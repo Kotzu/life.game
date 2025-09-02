@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Edit3, Pin, Move, Settings } from 'lucide-react';
+import EditableElement from './components/SimpleEditableElement';
 
 function App() {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
@@ -20,6 +21,7 @@ function App() {
   const [isSettingsDropdownOpen, setIsSettingsDropdownOpen] = useState(false);
   const [leftMarginPercent, setLeftMarginPercent] = useState(10);
   const [rightMarginPercent, setRightMarginPercent] = useState(10);
+
   const [themes, setThemes] = useState({
     default: 'Default',
     theme1: 'Theme1',
@@ -53,6 +55,7 @@ function App() {
     const savedPosition = localStorage.getItem('logoPosition');
     const savedSize = localStorage.getItem('logoSize');
     const savedMoved = localStorage.getItem('logoHasBeenMoved');
+
     const savedTheme = localStorage.getItem('currentTheme');
     const savedThemes = localStorage.getItem('themes');
     const savedLeftMargin = localStorage.getItem('leftMarginPercent');
@@ -81,7 +84,9 @@ function App() {
     if (savedMoved === 'true') {
       setHasBeenMoved(true);
     }
-    
+
+
+
     if (savedTheme) {
       setCurrentTheme(savedTheme);
     }
@@ -91,16 +96,23 @@ function App() {
       setThemes(parsedThemes);
     }
     
-    // Load theme data if current theme is not default
-    if (savedTheme && savedTheme !== 'default') {
+    // Load theme data for any saved theme (including default)
+    if (savedTheme) {
+      console.log('Loading theme:', savedTheme);
       const themeData = localStorage.getItem(`theme_${savedTheme}`);
       if (themeData) {
+        console.log('Theme data found:', JSON.parse(themeData));
         const parsed = JSON.parse(themeData);
-        setLogoPosition(parsed.position);
-        setLogoSize(parsed.size);
-        setHasBeenMoved(parsed.hasBeenMoved);
-        setIsAbsolutePositioned(parsed.isAbsolutePositioned);
+        setLogoPosition(parsed.logoPosition || parsed.position);
+        setLogoSize(parsed.logoSize || parsed.size);
+        setHasBeenMoved(parsed.logoHasBeenMoved || parsed.hasBeenMoved);
+        setIsAbsolutePositioned(parsed.logoIsAbsolutePositioned || parsed.isAbsolutePositioned);
+
+      } else {
+        console.log('No theme data found for:', savedTheme);
       }
+    } else {
+      console.log('No saved theme found');
     }
     
     // Set loading to false after all data is loaded
@@ -115,6 +127,8 @@ function App() {
       localStorage.setItem('logoHasBeenMoved', 'true');
     }
   }, [logoPosition, logoSize, hasBeenMoved]);
+
+
 
   // Save themes to localStorage whenever they change
   React.useEffect(() => {
@@ -310,36 +324,55 @@ function App() {
     setIsPinned(!isPinned);
   }, [isPinned]);
 
+
+
   // Change theme and reset all elements to default positions
   const changeTheme = useCallback((theme: string) => {
     if (theme === 'default') {
-      // Reset logo to original position
-      setHasBeenMoved(false);
-      setIsAbsolutePositioned(false);
-      setLogoPosition({ x: 0, y: 0 });
-      setLogoSize({ width: 200, height: 60 });
-      setIsEditMode(false);
-      setIsPinned(false);
-      localStorage.removeItem('logoPosition');
-      localStorage.removeItem('logoSize');
-      localStorage.removeItem('logoHasBeenMoved');
+      // Check if default theme has saved data
+      const defaultThemeData = localStorage.getItem(`theme_default`);
+      if (defaultThemeData) {
+        // Load saved default theme data
+        const parsed = JSON.parse(defaultThemeData);
+        setLogoPosition(parsed.logoPosition || parsed.position);
+        setLogoSize(parsed.logoSize || parsed.size);
+        setHasBeenMoved(parsed.logoHasBeenMoved || parsed.hasBeenMoved);
+        setIsAbsolutePositioned(parsed.logoIsAbsolutePositioned || parsed.isAbsolutePositioned);
+
+        setIsEditMode(false);
+        setIsPinned(false);
+      } else {
+        // Reset to original position (no saved default)
+        setHasBeenMoved(false);
+        setIsAbsolutePositioned(false);
+        setLogoPosition({ x: 0, y: 0 });
+        setLogoSize({ width: 200, height: 60 });
+
+        setIsEditMode(false);
+        setIsPinned(false);
+        localStorage.removeItem('logoPosition');
+        localStorage.removeItem('logoSize');
+        localStorage.removeItem('logoHasBeenMoved');
+
+      }
     } else {
       // Load theme data from localStorage
       const themeData = localStorage.getItem(`theme_${theme}`);
       if (themeData) {
         const parsed = JSON.parse(themeData);
-        setLogoPosition(parsed.position);
-        setLogoSize(parsed.size);
-        setHasBeenMoved(parsed.hasBeenMoved);
-        setIsAbsolutePositioned(parsed.isAbsolutePositioned);
+        setLogoPosition(parsed.logoPosition || parsed.position);
+        setLogoSize(parsed.logoSize || parsed.size);
+        setHasBeenMoved(parsed.logoHasBeenMoved || parsed.hasBeenMoved);
+        setIsAbsolutePositioned(parsed.logoIsAbsolutePositioned || parsed.isAbsolutePositioned);
+
         setIsEditMode(false);
         setIsPinned(false);
       }
     }
-    
+
     setCurrentTheme(theme);
     setIsThemeDropdownOpen(false);
-    
+
     // Save theme preference
     localStorage.setItem('currentTheme', theme);
   }, []);
@@ -369,21 +402,38 @@ function App() {
     setEditingThemeName('');
   }, []);
 
-  // Save current logo position to an existing theme
+  // Save current logo and playground position to an existing theme
   const saveToTheme = useCallback((themeKey: string) => {
-    // Save the current logo state to the specified theme
-    const themeData = {
-      position: logoPosition,
-      size: logoSize,
-      hasBeenMoved: hasBeenMoved,
-      isAbsolutePositioned: isAbsolutePositioned
-    };
-    localStorage.setItem(`theme_${themeKey}`, JSON.stringify(themeData));
-    
-    // Switch to the saved theme
-    setCurrentTheme(themeKey);
-    localStorage.setItem('currentTheme', themeKey);
-    
+    if (themeKey === 'default') {
+      // For default theme, save current state as the new default
+      const themeData = {
+        logoPosition: logoPosition,
+        logoSize: logoSize,
+        logoHasBeenMoved: hasBeenMoved,
+        logoIsAbsolutePositioned: isAbsolutePositioned,
+
+      };
+      localStorage.setItem(`theme_${themeKey}`, JSON.stringify(themeData));
+
+      // Update the default theme to use the current state
+      setCurrentTheme(themeKey);
+      localStorage.setItem('currentTheme', themeKey);
+    } else {
+      // For custom themes, save the current state
+      const themeData = {
+        logoPosition: logoPosition,
+        logoSize: logoSize,
+        logoHasBeenMoved: hasBeenMoved,
+        logoIsAbsolutePositioned: isAbsolutePositioned,
+
+      };
+      localStorage.setItem(`theme_${themeKey}`, JSON.stringify(themeData));
+
+      // Switch to the saved theme
+      setCurrentTheme(themeKey);
+      localStorage.setItem('currentTheme', themeKey);
+    }
+
     // Close the dropdown
     setIsThemeDropdownOpen(false);
   }, [logoPosition, logoSize, hasBeenMoved, isAbsolutePositioned]);
@@ -425,7 +475,8 @@ function App() {
       minHeight: '100vh', 
       backgroundColor: '#ffffff',
       width: '100%',
-      height: '100%'
+      height: '100%',
+      overflow: 'hidden' // Prevent horizontal scroll
     }}>
       {/* Clean Header */}
       <header style={{
@@ -440,7 +491,9 @@ function App() {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
-        paddingLeft: `${leftMarginPercent}%` // Align with main content margins
+        paddingLeft: `max(${leftMarginPercent}%, 16px)`, // Responsive padding with minimum
+        paddingRight: `max(${rightMarginPercent}%, 16px)`, // Add right padding for balance
+        boxSizing: 'border-box' // Include padding in width calculation
       }}>
         {/* Standalone Logo Container */}
         {!isLoading && (
@@ -483,7 +536,9 @@ function App() {
             {/* Logo Text */}
             <div style={{
               color: '#ffffff',
-              fontSize: isAbsolutePositioned && hasBeenMoved ? `${Math.max(12, Math.min(48, (logoSize.width + 16) * 0.12))}px` : '1.5rem',
+              fontSize: isAbsolutePositioned && hasBeenMoved 
+                ? `${Math.max(12, Math.min(48, (logoSize.width + 16) * 0.12))}px` 
+                : `clamp(1rem, 4vw, 1.5rem)`, // Responsive font size
               fontWeight: '700',
               letterSpacing: '-0.025em',
               fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif',
@@ -704,11 +759,13 @@ function App() {
         style={{
           position: 'fixed',
           top: '20px',
-          right: `calc(${rightMarginPercent}% + 20px)`, // Dynamic right margin + 20px padding
+          right: `max(calc(${rightMarginPercent}% + 20px), 20px)`, // Responsive positioning with minimum
           zIndex: 1002,
           display: 'flex',
           gap: '8px',
-          alignItems: 'center'
+          alignItems: 'center',
+          maxWidth: 'calc(100vw - 40px)', // Prevent overflow on small screens
+          flexWrap: 'wrap' // Allow wrapping on very small screens
         }}
       >
 
@@ -721,13 +778,14 @@ function App() {
             color: 'white',
             border: 'none',
             borderRadius: '6px',
-            fontSize: '12px',
+            fontSize: 'clamp(10px, 2.5vw, 12px)', // Responsive font size
             cursor: 'pointer',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             transition: 'all 0.2s ease',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px'
+            gap: '4px',
+            minWidth: 'fit-content' // Prevent button from shrinking too much
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = '#1e40af';
@@ -755,13 +813,14 @@ function App() {
               color: 'white',
               border: 'none',
               borderRadius: '6px',
-              fontSize: '12px',
+              fontSize: 'clamp(10px, 2.5vw, 12px)', // Responsive font size
               cursor: 'pointer',
               boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
               transition: 'all 0.2s ease',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px'
+              gap: '4px',
+              minWidth: 'fit-content' // Prevent button from shrinking too much
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = '#4b5563';
@@ -795,7 +854,7 @@ function App() {
               <div style={{
                 padding: '8px 12px',
                 color: '#6b7280',
-                fontSize: '12px',
+                fontSize: 'clamp(10px, 2.5vw, 12px)', // Responsive font size
                 borderBottom: '1px solid #e5e7eb',
                 fontWeight: '600'
               }}>
@@ -808,7 +867,7 @@ function App() {
                 borderBottom: '1px solid #e5e7eb'
               }}>
                 <div style={{
-                  fontSize: '11px',
+                  fontSize: 'clamp(9px, 2.2vw, 11px)', // Responsive font size
                   color: '#374151',
                   fontWeight: '500',
                   marginBottom: '8px'
@@ -824,7 +883,7 @@ function App() {
                   marginBottom: '6px'
                 }}>
                   <label style={{
-                    fontSize: '11px',
+                    fontSize: 'clamp(9px, 2.2vw, 11px)', // Responsive font size
                     color: '#6b7280'
                   }}>
                     Left Border:
@@ -841,7 +900,7 @@ function App() {
                         padding: '2px 4px',
                         border: '1px solid #d1d5db',
                         borderRadius: '3px',
-                        fontSize: '11px',
+                        fontSize: 'clamp(9px, 2.2vw, 11px)', // Responsive font size
                         textAlign: 'center'
                       }}
                     />
@@ -909,37 +968,63 @@ function App() {
             minWidth: '120px',
             overflow: 'hidden'
           }}>
-            {/* Default Theme - Always at top, not editable */}
-            <button
-              onClick={() => changeTheme('default')}
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                backgroundColor: currentTheme === 'default' ? '#f3f4f6' : 'transparent',
-                color: currentTheme === 'default' ? '#1e3a8a' : '#374151',
-                border: 'none',
-                fontSize: '12px',
-                cursor: 'pointer',
-                textAlign: 'left',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-              onMouseEnter={(e) => {
-                if (currentTheme !== 'default') {
-                  e.currentTarget.style.backgroundColor = '#f9fafb';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (currentTheme !== 'default') {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }
-              }}
+            {/* Default Theme - Always at top, with save option */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '8px 12px',
+              backgroundColor: currentTheme === 'default' ? '#f3f4f6' : 'transparent',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              if (currentTheme !== 'default') {
+                e.currentTarget.style.backgroundColor = '#f9fafb';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (currentTheme !== 'default') {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
+            }}
+            onClick={() => changeTheme('default')}
             >
-              <span>{themes.default}</span>
-              <span style={{ fontSize: '10px', color: '#9ca3af' }}>•</span>
-            </button>
+              <span style={{
+                color: currentTheme === 'default' ? '#1e3a8a' : '#374151',
+                fontSize: '12px',
+                flex: 1
+              }}>
+                {themes.default}
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                {/* Save to Default Theme Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    saveToTheme('default');
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '10px',
+                    color: '#10b981',
+                    padding: '2px',
+                    borderRadius: '2px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#f0fdf4';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
+                  title="Save current logo position to default theme"
+                >
+                  💾
+                </button>
+                <span style={{ fontSize: '10px', color: '#9ca3af' }}>•</span>
+              </div>
+            </div>
             
             {/* Divider */}
             <div style={{
@@ -1095,46 +1180,61 @@ function App() {
 
       {/* Main Content Area with dynamic margins */}
       <main style={{
-        marginLeft: `${leftMarginPercent}%`,
-        marginRight: `${rightMarginPercent}%`,
+        marginLeft: `max(${leftMarginPercent}%, 16px)`, // Responsive margin with minimum
+        marginRight: `max(${rightMarginPercent}%, 16px)`, // Responsive margin with minimum
         minHeight: '90vh', // Remaining viewport height after header
         backgroundColor: '#ffffff',
-        padding: '2rem 0',
+        padding: '2rem 1rem', // Responsive padding
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        boxSizing: 'border-box', // Include padding in width calculation
+        width: 'auto', // Let it size naturally
+        maxWidth: '100vw' // Prevent overflow
       }}>
-        {/* Playground Button */}
-        <button
-          style={{
-            padding: '16px 32px',
-            backgroundColor: '#10b981',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            letterSpacing: '-0.025em'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#059669';
-            e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.boxShadow = '0 6px 12px rgba(0,0,0,0.15)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#10b981';
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-          }}
+        {/* Playground Button - Now Editable */}
+        <EditableElement
+          elementType="button"
+          initialText="Playground"
+          onTextChange={(newText) => console.log('Button text changed to:', newText)}
         >
-          Playground
-        </button>
+          <button
+            style={{
+              padding: 'clamp(12px, 4vw, 16px) clamp(24px, 8vw, 32px)', // Responsive padding
+              backgroundColor: '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: 'clamp(14px, 4vw, 16px)', // Responsive font size
+              fontWeight: '600',
+              cursor: 'pointer',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              letterSpacing: '-0.025em',
+              width: '100%',
+              height: '100%',
+              minWidth: 'fit-content', // Prevent button from becoming too small
+              maxWidth: '100%' // Prevent overflow
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#059669';
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 6px 12px rgba(0,0,0,0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#10b981';
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            }}
+          >
+            Playground
+          </button>
+        </EditableElement>
+
       </main>
       </div>
   );
