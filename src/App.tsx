@@ -17,6 +17,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentTheme, setCurrentTheme] = useState('default');
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
+  const [themes, setThemes] = useState({
+    default: 'Default',
+    theme1: 'Theme1',
+    theme2: 'Theme2',
+    theme3: 'Theme3'
+  });
+  const [editingTheme, setEditingTheme] = useState<string | null>(null);
+  const [editingThemeName, setEditingThemeName] = useState('');
   
   const logoRef = useRef<HTMLDivElement>(null);
 
@@ -26,6 +34,7 @@ function App() {
     const savedSize = localStorage.getItem('logoSize');
     const savedMoved = localStorage.getItem('logoHasBeenMoved');
     const savedTheme = localStorage.getItem('currentTheme');
+    const savedThemes = localStorage.getItem('themes');
     
     if (savedPosition) {
       const position = JSON.parse(savedPosition);
@@ -47,6 +56,11 @@ function App() {
       setCurrentTheme(savedTheme);
     }
     
+    if (savedThemes) {
+      const parsedThemes = JSON.parse(savedThemes);
+      setThemes(parsedThemes);
+    }
+    
     // Set loading to false after all data is loaded
     setIsLoading(false);
   }, []);
@@ -60,7 +74,10 @@ function App() {
     }
   }, [logoPosition, logoSize, hasBeenMoved]);
 
-
+  // Save themes to localStorage whenever they change
+  React.useEffect(() => {
+    localStorage.setItem('themes', JSON.stringify(themes));
+  }, [themes]);
 
   // Handle mouse down for dragging
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -254,6 +271,31 @@ function App() {
     
     // Save theme preference
     localStorage.setItem('currentTheme', theme);
+  }, []);
+
+  // Start editing a theme name
+  const startEditingTheme = useCallback((themeKey: string) => {
+    if (themeKey === 'default') return; // Don't allow editing default theme
+    setEditingTheme(themeKey);
+    setEditingThemeName(themes[themeKey as keyof typeof themes]);
+  }, [themes]);
+
+  // Save theme name edit
+  const saveThemeName = useCallback(() => {
+    if (editingTheme && editingThemeName.trim()) {
+      setThemes(prev => ({
+        ...prev,
+        [editingTheme]: editingThemeName.trim()
+      }));
+    }
+    setEditingTheme(null);
+    setEditingThemeName('');
+  }, [editingTheme, editingThemeName]);
+
+  // Cancel theme name edit
+  const cancelThemeEdit = useCallback(() => {
+    setEditingTheme(null);
+    setEditingThemeName('');
   }, []);
 
   // Add keyboard shortcut to reset to default theme (Ctrl+R or Cmd+R)
@@ -572,7 +614,7 @@ function App() {
             e.currentTarget.style.transform = 'scale(1)';
           }}
         >
-          {currentTheme.charAt(0).toUpperCase() + currentTheme.slice(1)}
+          Themes
           <span style={{ fontSize: '10px' }}>▼</span>
         </button>
         
@@ -590,6 +632,7 @@ function App() {
             minWidth: '120px',
             overflow: 'hidden'
           }}>
+            {/* Default Theme - Always at top, not editable */}
             <button
               onClick={() => changeTheme('default')}
               style={{
@@ -601,7 +644,10 @@ function App() {
                 fontSize: '12px',
                 cursor: 'pointer',
                 textAlign: 'left',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
               }}
               onMouseEnter={(e) => {
                 if (currentTheme !== 'default') {
@@ -614,9 +660,129 @@ function App() {
                 }
               }}
             >
-              Default
+              <span>{themes.default}</span>
+              <span style={{ fontSize: '10px', color: '#9ca3af' }}>•</span>
             </button>
-            {/* Future themes can be added here */}
+            
+            {/* Divider */}
+            <div style={{
+              height: '1px',
+              backgroundColor: '#e5e7eb',
+              margin: '4px 0'
+            }} />
+            
+            {/* Editable Themes */}
+            {Object.entries(themes).filter(([key]) => key !== 'default').map(([themeKey, themeName]) => (
+              <div key={themeKey} style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '8px 12px',
+                backgroundColor: currentTheme === themeKey ? '#f3f4f6' : 'transparent',
+                transition: 'all 0.2s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                if (currentTheme !== themeKey) {
+                  e.currentTarget.style.backgroundColor = '#f9fafb';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (currentTheme !== themeKey) {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }
+              }}
+              onClick={() => changeTheme(themeKey)}
+              >
+                {editingTheme === themeKey ? (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', width: '100%' }}>
+                    <input
+                      type="text"
+                      value={editingThemeName}
+                      onChange={(e) => setEditingThemeName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          saveThemeName();
+                        } else if (e.key === 'Escape') {
+                          cancelThemeEdit();
+                        }
+                      }}
+                      onBlur={saveThemeName}
+                      style={{
+                        border: '1px solid #d1d5db',
+                        borderRadius: '4px',
+                        padding: '2px 6px',
+                        fontSize: '12px',
+                        flex: 1,
+                        outline: 'none'
+                      }}
+                      autoFocus
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        saveThemeName();
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '10px',
+                        color: '#10b981'
+                      }}
+                    >
+                      ✓
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        cancelThemeEdit();
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '10px',
+                        color: '#ef4444'
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <span style={{
+                      color: currentTheme === themeKey ? '#1e3a8a' : '#374151',
+                      fontSize: '12px'
+                    }}>
+                      {themeName}
+                    </span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startEditingTheme(themeKey);
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '10px',
+                        color: '#6b7280',
+                        padding: '2px',
+                        borderRadius: '2px'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#f3f4f6';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
