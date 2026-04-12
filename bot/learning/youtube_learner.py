@@ -96,6 +96,91 @@ class YouTubeLearner:
             results.append(result)
         return results
 
+    def search_and_learn(self, query: str, game_name: str, max_videos: int = 3) -> List[str]:
+        """
+        Cauta pe YouTube dupa query si invata din primele N video-uri.
+        Foloseste yt-dlp cu ytsearchN: pentru a cauta fara API key YouTube.
+
+        Exemplu: search_and_learn("dota underlords best strategy guide", "dota_underlords", 3)
+        """
+        log.info(f"Caut pe YouTube: '{query}' (primele {max_videos} video-uri)")
+
+        # yt-dlp suporta ytsearchN:query nativ
+        search_url = f"ytsearch{max_videos}:{query}"
+
+        # Obtine lista de URL-uri din search
+        cmd = [
+            "yt-dlp",
+            "--get-url",
+            "--no-playlist",
+            "--quiet",
+            search_url,
+        ]
+
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+            urls = [u.strip() for u in result.stdout.strip().split('\n') if u.strip()]
+
+            if not urls:
+                # Fallback: obtine ID-urile si construieste URL-urile
+                cmd2 = [
+                    "yt-dlp",
+                    "--print", "webpage_url",
+                    "--no-playlist",
+                    "--quiet",
+                    search_url,
+                ]
+                result2 = subprocess.run(cmd2, capture_output=True, text=True, timeout=60)
+                urls = [u.strip() for u in result2.stdout.strip().split('\n') if u.strip()]
+
+            if not urls:
+                log.error(f"Nu s-au gasit video-uri pentru: '{query}'")
+                return []
+
+            log.info(f"Gasit {len(urls)} video-uri. Incep invatarea...")
+            for i, url in enumerate(urls, 1):
+                log.info(f"  [{i}/{len(urls)}] {url}")
+
+            return self.learn_from_multiple_urls(urls, game_name)
+
+        except subprocess.TimeoutExpired:
+            log.error("Timeout la cautarea YouTube")
+            return []
+        except Exception as e:
+            log.error(f"Eroare la cautare YouTube: {e}")
+            return []
+
+    def get_video_titles(self, query: str, max_videos: int = 10) -> List[dict]:
+        """
+        Returneaza titlurile si URL-urile video-urilor gasite fara sa le descarce.
+        Util pentru a alege manual ce video-uri sa folosesti.
+        """
+        search_url = f"ytsearch{max_videos}:{query}"
+        cmd = [
+            "yt-dlp",
+            "--print", "%(title)s\t%(webpage_url)s\t%(duration_string)s",
+            "--no-playlist",
+            "--quiet",
+            search_url,
+        ]
+
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+            videos = []
+            for line in result.stdout.strip().split('\n'):
+                if '\t' in line:
+                    parts = line.split('\t')
+                    if len(parts) >= 2:
+                        videos.append({
+                            "title": parts[0],
+                            "url": parts[1],
+                            "duration": parts[2] if len(parts) > 2 else "?",
+                        })
+            return videos
+        except Exception as e:
+            log.error(f"Eroare la listare video-uri: {e}")
+            return []
+
     def _download_audio(self, url: str) -> Optional[str]:
         """Descarca audio-ul din YouTube folosind yt-dlp."""
         output_path = str(self.cache_dir / "audio_%(id)s.%(ext)s")

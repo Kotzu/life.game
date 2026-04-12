@@ -121,7 +121,7 @@ def run_bot(game_name: str, config: dict, max_actions: int = 0):
 
 
 def learn_from_youtube(game_name: str, url: str, config: dict):
-    """Invata strategii dintr-un video YouTube."""
+    """Invata strategii dintr-un video YouTube (URL specific)."""
     log.info(f"Incep invatarea din YouTube pentru: {game_name}")
     kb = KnowledgeBase(config["learning"]["knowledge_base_path"])
     learner = YouTubeLearner(config, kb)
@@ -130,7 +130,36 @@ def learn_from_youtube(game_name: str, url: str, config: dict):
 
     log.info("=== Strategii extrase ===")
     print(strategies)
-    log.info(f"Invatare completata! Strategiile au fost salvate in knowledge base.")
+    log.info("Invatare completata! Strategiile au fost salvate in knowledge base.")
+
+
+def search_youtube(game_name: str, query: str, config: dict, max_videos: int = 3, list_only: bool = False):
+    """Cauta pe YouTube si invata din video-urile gasite."""
+    kb = KnowledgeBase(config["learning"]["knowledge_base_path"])
+    learner = YouTubeLearner(config, kb)
+
+    if list_only:
+        # Listeaza video-urile fara sa le descarce
+        log.info(f"Caut video-uri pentru: '{query}'")
+        videos = learner.get_video_titles(query, max_videos=10)
+        if not videos:
+            log.error("Nu s-au gasit video-uri.")
+            return
+        print(f"\n=== Video-uri gasite pentru '{query}' ===")
+        for i, v in enumerate(videos, 1):
+            print(f"  {i}. [{v['duration']}] {v['title']}")
+            print(f"     {v['url']}")
+        print(f"\nFoloseste --learn-url <URL> pentru a invata dintr-un video specific.")
+        print(f"Sau --learn-search '{query}' --max-videos {max_videos} pentru a invata automat.")
+        return
+
+    # Cauta si invata automat
+    results = learner.search_and_learn(query, game_name, max_videos=max_videos)
+    if results:
+        log.info(f"Invatare completata din {len(results)} video-uri!")
+        log.info("Ruleaza --kb-stats pentru a vedea ce s-a invatat.")
+    else:
+        log.error("Nu s-a putut invata nimic. Verifica conexiunea si yt-dlp.")
 
 
 def describe_screen(config: dict):
@@ -171,16 +200,40 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemple:
+  # Joaca Dota Underlords
   python main.py --game dota_underlords
+
+  # Cauta automat pe YouTube si invata din 3 video-uri
+  python main.py --game dota_underlords --learn-search "dota underlords best strategy guide 2024"
+
+  # Listeaza video-urile gasite fara sa invete (alegi tu)
+  python main.py --learn-search "dota underlords tier list" --list-videos
+
+  # Invata dintr-un URL specific
   python main.py --game dota_underlords --learn-url "https://youtube.com/watch?v=..."
+
+  # Invata din mai multe video-uri
+  python main.py --game dota_underlords --learn-search "underlords guide" --max-videos 5
+
+  # Debug: ce vede botul pe ecran
   python main.py --describe
+
+  # Adauga strategie manuala
   python main.py --game dota_underlords --add-strategy "Prioritizeaza Warriors early"
+
+  # Statistici knowledge base
   python main.py --kb-stats
         """
     )
 
     parser.add_argument("--game", "-g", type=str, help="Jocul de jucat (ex: dota_underlords)")
-    parser.add_argument("--learn-url", "-l", type=str, help="URL YouTube din care sa invete")
+    parser.add_argument("--learn-url", "-l", type=str, help="URL YouTube specific din care sa invete")
+    parser.add_argument("--learn-search", type=str, metavar="QUERY",
+                        help="Cauta pe YouTube si invata automat (ex: 'dota underlords guide')")
+    parser.add_argument("--max-videos", type=int, default=3,
+                        help="Numar maxim de video-uri de invatat la --learn-search (default: 3)")
+    parser.add_argument("--list-videos", action="store_true",
+                        help="Folosit cu --learn-search: listeaza video-urile fara sa invete")
     parser.add_argument("--describe", "-d", action="store_true", help="Descrie ecranul curent (debug)")
     parser.add_argument("--add-strategy", "-s", type=str, help="Adauga o strategie manuala")
     parser.add_argument("--kb-stats", action="store_true", help="Afiseaza statistici knowledge base")
@@ -218,6 +271,14 @@ Exemple:
             log.error("Trebuie sa specifici --game pentru a invata din YouTube")
             sys.exit(1)
         learn_from_youtube(args.game, args.learn_url, config)
+
+    elif args.learn_search:
+        if not args.game and not args.list_videos:
+            log.error("Trebuie sa specifici --game pentru a invata din YouTube")
+            sys.exit(1)
+        game = args.game or "general"
+        search_youtube(game, args.learn_search, config,
+                       max_videos=args.max_videos, list_only=args.list_videos)
 
     elif args.add_strategy:
         if not args.game:
