@@ -1,0 +1,46 @@
+# Universal AI Game Bot - Configuration
+ai:
+  model: "claude-opus-4-6"           # Model LLM principal
+  vision_model: "claude-opus-4-6"    # Model pentru analiza vizuala
+  api_key_env: "ANTHROPIC_API_KEY"   # Variabila de mediu pentru API key
+  max_tokens: 4096
+  temperature: 0.3
+
+capture:
+  fps: 2                             # Frame-uri pe secunda (nu suprasolicita API)
+  format: "PNG"
+  quality: 85
+  monitor: 0                         # 0 = monitor primar
+
+input:
+  # Timpi umani (random in interval [min, max] secunde)
+  click_delay_min: 0.08
+  click_delay_max: 0.25
+  move_duration_min: 0.1
+  move_duration_max: 0.4
+  action_pause_min: 0.3
+  action_pause_max: 1.2
+  # Bezier mouse movement - apare uman
+  bezier_points: 5
+  bezier_deviation: 30
+
+learning:
+  knowledge_base_path: "data/knowledge_base.json"
+  video_cache_path: "data/videos/"
+  max_videos_per_game: 20
+  whisper_model: "base"              # base, small, medium, large
+
+games:
+  dota_underlords:
+    name: "Dota Underlords"
+    window_title: "Dota Underlords"
+    resolution: [1920, 1080]
+    # Regiuni UI specifice jocului (procente din ecran)
+    regions:
+      board: [0.05, 0.10, 0.75, 0.85]
+      bench: [0.05, 0.87, 0.95, 0.97]
+      shop: [0.10, 0.87, 0.90, 0.98]
+      gold: [0.01, 0.93, 0.15, 0.99]
+      hp: [0.01, 0.88, 0.15, 0.93]
+      round: [0.42, 0.01, 0.58, 0.07]
+      level: [0.05, 0.93, 0.15, 0.99]
