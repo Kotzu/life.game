@@ -1,23 +1,35 @@
 # AI Bot - Universal Game Bot with LLM Vision
+# ============================================
+
 # Core AI
 anthropic>=0.40.0
 
-# Screen capture (stealthy, low-level)
+# Screen capture PC (stealthy, low-level)
 mss>=9.0.1
 Pillow>=10.0.0
 opencv-python-headless>=4.8.0
 
-# Input control (low-level OS APIs, undetected)
+# Input control PC (low-level OS APIs)
 pynput>=1.7.7
+
+# iOS / iPhone control
+pymobiledevice3>=4.0.0      # Screenshot USB direct de pe iPhone
+tidevice>=0.10.0            # Gestioneaza WDA pe iPhone (xctest)
+requests>=2.31.0            # HTTP client pentru WDA API
+
+# Web dashboard (accesibil din iPhone browser)
+flask>=3.0.0
+flask-socketio>=5.3.6
+eventlet>=0.35.1            # Server async pentru SocketIO
 
 # YouTube learning
 yt-dlp>=2024.1.0
-openai-whisper>=20231117
+openai-whisper>=20231117    # Transcriere audio -> text
 
 # Data & config
 numpy>=1.24.0
 pyyaml>=6.0.1
 
-# Utilities
+# Logging frumos
 rich>=13.0.0
 loguru>=0.7.2

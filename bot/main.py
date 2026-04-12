@@ -1,101 +1,191 @@
 """
 Universal AI Game Bot - Main Entry Point
 =========================================
-Bot universal full offline cu baza AI LLM.
-Invata din YouTube, joaca orice joc single player.
+Bot universal cu AI LLM pentru jocuri single-player/offline.
+Suporta PC si iPhone (via WebDriverAgent).
+Invata din YouTube, trial & error cu reward system, web dashboard.
 
-Utilizare:
-    # Joaca Dota Underlords
-    python main.py --game dota_underlords
-
-    # Invata din YouTube inainte de a juca
-    python main.py --game dota_underlords --learn-url "https://youtube.com/watch?v=..."
-
-    # Analizeaza ecranul curent (debug)
-    python main.py --describe
-
-    # Adauga strategii manual
-    python main.py --game dota_underlords --add-strategy "Prioritizeaza aliantele Warriors si Assassins early game"
+Utilizare rapida:
+  python main.py --web                          # Porneste dashboard-ul web
+  python main.py --game dota_underlords         # Joaca pe PC
+  python main.py --game dota_underlords --mobile # Joaca pe iPhone
+  python main.py --game dota_underlords --learn-search "dota underlords guide"
 """
 
 import argparse
 import os
 import sys
+import threading
 import time
 from pathlib import Path
 
-# Adauga directorul botului in PYTHONPATH
+# PYTHONPATH
 sys.path.insert(0, str(Path(__file__).parent))
 
 from utils.config import load_config
 from utils.logger import log
-from core.screen_capture import ScreenCapture
-from core.input_controller import InputController
 from core.vision_analyzer import VisionAnalyzer
 from core.decision_engine import DecisionEngine
 from learning.knowledge_base import KnowledgeBase
 from learning.youtube_learner import YouTubeLearner
+from learning.reward_system import RewardSystem
 
 
-def create_game_bot(game_name: str, config: dict, screen, inp, vision):
-    """Factory: creeaza botul specific jocului."""
+# ===== FACTORY: creeaza botul potrivit (PC sau iPhone) =====
+
+def build_components(game_name: str, config: dict, mobile: bool):
+    """
+    Construieste screen capture + input controller potrivite pentru PC sau iPhone.
+    Returneaza (screen_or_ios, input_ctrl, vision, game_bot)
+    """
+    vision = VisionAnalyzer(config)
+
+    if mobile:
+        from mobile.ios_controller import iOSController
+        ios = iOSController(config)
+
+        # Wrapper compatibil cu interfata BaseGame
+        class MobileScreenAdapter:
+            def capture_to_base64(self, max_width=1024):
+                return ios.capture_to_base64(max_width)
+            def get_screen_size(self):
+                return ios.get_screen_size()
+            def close(self):
+                ios.close()
+
+        class MobileInputAdapter:
+            def __init__(self, ios_ctrl):
+                self._ios = ios_ctrl
+                # Expune metode compatibile cu InputController
+                self.click = lambda x, y, **kw: ios_ctrl.tap(x, y)
+                self.drag = lambda fx, fy, tx, ty: ios_ctrl.swipe(fx, fy, tx, ty, 0.5)
+                self.press_key = lambda k: None  # iOS nu are tastatura in joc
+                self.pause = lambda: time.sleep(0.5)
+                self.move_to = lambda x, y: None  # Nu exista hover pe touch
+
+        screen = MobileScreenAdapter()
+        inp = MobileInputAdapter(ios)
+
+        if not ios.connect():
+            log.error("Conectare iPhone esuata. Verifica WDA.")
+            sys.exit(1)
+    else:
+        from core.screen_capture import ScreenCapture
+        from core.input_controller import InputController
+        screen = ScreenCapture(monitor_index=config["capture"]["monitor"])
+        inp = InputController(config)
+
+    game_bot = _create_game_bot(game_name, config, screen, inp, vision)
+    return screen, inp, vision, game_bot
+
+
+def _create_game_bot(game_name, config, screen, inp, vision):
     if game_name == "dota_underlords":
         from games.dota_underlords import UnderlordsBot
         return UnderlordsBot(config, screen, inp, vision)
-    else:
-        raise ValueError(f"Joc necunoscut: {game_name}. Jocuri suportate: dota_underlords")
+    raise ValueError(f"Joc necunoscut: {game_name}. Disponibil: dota_underlords")
 
 
-def run_bot(game_name: str, config: dict, max_actions: int = 0):
+# ===== BOT LOOP PRINCIPAL =====
+
+# Flag global de stop (setat de dashboard sau CTRL+C)
+_stop_flag = threading.Event()
+_bot_thread = None
+
+
+def run_bot(game_name: str, config: dict, mobile: bool = False,
+            max_actions: int = 0, dashboard=None):
     """
     Loop principal al botului.
-    Captureaza ecranul -> Analizeaza -> Decide -> Executa -> Repeta.
-    """
-    log.info(f"Pornesc botul pentru: {game_name}")
+    Captureaza -> Analizeaza -> Decide -> Executa -> Reward -> Repeta.
 
-    # Initializare componente
-    screen = ScreenCapture(monitor_index=config["capture"]["monitor"])
-    inp = InputController(config)
-    vision = VisionAnalyzer(config)
+    Args:
+        dashboard: modulul web.dashboard (optional, pentru live updates)
+    """
+    global _stop_flag
+    _stop_flag.clear()
+
+    log.info(f"Pornesc bot: {game_name} | Mod: {'iPhone' if mobile else 'PC'}")
+    if dashboard:
+        dashboard.push_log(f"Bot pornit: {game_name}", "info")
+
+    # Initializare
+    screen, inp, vision, game_bot = build_components(game_name, config, mobile)
     kb = KnowledgeBase(config["learning"]["knowledge_base_path"])
     decision = DecisionEngine(config, kb)
-    game_bot = create_game_bot(game_name, config, screen, inp, vision)
-
-    log.info("Toate componentele initializate. Incep in 3 secunde...")
-    log.info("CTRL+C pentru a opri.")
-    time.sleep(3)
+    rewards = RewardSystem(game_name, kb)
 
     action_count = 0
     errors = 0
     MAX_ERRORS = 5
+    prev_state = {}
+
+    if dashboard:
+        dashboard.update_state(running=True, game=game_name,
+                               mode="mobile" if mobile else "desktop")
+
+    log.info("Pornesc in 3 secunde... CTRL+C pentru oprire.")
+    time.sleep(3)
 
     try:
-        while True:
-            # Verifica limita actiunilor
+        while not _stop_flag.is_set():
             if max_actions > 0 and action_count >= max_actions:
-                log.info(f"Limita de {max_actions} actiuni atinsa. Opresc.")
+                log.info(f"Limita {max_actions} actiuni atinsa.")
                 break
 
-            # 1. Captureaza ecranul
-            log.debug("Capturez ecranul...")
+            # 1. Screenshot
             screenshot_b64 = screen.capture_to_base64()
+            if screenshot_b64 is None:
+                log.warning("Screenshot esuat. Reincerc...")
+                time.sleep(2)
+                continue
+
+            # Trimite screenshot la dashboard
+            if dashboard:
+                dashboard.push_screenshot(screenshot_b64)
 
             # 2. Verifica daca jocul e activ
             if not game_bot.is_game_active(screenshot_b64):
-                log.warning("Jocul nu pare activ pe ecran. Astept 5s...")
+                log.warning("Jocul nu pare activ. Astept 5s...")
                 time.sleep(5)
                 continue
 
             # 3. Parseaza starea jocului
-            log.debug("Analizez starea jocului...")
             game_state = game_bot.parse_game_state(screenshot_b64)
-            log.info(f"Stare: Round={game_state.get('round')} Gold={game_state.get('gold')} HP={game_state.get('hp')}")
 
-            # 4. Decide actiunea
+            # 4. Adauga contextul reward-urilor recente la knowledge
+            reward_context = rewards.get_recent_context(n=5)
+            if reward_context:
+                # Injecteaza contextul temporar in KB (nu se salveaza permanent)
+                game_state["_reward_context"] = reward_context
+
+            log.info(
+                f"Stare | Round={game_state.get('round')} "
+                f"Gold={game_state.get('gold')} HP={game_state.get('hp')}"
+            )
+
+            # 5. Decide actiunea
             action = decision.decide(game_state, screenshot_b64, game_name)
-            log.info(f"Decizie: {action.get('action')} | Incredere: {action.get('confidence', 0):.0%}")
+            log.info(
+                f"Decizie: {action.get('action')} | "
+                f"Incredere: {action.get('confidence', 0):.0%} | "
+                f"{action.get('reason', '')[:60]}"
+            )
 
-            # 5. Executa actiunea
+            # Update dashboard
+            if dashboard:
+                stats = {"actions": action_count, "errors": errors, "uptime": 0}
+                dashboard.update_state(
+                    last_action=action,
+                    game_state=game_state,
+                    stats=stats,
+                )
+                dashboard.push_log(
+                    f"[{action.get('action')}] {action.get('reason','')[:80]}",
+                    "info"
+                )
+
+            # 6. Executa actiunea
             success = game_bot.execute_action(action)
 
             if success:
@@ -104,190 +194,326 @@ def run_bot(game_name: str, config: dict, max_actions: int = 0):
                 decision.mark_action_result(action, True)
             else:
                 errors += 1
-                decision.mark_action_result(action, False, "Executie esuata")
+                decision.mark_action_result(action, False)
                 if errors >= MAX_ERRORS:
-                    log.error(f"Prea multe erori ({MAX_ERRORS}). Opresc.")
+                    log.error(f"Prea multe erori consecutive ({MAX_ERRORS}). Opresc.")
                     break
 
-            # 6. Pauza intre actiuni (evita spam)
-            fps = config["capture"]["fps"]
+            # 7. Capteaza starea de dupa actiune (pentru reward)
+            time.sleep(0.5)  # Asteapta animatia
+            new_screenshot_b64 = screen.capture_to_base64()
+            if new_screenshot_b64:
+                new_state = game_bot.parse_game_state(new_screenshot_b64)
+                reward = rewards.record_experience(game_state, action, new_state)
+                log.debug(f"Reward: {reward:+.2f}")
+
+                # Detectare game over -> reset episod
+                if new_state.get("hp", 100) <= 0:
+                    log.info("Game over detectat! Resetez episodul.")
+                    rewards.reset_episode()
+                    if dashboard:
+                        dashboard.push_log("Game over! Episod nou.", "warning")
+                    time.sleep(10)  # Asteapta ecranul de sfarsit
+
+                prev_state = new_state
+            else:
+                prev_state = game_state
+
+            # 8. Pauza intre cicluri
+            fps = config["capture"].get("fps", 2)
             time.sleep(1.0 / fps)
 
     except KeyboardInterrupt:
-        log.info("Bot oprit manual (CTRL+C)")
+        log.info("Bot oprit (CTRL+C)")
     finally:
         screen.close()
-        log.info(f"Total actiuni executate: {action_count}")
+        summary = rewards.get_episode_summary()
+        log.info(
+            f"Sesiune terminata | Actiuni: {action_count} | "
+            f"Reward total: {summary['total_reward']:+.1f} | "
+            f"Runde: {summary['rounds_survived']}"
+        )
+        if dashboard:
+            dashboard.update_state(running=False)
+            dashboard.push_log(
+                f"Bot oprit. Actiuni: {action_count}, Reward: {summary['total_reward']:+.1f}",
+                "info"
+            )
 
 
-def learn_from_youtube(game_name: str, url: str, config: dict):
-    """Invata strategii dintr-un video YouTube (URL specific)."""
-    log.info(f"Incep invatarea din YouTube pentru: {game_name}")
+def start_bot_thread(game_name, config, mobile, max_actions=0, dashboard=None):
+    """Porneste botul intr-un thread separat (pentru dashboard)."""
+    global _bot_thread, _stop_flag
+    _stop_flag.clear()
+    _bot_thread = threading.Thread(
+        target=run_bot,
+        kwargs=dict(game_name=game_name, config=config, mobile=mobile,
+                    max_actions=max_actions, dashboard=dashboard),
+        daemon=True,
+    )
+    _bot_thread.start()
+
+
+def stop_bot_thread():
+    """Opreste thread-ul botului."""
+    global _stop_flag
+    _stop_flag.set()
+    log.info("Semnal de oprire trimis.")
+
+
+# ===== YOUTUBE LEARNING =====
+
+def learn_from_youtube(game_name: str, url: str, config: dict, dashboard=None):
+    """Invata dintr-un URL specific."""
     kb = KnowledgeBase(config["learning"]["knowledge_base_path"])
     learner = YouTubeLearner(config, kb)
-
+    if dashboard:
+        dashboard.push_log(f"Invatare din URL: {url[:60]}...", "info")
     strategies = learner.learn_from_url(url, game_name)
-
     log.info("=== Strategii extrase ===")
     print(strategies)
-    log.info("Invatare completata! Strategiile au fost salvate in knowledge base.")
+    if dashboard:
+        dashboard.push_log("Invatare URL completata!", "success")
+        dashboard.update_state(kb_stats=kb.get_stats())
 
 
-def search_youtube(game_name: str, query: str, config: dict, max_videos: int = 3, list_only: bool = False):
-    """Cauta pe YouTube si invata din video-urile gasite."""
+def search_youtube(game_name: str, query: str, config: dict,
+                   max_videos: int = 3, list_only: bool = False, dashboard=None):
+    """Cauta pe YouTube si invata."""
     kb = KnowledgeBase(config["learning"]["knowledge_base_path"])
     learner = YouTubeLearner(config, kb)
 
     if list_only:
-        # Listeaza video-urile fara sa le descarce
-        log.info(f"Caut video-uri pentru: '{query}'")
         videos = learner.get_video_titles(query, max_videos=10)
         if not videos:
             log.error("Nu s-au gasit video-uri.")
             return
-        print(f"\n=== Video-uri gasite pentru '{query}' ===")
+        print(f"\n=== Video-uri pentru '{query}' ===")
         for i, v in enumerate(videos, 1):
             print(f"  {i}. [{v['duration']}] {v['title']}")
             print(f"     {v['url']}")
-        print(f"\nFoloseste --learn-url <URL> pentru a invata dintr-un video specific.")
-        print(f"Sau --learn-search '{query}' --max-videos {max_videos} pentru a invata automat.")
         return
 
-    # Cauta si invata automat
+    if dashboard:
+        dashboard.push_log(f"Caut YouTube: '{query}' ({max_videos} video-uri)", "info")
+
     results = learner.search_and_learn(query, game_name, max_videos=max_videos)
+
     if results:
-        log.info(f"Invatare completata din {len(results)} video-uri!")
-        log.info("Ruleaza --kb-stats pentru a vedea ce s-a invatat.")
+        log.info(f"Invatat din {len(results)} video-uri!")
+        if dashboard:
+            dashboard.push_log(f"Invatare YouTube completata! ({len(results)} video-uri)", "success")
+            dashboard.update_state(kb_stats=kb.get_stats())
     else:
-        log.error("Nu s-a putut invata nimic. Verifica conexiunea si yt-dlp.")
+        log.error("Nu s-a putut invata nimic. Verifica yt-dlp si conexiunea.")
+        if dashboard:
+            dashboard.push_log("Eroare invatare YouTube!", "error")
 
 
-def describe_screen(config: dict):
-    """Descrie ce vede botul pe ecran (mod debug)."""
-    screen = ScreenCapture(monitor_index=config["capture"]["monitor"])
+def learn_callback_factory(config, dashboard):
+    """Factory pentru callback-ul de invatare din dashboard."""
+    def _learn(game: str, query: str = "", url: str = "", max_videos: int = 3):
+        if url:
+            learn_from_youtube(game, url, config, dashboard)
+        elif query:
+            search_youtube(game, query, config, max_videos=max_videos, dashboard=dashboard)
+    return _learn
+
+
+# ===== ALTE COMENZI =====
+
+def describe_screen(config: dict, mobile: bool = False):
+    """Debug: descrie ce vede botul."""
+    if mobile:
+        from mobile.ios_controller import iOSController
+        ios = iOSController(config)
+        if not ios.connect():
+            return
+        b64 = ios.capture_to_base64()
+        ios.close()
+    else:
+        from core.screen_capture import ScreenCapture
+        screen = ScreenCapture(monitor_index=config["capture"]["monitor"])
+        b64 = screen.capture_to_base64()
+        screen.close()
+
+    if not b64:
+        log.error("Nu s-a putut captura ecranul.")
+        return
+
     vision = VisionAnalyzer(config)
-
-    log.info("Capturez ecranul si solicit descriere...")
-    screenshot_b64 = screen.capture_to_base64()
-    description = vision.describe_scene(screenshot_b64)
-
+    desc = vision.describe_scene(b64)
     print("\n=== Ce vede botul ===")
-    print(description)
-    screen.close()
+    print(desc)
 
 
-def add_strategy(game_name: str, strategy_text: str, config: dict):
-    """Adauga o strategie manuala in knowledge base."""
+def add_strategy(game_name: str, text: str, config: dict):
     kb = KnowledgeBase(config["learning"]["knowledge_base_path"])
-    kb.add_strategy(game_name, strategy_text)
-    log.info(f"Strategie adaugata pentru {game_name}: {strategy_text}")
+    kb.add_strategy(game_name, text)
+    log.info(f"Strategie adaugata: {text}")
 
 
 def show_kb_stats(config: dict):
-    """Afiseaza statistici despre knowledge base."""
     kb = KnowledgeBase(config["learning"]["knowledge_base_path"])
     stats = kb.get_stats()
-    print("\n=== Knowledge Base Stats ===")
-    print(f"Jocuri: {', '.join(stats['games']) or 'niciun joc'}")
-    print(f"Strategii totale: {stats['total_strategies']}")
-    print(f"Experiente totale: {stats['total_experiences']}")
-    print(f"Surse YouTube: {stats['youtube_sources']}")
+    print("\n=== Knowledge Base ===")
+    print(f"Jocuri:    {', '.join(stats['games']) or 'niciunul'}")
+    print(f"Strategii: {stats['total_strategies']}")
+    print(f"Experiente:{stats['total_experiences']}")
+    print(f"YouTube:   {stats['youtube_sources']} surse")
 
+
+def get_local_ip() -> str:
+    """Returneaza IP-ul local al PC-ului (pentru dashboard)."""
+    import socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "localhost"
+
+
+# ===== MAIN =====
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Universal AI Game Bot - LLM powered, offline games",
+        description="Universal AI Game Bot - LLM + Vision + Trial&Error + YouTube",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemple:
-  # Joaca Dota Underlords
+  # Dashboard web (acceseaza de pe iPhone: http://<IP-PC>:5000)
+  python main.py --web
+
+  # Joaca pe PC
   python main.py --game dota_underlords
 
-  # Cauta automat pe YouTube si invata din 3 video-uri
-  python main.py --game dota_underlords --learn-search "dota underlords best strategy guide 2024"
+  # Joaca pe iPhone (WDA trebuie sa ruleze)
+  python main.py --game dota_underlords --mobile
 
-  # Listeaza video-urile gasite fara sa invete (alegi tu)
-  python main.py --learn-search "dota underlords tier list" --list-videos
+  # Dashboard + iPhone (tot de la dashboard controlezi)
+  python main.py --web --mobile
 
-  # Invata dintr-un URL specific
+  # Invata din YouTube (cautare automata)
+  python main.py --game dota_underlords --learn-search "dota underlords best guide 2024"
+
+  # Listeaza video-uri fara sa descarce
+  python main.py --learn-search "underlords tier list" --list-videos
+
+  # URL specific
   python main.py --game dota_underlords --learn-url "https://youtube.com/watch?v=..."
 
-  # Invata din mai multe video-uri
-  python main.py --game dota_underlords --learn-search "underlords guide" --max-videos 5
-
-  # Debug: ce vede botul pe ecran
+  # Debug - ce vede botul
   python main.py --describe
+  python main.py --describe --mobile
 
-  # Adauga strategie manuala
-  python main.py --game dota_underlords --add-strategy "Prioritizeaza Warriors early"
-
-  # Statistici knowledge base
+  # Statistici
   python main.py --kb-stats
         """
     )
 
-    parser.add_argument("--game", "-g", type=str, help="Jocul de jucat (ex: dota_underlords)")
-    parser.add_argument("--learn-url", "-l", type=str, help="URL YouTube specific din care sa invete")
+    parser.add_argument("--game", "-g", type=str, default="dota_underlords",
+                        help="Jocul de jucat (default: dota_underlords)")
+    parser.add_argument("--mobile", "-m", action="store_true",
+                        help="Mod iPhone: controleaza via WDA (WebDriverAgent)")
+    parser.add_argument("--web", "-w", action="store_true",
+                        help="Porneste dashboard-ul web (accesibil din orice browser)")
+    parser.add_argument("--web-port", type=int, default=5000,
+                        help="Port pentru dashboard web (default: 5000)")
+    parser.add_argument("--learn-url", "-l", type=str,
+                        help="URL YouTube specific")
     parser.add_argument("--learn-search", type=str, metavar="QUERY",
-                        help="Cauta pe YouTube si invata automat (ex: 'dota underlords guide')")
+                        help="Cauta pe YouTube si invata (ex: 'dota underlords guide')")
     parser.add_argument("--max-videos", type=int, default=3,
-                        help="Numar maxim de video-uri de invatat la --learn-search (default: 3)")
+                        help="Numar maxim video-uri la --learn-search (default: 3)")
     parser.add_argument("--list-videos", action="store_true",
-                        help="Folosit cu --learn-search: listeaza video-urile fara sa invete")
-    parser.add_argument("--describe", "-d", action="store_true", help="Descrie ecranul curent (debug)")
-    parser.add_argument("--add-strategy", "-s", type=str, help="Adauga o strategie manuala")
-    parser.add_argument("--kb-stats", action="store_true", help="Afiseaza statistici knowledge base")
-    parser.add_argument("--max-actions", "-n", type=int, default=0, help="Limita maxima de actiuni (0 = infinit)")
-    parser.add_argument("--config", "-c", type=str, default=None, help="Cale config YAML custom")
-    parser.add_argument("--api-key", type=str, help="Anthropic API key (sau seteaza ANTHROPIC_API_KEY env)")
+                        help="Listeaza video-urile fara sa le descarce")
+    parser.add_argument("--describe", "-d", action="store_true",
+                        help="Descrie ecranul curent (debug)")
+    parser.add_argument("--add-strategy", "-s", type=str,
+                        help="Adauga o strategie manuala")
+    parser.add_argument("--kb-stats", action="store_true",
+                        help="Afiseaza statistici knowledge base")
+    parser.add_argument("--max-actions", "-n", type=int, default=0,
+                        help="Limita actiuni (0 = infinit)")
+    parser.add_argument("--config", "-c", type=str, default=None,
+                        help="Cale config YAML custom")
+    parser.add_argument("--api-key", type=str,
+                        help="Anthropic API key (sau env ANTHROPIC_API_KEY)")
 
     args = parser.parse_args()
 
-    # Seteaza API key daca a fost furnizat
     if args.api_key:
         os.environ["ANTHROPIC_API_KEY"] = args.api_key
 
-    # Verifica API key
     config = load_config(args.config)
+
     api_key_env = config["ai"]["api_key_env"]
     if not os.environ.get(api_key_env):
-        log.error(f"API key lipsa! Seteaza {api_key_env} sau foloseste --api-key")
-        log.error("Exemplu: export ANTHROPIC_API_KEY='sk-ant-...'")
+        log.error(f"API key lipsa! Seteaza {api_key_env} sau --api-key")
         sys.exit(1)
 
-    # Creeaza directoarele necesare
     os.makedirs("logs", exist_ok=True)
     os.makedirs("data", exist_ok=True)
 
-    # Executa comanda solicitata
+    # ===== WEB DASHBOARD =====
+    if args.web:
+        from web.dashboard import run_dashboard, set_callbacks, update_state
+        import web.dashboard as dashboard_mod
+
+        kb = KnowledgeBase(config["learning"]["knowledge_base_path"])
+        dashboard_mod.update_state(kb_stats=kb.get_stats())
+
+        # Seteaza callback-urile
+        def _start(game, mode):
+            mobile = (mode == "mobile")
+            start_bot_thread(game, config, mobile,
+                             max_actions=args.max_actions,
+                             dashboard=dashboard_mod)
+
+        set_callbacks(
+            start_fn=_start,
+            stop_fn=stop_bot_thread,
+            learn_fn=learn_callback_factory(config, dashboard_mod),
+        )
+
+        local_ip = get_local_ip()
+        log.info(f"Dashboard pornit!")
+        log.info(f"  PC:     http://localhost:{args.web_port}")
+        log.info(f"  iPhone: http://{local_ip}:{args.web_port}")
+
+        # Daca --game si --web, porneste botul automat
+        if args.game and not args.learn_search and not args.learn_url:
+            log.info(f"Pornesc botul automat pentru {args.game}...")
+            start_bot_thread(args.game, config, args.mobile,
+                             max_actions=args.max_actions,
+                             dashboard=dashboard_mod)
+
+        run_dashboard(port=args.web_port)
+        return
+
+    # ===== COMENZI FARA DASHBOARD =====
+
     if args.describe:
-        describe_screen(config)
+        describe_screen(config, mobile=args.mobile)
 
     elif args.kb_stats:
         show_kb_stats(config)
 
     elif args.learn_url:
-        if not args.game:
-            log.error("Trebuie sa specifici --game pentru a invata din YouTube")
-            sys.exit(1)
         learn_from_youtube(args.game, args.learn_url, config)
 
     elif args.learn_search:
-        if not args.game and not args.list_videos:
-            log.error("Trebuie sa specifici --game pentru a invata din YouTube")
-            sys.exit(1)
-        game = args.game or "general"
-        search_youtube(game, args.learn_search, config,
+        search_youtube(args.game, args.learn_search, config,
                        max_videos=args.max_videos, list_only=args.list_videos)
 
     elif args.add_strategy:
-        if not args.game:
-            log.error("Trebuie sa specifici --game pentru a adauga o strategie")
-            sys.exit(1)
         add_strategy(args.game, args.add_strategy, config)
 
     elif args.game:
-        run_bot(args.game, config, max_actions=args.max_actions)
+        run_bot(args.game, config, mobile=args.mobile, max_actions=args.max_actions)
 
     else:
         parser.print_help()
