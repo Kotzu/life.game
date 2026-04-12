@@ -1,0 +1,7 @@
+# Pachete compatibile cu Juno IDE pe iPhone
+# Instalare in Juno: Settings > Python Packages > pip install -r requirements_juno.txt
+
+anthropic>=0.40.0    # Claude AI - functioneaza pe iOS
+requests>=2.31.0     # HTTP requests
+yt-dlp>=2024.1.0     # YouTube download (pure Python, fara C extensions)
+pyyaml>=6.0.1        # Config YAML
