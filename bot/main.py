@@ -124,8 +124,25 @@ def run_bot(game_name: str, config: dict, mobile: bool = False,
         dashboard.update_state(running=True, game=game_name,
                                mode="mobile" if mobile else "desktop")
 
-    log.info("Pornesc in 3 secunde... CTRL+C pentru oprire.")
-    time.sleep(3)
+    # Countdown + auto-focus joc pe macOS
+    import platform, subprocess
+    log.info("=" * 55)
+    log.info("  Deschide Dota Underlords ACUM si comuta pe fereastra!")
+    log.info("  Botul porneste in 10 secunde...")
+    log.info("=" * 55)
+    for i in range(10, 0, -1):
+        log.info(f"  Start in {i}s...")
+        time.sleep(1)
+    # Auto-focus Dota Underlords pe macOS
+    if platform.system() == "Darwin":
+        try:
+            subprocess.run(
+                ["osascript", "-e",
+                 'tell application "Dota Underlords" to activate'],
+                capture_output=True, timeout=3
+            )
+        except Exception:
+            pass
 
     try:
         while not _stop_flag.is_set():
