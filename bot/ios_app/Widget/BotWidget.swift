@@ -8,6 +8,7 @@ import WidgetKit
 // ── Shared model (copy din Sources/BotActivity.swift) ──────────────────────
 // (In Xcode: adauga BotActivity.swift la ambele targete in loc de duplicate)
 
+@main
 struct BotLiveActivityWidget: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: BotActivityAttributes.self) { context in

@@ -27,8 +27,6 @@ targets:
     sources:
       - path: Sources
         includes: ["*.swift"]
-      - path: Widget
-        includes: ["BotActivityAttributes.swift"]  # shared model
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.aibot.BotBridge
