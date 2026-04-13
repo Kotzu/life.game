@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 /// Client pentru Mac Bridge (mac_bridge.py).
 /// BotBridge apeleaza Mac Bridge via WiFi pentru a porni/opri TouchRunner.
