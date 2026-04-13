@@ -35,7 +35,7 @@ class BotLoop: ObservableObject {
 
         // Cere permisiune screen capture
         do {
-            try await capture.start(fps: 2)
+            try await capture.start(fps: 1)
         } catch {
             log("Screen capture eroare: \(error.localizedDescription)", level: "error")
             return

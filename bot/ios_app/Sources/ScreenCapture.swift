@@ -54,9 +54,9 @@ class ScreenCapture: NSObject, ObservableObject {
         guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
 
         let original = UIImage(cgImage: cgImage)
-        let scaled   = original.scaledDown(toWidth: 1280)
+        let scaled   = original.scaledDown(toWidth: 768)
 
-        guard let jpeg = scaled.jpegData(compressionQuality: 0.82) else { return }
+        guard let jpeg = scaled.jpegData(compressionQuality: 0.7) else { return }
         onFrame?(jpeg)
     }
 }
