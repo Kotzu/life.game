@@ -208,7 +208,7 @@ def run_bot(game_name: str, config: dict, mobile: bool = False,
                 log.debug(f"Reward: {reward:+.2f}")
 
                 # Detectare game over -> reset episod
-                if new_state.get("hp", 100) <= 0:
+                if (new_state.get("hp") or 100) <= 0:
                     log.info("Game over detectat! Resetez episodul.")
                     rewards.reset_episode()
                     if dashboard:
