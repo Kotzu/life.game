@@ -5,7 +5,9 @@ Miscare bezier pentru mouse (apare uman, timing randomizat).
 """
 
 import math
+import platform
 import random
+import subprocess
 import time
 from typing import List, Optional, Tuple
 
@@ -98,8 +100,23 @@ class InputController:
         y = int(y_pct * screen_h)
         self.move_to(x, y)
 
+    def _focus_game(self):
+        """Aduce fereastra jocului in prim-plan pe macOS."""
+        if platform.system() == "Darwin":
+            for app in ("Dota Underlords", "dota_underlords"):
+                try:
+                    subprocess.run(
+                        ["osascript", "-e", f'tell application "{app}" to activate'],
+                        capture_output=True, timeout=2
+                    )
+                    time.sleep(0.1)
+                    break
+                except Exception:
+                    pass
+
     def click(self, x: Optional[int] = None, y: Optional[int] = None, button: str = "left"):
         """Click (cu miscare umana daca sunt specificate coordonate)."""
+        self._focus_game()
         if x is not None and y is not None:
             self.move_to(x, y)
 
