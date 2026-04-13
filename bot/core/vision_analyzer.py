@@ -1,60 +1,76 @@
 """
-Vision Analyzer - Foloseste Claude Vision API pentru analiza screenshots.
-Trimite imagini la Claude si interpreteaza starea jocului.
+Vision Analyzer - Un singur apel Claude per ciclu.
+Analizeaza screenshot-ul, extrage starea si decide actiunea simultan.
 """
 
+import json
 import os
-from typing import Any, Dict, Optional
+import re
+from typing import Any, Dict
 
 import anthropic
 
 from utils.logger import log
 
 
-class VisionAnalyzer:
-    """
-    Analizator vizual bazat pe Claude Vision.
-    Interpreteaza screenshots ale jocului si extrage informatii structurate.
-    """
+ONE_SHOT_PROMPT = """Esti un bot expert la Dota Underlords. Analizezi un screenshot si returnezi un JSON cu:
+1. Ce ecran este vizibil
+2. Starea jocului (daca esti in joc)
+3. Actiunea optima de facut ACUM
 
+COORDONATE: intotdeauna ca procente 0.0-1.0 (x_pct=0.0 stanga, 1.0 dreapta; y_pct=0.0 sus, 1.0 jos)
+
+Raspunde EXCLUSIV cu JSON valid:
+{
+  "screen": "main_menu|mode_select|loading|in_game|game_over|unknown",
+  "gold": <int sau null>,
+  "hp": <int sau null>,
+  "round": <int sau null>,
+  "phase": "planning|combat|shopping|unknown",
+  "action": "click|wait|key",
+  "x_pct": <0.0-1.0 sau null>,
+  "y_pct": <0.0-1.0 sau null>,
+  "target": "<ce apesi>",
+  "reason": "<de ce>",
+  "confidence": <0.0-1.0>
+}"""
+
+
+class VisionAnalyzer:
     def __init__(self, config: dict):
         api_key = os.environ.get(config["ai"]["api_key_env"])
         if not api_key:
-            raise ValueError(
-                f"API key nu a fost gasit. Seteaza variabila {config['ai']['api_key_env']}"
-            )
+            raise ValueError(f"API key lipsa. Seteaza {config['ai']['api_key_env']}")
 
         self.client = anthropic.Anthropic(api_key=api_key)
         self.model = config["ai"]["vision_model"]
         self.max_tokens = config["ai"]["max_tokens"]
+        log.info(f"VisionAnalyzer: {self.model}")
 
-        log.info(f"VisionAnalyzer initializat cu modelul {self.model}")
-
-    def analyze_game_state(
+    def analyze_and_decide(
         self,
         screenshot_b64: str,
-        game_context: str,
-        system_prompt: str,
+        history: str = "",
+        knowledge: str = "",
     ) -> Dict[str, Any]:
         """
-        Analizeza un screenshot al jocului si returneaza starea parsed.
-
-        Args:
-            screenshot_b64: Screenshot encodat in base64
-            game_context: Context specific jocului (ce sa caute)
-            system_prompt: Instructiunile de sistem pentru AI
-
-        Returns:
-            Dict cu starea jocului extrasa
+        UN singur apel API: vede ecranul, extrage starea, decide actiunea.
+        Inlocuieste 3-4 apeluri separate.
         """
-        log.debug("Trimit screenshot la Claude Vision pentru analiza...")
+        context = ""
+        if history:
+            context += f"\nUltimele actiuni (cu rezultat):\n{history}"
+        if knowledge:
+            context += f"\nStrategii cunoscute:\n{knowledge[:500]}"
+        if context:
+            context = f"\nCONTEXT:{context}"
 
-        message = self.client.messages.create(
-            model=self.model,
-            max_tokens=self.max_tokens,
-            system=system_prompt,
-            messages=[
-                {
+        try:
+            msg = self.client.messages.create(
+                model=self.model,
+                max_tokens=512,
+                system=ONE_SHOT_PROMPT,
+                messages=[{
                     "role": "user",
                     "content": [
                         {
@@ -67,114 +83,30 @@ class VisionAnalyzer:
                         },
                         {
                             "type": "text",
-                            "text": game_context,
+                            "text": f"Analizeaza si decide urmatoarea actiune.{context}",
                         },
                     ],
-                }
-            ],
-        )
+                }],
+            )
 
-        response_text = message.content[0].text
-        log.debug(f"Raspuns Claude Vision: {response_text[:200]}...")
+            raw = msg.content[0].text
+            log.debug(f"Vision raw: {raw[:200]}")
+            return self._parse(raw)
 
-        return {"raw_response": response_text, "usage": message.usage}
+        except Exception as e:
+            log.error(f"VisionAnalyzer eroare: {e}")
+            return {"screen": "unknown", "action": "wait", "reason": str(e), "confidence": 0.0}
 
-    def decide_action(
-        self,
-        screenshot_b64: str,
-        game_state: Dict[str, Any],
-        knowledge: str,
-        system_prompt: str,
-    ) -> str:
-        """
-        Pe baza starii jocului si cunostintelor, decide urmatoarea actiune.
+    def _parse(self, text: str) -> Dict[str, Any]:
+        m = re.search(r'\{.*\}', text, re.DOTALL)
+        if m:
+            try:
+                return json.loads(m.group())
+            except json.JSONDecodeError:
+                pass
+        return {"screen": "unknown", "action": "wait", "reason": "parse error", "confidence": 0.0}
 
-        Args:
-            screenshot_b64: Screenshot curent
-            game_state: Starea jocului extrasa anterior
-            knowledge: Cunostinte invatate din YouTube/experienta
-            system_prompt: Instructiuni de sistem
-
-        Returns:
-            JSON string cu actiunile de executat
-        """
-        log.debug("Solicit decizie de la Claude...")
-
-        user_message = f"""
-Starea curenta a jocului:
-{game_state}
-
-Cunostinte si strategii invatate:
-{knowledge}
-
-Pe baza screenshot-ului si starii jocului, decide cea mai buna actiune urmatoare.
-
-IMPORTANT pentru coordonate:
-- Returneaza INTOTDEAUNA coordonatele ca procente (0.0-1.0) din ecran, NU pixeli
-- x_pct=0.0 = marginea stanga, x_pct=1.0 = marginea dreapta
-- y_pct=0.0 = marginea sus, y_pct=1.0 = marginea jos
-- Exemplu: un buton la jumatatea ecranului = x_pct=0.5, y_pct=0.5
-- Fii precis: uita-te exact unde e elementul in imagine si estimeaza procentul
-
-Returneaza DOAR un JSON valid cu structura:
-{{
-  "action": "click|drag|key|wait|reroll|buy|sell|place|combine",
-  "target": "descriere element UI tinta",
-  "x_pct": null,
-  "y_pct": null,
-  "from_x_pct": null,
-  "from_y_pct": null,
-  "reason": "explicatie scurta",
-  "confidence": 0.0-1.0
-}}
-"""
-        message = self.client.messages.create(
-            model=self.model,
-            max_tokens=512,
-            system=system_prompt,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": "image/jpeg",
-                                "data": screenshot_b64,
-                            },
-                        },
-                        {"type": "text", "text": user_message},
-                    ],
-                }
-            ],
-        )
-
-        return message.content[0].text
-
+    # Pastrat pentru compatibilitate cu cod vechi
     def describe_scene(self, screenshot_b64: str) -> str:
-        """Descrie generic ce vede in screenshot (pentru debugging/learning)."""
-        message = self.client.messages.create(
-            model=self.model,
-            max_tokens=1024,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": "image/jpeg",
-                                "data": screenshot_b64,
-                            },
-                        },
-                        {
-                            "type": "text",
-                            "text": "Descrie detaliat ce vezi in aceasta imagine. Daca e un joc, identifica UI elements, starea jocului, resurse, unitati, etc.",
-                        },
-                    ],
-                }
-            ],
-        )
-        return message.content[0].text
+        result = self.analyze_and_decide(screenshot_b64)
+        return f"screen={result.get('screen')} phase={result.get('phase')} target={result.get('target')}"

@@ -157,59 +157,66 @@ def run_bot(game_name: str, config: dict, mobile: bool = False,
                 time.sleep(2)
                 continue
 
-            # Trimite screenshot la dashboard
             if dashboard:
                 dashboard.push_screenshot(screenshot_b64)
 
-            # 2. Verifica daca jocul e activ
-            if not game_bot.is_game_active(screenshot_b64):
-                log.warning("Jocul nu pare activ. Astept 5s...")
-                time.sleep(5)
-                continue
+            # 2. UN singur apel Claude: vede + decide
+            history_text = ""
+            if hasattr(decision, 'history') and decision.history:
+                recent = decision.history[-4:]
+                history_text = "\n".join(
+                    f"- {h.get('action')} pe '{h.get('target','')}' -> {h.get('result','?')}"
+                    + (f" (ESEC: {h.get('notes','')})" if h.get('result') == 'esec' else "")
+                    for h in recent
+                )
+            knowledge_text = kb.get_relevant_knowledge(game_name, {})
 
-            # 3. Parseaza starea jocului
-            game_state = game_bot.parse_game_state(screenshot_b64)
+            result = vision.analyze_and_decide(screenshot_b64, history_text, knowledge_text)
 
-            # 4. Adauga contextul reward-urilor recente la knowledge
-            reward_context = rewards.get_recent_context(n=5)
-            if reward_context:
-                # Injecteaza contextul temporar in KB (nu se salveaza permanent)
-                game_state["_reward_context"] = reward_context
+            screen_type = result.get("screen", "unknown")
+            action = {
+                "action":   result.get("action", "wait"),
+                "x_pct":    result.get("x_pct"),
+                "y_pct":    result.get("y_pct"),
+                "from_x_pct": result.get("from_x_pct"),
+                "from_y_pct": result.get("from_y_pct"),
+                "key":      result.get("key"),
+                "reason":   result.get("reason", ""),
+                "target_description": result.get("target", ""),
+                "confidence": result.get("confidence", 0.5),
+            }
+            game_state = {
+                "game":   game_name,
+                "screen": screen_type,
+                "gold":   result.get("gold"),
+                "hp":     result.get("hp"),
+                "round":  result.get("round"),
+                "phase":  result.get("phase", "unknown"),
+            }
 
             log.info(
-                f"Stare | Round={game_state.get('round')} "
-                f"Gold={game_state.get('gold')} HP={game_state.get('hp')}"
+                f"[{screen_type}] {action['action']} -> '{action['target_description']}' "
+                f"({int(action['confidence']*100)}%) | {action['reason'][:60]}"
             )
 
-            # 5. Decide actiunea
-            action = decision.decide(game_state, screenshot_b64, game_name)
-            log.info(
-                f"Decizie: {action.get('action')} | "
-                f"Incredere: {action.get('confidence', 0):.0%} | "
-                f"{action.get('reason', '')[:60]}"
-            )
-
-            # Update dashboard
             if dashboard:
-                stats = {"actions": action_count, "errors": errors, "uptime": 0}
                 dashboard.update_state(
                     last_action=action,
                     game_state=game_state,
-                    stats=stats,
+                    stats={"actions": action_count, "errors": errors, "uptime": 0},
                 )
                 dashboard.push_log(
-                    f"[{action.get('action')}] {action.get('reason','')[:80]}",
-                    "info"
+                    f"[{screen_type}][{action['action']}] {action['reason'][:80]}", "info"
                 )
 
-            # 6. Fingerprint inainte de actiune (pentru verificare efect)
+            # 3. Fingerprint inainte
             fp_before = screen.fingerprint() if hasattr(screen, 'fingerprint') else None
 
-            # 7. Executa actiunea
+            # 4. Executa
             success = game_bot.execute_action(action)
 
-            # 8. Verifica daca actiunea a avut efect real (ecranul s-a schimbat?)
-            time.sleep(1.5)  # Asteapta animatia/tranzitia
+            # 5. Verifica daca ecranul s-a schimbat
+            time.sleep(1.5)
             fp_after = screen.fingerprint() if hasattr(screen, 'fingerprint') else None
             screen_changed = (fp_before is None or fp_after is None or fp_before != fp_after)
 
@@ -217,54 +224,55 @@ def run_bot(game_name: str, config: dict, mobile: bool = False,
                 errors = 0
                 action_count += 1
                 decision.mark_action_result(action, True)
-                log.debug("Actiune confirmata: ecranul s-a schimbat")
-            elif success and not screen_changed:
-                # Actiunea s-a executat tehnic dar nu a avut efect vizibil
+            elif success and not screen_changed and action.get("action") != "wait":
                 action_count += 1
                 decision.mark_action_result(
                     action, False,
-                    notes="Ecranul nu s-a schimbat dupa actiune - click probabil ratat"
+                    notes=f"Ecranul nu s-a schimbat dupa click pe '{action.get('target_description','?')}'"
                 )
-                log.warning(
-                    f"Actiune '{action.get('action')}' fara efect vizibil "
-                    f"(tinta: {action.get('target_description', '?')}). "
-                    f"LLM va sti sa incerce altceva."
-                )
+                log.warning(f"Click fara efect pe '{action.get('target_description','?')}'")
                 if dashboard:
                     dashboard.push_log(
-                        f"Click fara efect la {action.get('target_description','?')} "
-                        f"- voi incerca alta pozitie",
+                        f"Click ratat pe '{action.get('target_description','?')}' - voi incerca altfel",
                         "warning"
                     )
             else:
-                errors += 1
-                decision.mark_action_result(action, False)
+                if action.get("action") == "wait":
+                    pass  # wait e ok
+                else:
+                    errors += 1
+                decision.mark_action_result(action, success)
                 if errors >= MAX_ERRORS:
-                    log.error(f"Prea multe erori consecutive ({MAX_ERRORS}). Opresc.")
+                    log.error(f"Prea multe erori ({MAX_ERRORS}). Opresc.")
                     break
 
-            # 9. Capteaza starea de dupa actiune (pentru reward)
+            # 6. Reward bazat pe schimbarea starii
             new_screenshot_b64 = screen.capture_to_base64()
             if new_screenshot_b64:
-                new_state = game_bot.parse_game_state(new_screenshot_b64)
+                new_result = vision.analyze_and_decide(new_screenshot_b64)
+                new_state = {
+                    "game": game_name,
+                    "screen": new_result.get("screen", "unknown"),
+                    "gold": new_result.get("gold"),
+                    "hp": new_result.get("hp"),
+                    "round": new_result.get("round"),
+                }
                 reward = rewards.record_experience(game_state, action, new_state)
                 log.debug(f"Reward: {reward:+.2f}")
 
-                # Detectare game over -> reset episod
                 if (new_state.get("hp") or 100) <= 0:
-                    log.info("Game over detectat! Resetez episodul.")
+                    log.info("Game over! Resetez episodul.")
                     rewards.reset_episode()
                     if dashboard:
                         dashboard.push_log("Game over! Episod nou.", "warning")
-                    time.sleep(10)  # Asteapta ecranul de sfarsit
+                    time.sleep(10)
 
-                prev_state = new_state
+            # 7. Pauza adaptiva: mai scurta pe meniu, mai lunga in joc
+            if screen_type in ("main_menu", "mode_select"):
+                time.sleep(0.5)  # Meniu: rapid
             else:
-                prev_state = game_state
-
-            # 8. Pauza intre cicluri
-            fps = config["capture"].get("fps", 2)
-            time.sleep(1.0 / fps)
+                fps = config["capture"].get("fps", 2)
+                time.sleep(1.0 / fps)
 
     except KeyboardInterrupt:
         log.info("Bot oprit (CTRL+C)")
