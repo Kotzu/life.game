@@ -1,0 +1,87 @@
+# Universal AI Game Bot - Configuration
+
+ai:
+  model: "claude-opus-4-6"           # Model LLM principal
+  vision_model: "claude-opus-4-6"    # Model pentru analiza vizuala
+  api_key_env: "ANTHROPIC_API_KEY"   # Variabila de mediu pentru API key
+  max_tokens: 4096
+  temperature: 0.3
+
+capture:
+  fps: 2                             # Frame-uri pe secunda (nu suprasolicita API)
+  format: "JPEG"
+  quality: 85
+  monitor: 0                         # 0 = monitor primar
+
+input:
+  # Timpi umani (random in interval [min, max] secunde)
+  click_delay_min: 0.08
+  click_delay_max: 0.25
+  move_duration_min: 0.1
+  move_duration_max: 0.4
+  action_pause_min: 0.3
+  action_pause_max: 1.2
+  bezier_points: 5
+  bezier_deviation: 30
+
+# ===== MOBILE (iPhone via WebDriverAgent) =====
+mobile:
+  # WDA ruleaza pe iPhone, accesat via USB tunnel sau WiFi
+  wda_host: "localhost"              # localhost = USB tunnel (iproxy)
+  wda_port: 8100
+  screenshot_mode: "wda"            # "wda" = via WDA HTTP | "usb" = via pymobiledevice3
+  scale_factor: 1.0                 # iPhone Point coordinates (nu pixeli fizici)
+
+  # Setup iPhone (o singura data):
+  # 1. Settings > Privacy & Security > Developer Mode -> ON
+  # 2. Conecteaza iPhone la PC via USB
+  # 3. Ruleaza pe PC: tidevice xctest --bundle_id com.facebook.WebDriverAgentRunner
+  # 4. Ruleaza: iproxy 8100 8100  (tunel USB pentru WDA)
+  # 5. Porneste botul: python main.py --mobile
+
+# ===== WEB DASHBOARD =====
+web:
+  host: "0.0.0.0"                   # 0.0.0.0 = accesibil din retea locala
+  port: 5000
+  # Acces din iPhone: http://<IP-PC-tau>:5000
+  # Gaseste IP-ul cu: ipconfig (Windows) sau ifconfig (Mac/Linux)
+
+# ===== REWARD SYSTEM (Trial & Error) =====
+rewards:
+  # Reward-uri pozitive
+  round_survived: 2.0               # Supravietuiesti o runda
+  hp_maintained_combat: 0.5        # HP mentinut in lupta
+  hero_bought_placed: 0.8          # Erou cumparat si pus pe tabla
+  safe_reroll: 0.2                 # Reroll cu gold suficient
+  level_up_affordable: 0.6        # Level up abordabil
+  hero_combine: 3.0               # 3 eroi combinati intr-unul mai puternic!
+
+  # Penalitati
+  hp_loss_per_point: -0.15        # Per HP pierdut
+  risky_reroll: -0.5              # Reroll cu gold sub 10
+  level_up_broke: -0.3            # Level up cand n-ai gold
+  idle_planning: -0.1             # Inactiv in planning phase
+  game_over: -10.0                # Eliminat din joc
+
+learning:
+  knowledge_base_path: "data/knowledge_base.json"
+  video_cache_path: "data/videos/"
+  max_videos_per_game: 20
+  whisper_model: "base"            # base | small | medium | large
+  # "base" = ~1GB RAM, rapid | "medium" = mai precis | "large" = cel mai bun
+
+games:
+  dota_underlords:
+    name: "Dota Underlords"
+    window_title: "Dota Underlords"
+    resolution_pc: [1920, 1080]
+    resolution_iphone: [390, 844]  # iPhone 14 Pro points
+    # Regiuni UI ca procente din ecran (valabile pt ambele rezolutii)
+    regions:
+      board: [0.05, 0.10, 0.75, 0.85]
+      bench: [0.05, 0.87, 0.95, 0.97]
+      shop:  [0.10, 0.87, 0.90, 0.98]
+      gold:  [0.01, 0.93, 0.15, 0.99]
+      hp:    [0.01, 0.88, 0.15, 0.93]
+      round: [0.42, 0.01, 0.58, 0.07]
+      level: [0.05, 0.93, 0.15, 0.99]

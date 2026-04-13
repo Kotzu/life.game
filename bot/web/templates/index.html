@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AI Game Bot</title>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 12px;
+      padding-bottom: 80px;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: #12121a;
+      border-radius: 14px;
+      border: 1px solid #1e1e2e;
+    }
+    .header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #7c3aed, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .status-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #374151;
+      transition: background 0.3s;
+    }
+    .status-dot.running { background: #10b981; box-shadow: 0 0 8px #10b981; }
+    .status-dot.learning { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; animation: pulse 1s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ===== SCREENSHOT ===== */
+    .screenshot-card {
+      background: #12121a;
+      border: 1px solid #1e1e2e;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .screenshot-card .label {
+      position: absolute;
+      top: 8px; left: 10px;
+      font-size: 11px;
+      color: #6b7280;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(10,10,15,0.8);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .screenshot-card img {
+      width: 100%;
+      display: block;
+      border-radius: 16px;
+    }
+    .no-screenshot {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #374151;
+      font-size: 14px;
+    }
+
+    /* ===== STATS GRID ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat-card {
+      background: #12121a;
+      border: 1px solid #1e1e2e;
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+    .stat-card .stat-label {
+      font-size: 10px;
+      color: #6b7280;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .stat-card .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #e0e0e0;
+    }
+    .stat-card .stat-sub {
+      font-size: 11px;
+      color: #4b5563;
+      margin-top: 2px;
+    }
+    .stat-card.gold .stat-value { color: #f59e0b; }
+    .stat-card.hp .stat-value { color: #10b981; }
+    .stat-card.round .stat-value { color: #7c3aed; }
+    .stat-card.actions .stat-value { color: #06b6d4; }
+
+    /* ===== ACTION CARD ===== */
+    .action-card {
+      background: #12121a;
+      border: 1px solid #1e1e2e;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .action-card .section-label {
+      font-size: 10px;
+      color: #6b7280;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .action-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #1e1e2e;
+      color: #7c3aed;
+      margin-right: 6px;
+    }
+    .action-reason {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .confidence-bar {
+      height: 4px;
+      background: #1e1e2e;
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .confidence-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #7c3aed, #06b6d4);
+      transition: width 0.5s ease;
+    }
+
+    /* ===== CONTROLS ===== */
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .btn {
+      padding: 16px;
+      border-radius: 14px;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { transform: scale(0.96); }
+    .btn-start {
+      background: linear-gradient(135deg, #7c3aed, #06b6d4);
+      color: white;
+    }
+    .btn-stop {
+      background: #1e1e2e;
+      color: #ef4444;
+      border: 1px solid #ef4444;
+    }
+    .btn-stop:disabled { opacity: 0.4; }
+    .btn-start:disabled { opacity: 0.4; }
+
+    /* ===== GAME MODE ===== */
+    .mode-selector {
+      background: #12121a;
+      border: 1px solid #1e1e2e;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .mode-selector .section-label {
+      font-size: 10px;
+      color: #6b7280;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toggle-group {
+      display: flex;
+      background: #0a0a0f;
+      border-radius: 10px;
+      padding: 3px;
+      border: 1px solid #1e1e2e;
+    }
+    .toggle-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: #6b7280;
+      transition: all 0.2s;
+    }
+    .toggle-btn.active {
+      background: #7c3aed;
+      color: white;
+    }
+
+    /* ===== YOUTUBE LEARN ===== */
+    .learn-card {
+      background: #12121a;
+      border: 1px solid #1e1e2e;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .learn-card .section-label {
+      font-size: 10px;
+      color: #6b7280;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .learn-input {
+      width: 100%;
+      background: #0a0a0f;
+      border: 1px solid #1e1e2e;
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #e0e0e0;
+      font-size: 15px;
+      margin-bottom: 8px;
+      outline: none;
+    }
+    .learn-input:focus { border-color: #7c3aed; }
+    .learn-input::placeholder { color: #374151; }
+    .learn-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .videos-counter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+    .videos-counter button {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      border: 1px solid #1e1e2e;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-learn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #dc2626, #f59e0b);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-learn:active { transform: scale(0.97); }
+
+    /* ===== LOG ===== */
+    .log-card {
+      background: #12121a;
+      border: 1px solid #1e1e2e;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .log-card .section-label {
+      font-size: 10px;
+      color: #6b7280;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .log-lines {
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      max-height: 140px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .log-line { display: flex; gap: 6px; }
+    .log-time { color: #4b5563; flex-shrink: 0; }
+    .log-msg.info { color: #9ca3af; }
+    .log-msg.error { color: #ef4444; }
+    .log-msg.warning { color: #f59e0b; }
+    .log-msg.debug { color: #4b5563; }
+    .log-msg.success { color: #10b981; }
+
+    /* ===== KB STATS ===== */
+    .kb-card {
+      background: #12121a;
+      border: 1px solid #1e1e2e;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .kb-card .section-label {
+      font-size: 10px;
+      color: #6b7280;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .kb-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #1e1e2e;
+    }
+    .kb-row:last-child { border-bottom: none; }
+    .kb-key { font-size: 13px; color: #6b7280; }
+    .kb-val { font-size: 13px; font-weight: 700; color: #e0e0e0; }
+
+    /* ===== CONNECTION ===== */
+    .conn-badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .conn-badge.connected { background: #064e3b; color: #10b981; }
+    .conn-badge.disconnected { background: #1f1f2e; color: #6b7280; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>AI Game Bot</h1>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="conn-badge disconnected" id="conn-badge">Offline</span>
+      <div class="status-dot" id="status-dot"></div>
+    </div>
+  </div>
+
+  <!-- SCREENSHOT LIVE -->
+  <div class="screenshot-card">
+    <span class="label">LIVE</span>
+    <div class="no-screenshot" id="no-screenshot">Asteapta screenshot...</div>
+    <img id="screenshot-img" style="display:none;" alt="Game screenshot">
+  </div>
+
+  <!-- GAME STATS -->
+  <div class="stats-grid">
+    <div class="stat-card gold">
+      <div class="stat-label">Gold</div>
+      <div class="stat-value" id="stat-gold">—</div>
+      <div class="stat-sub">resursa principala</div>
+    </div>
+    <div class="stat-card hp">
+      <div class="stat-label">HP</div>
+      <div class="stat-value" id="stat-hp">—</div>
+      <div class="stat-sub">viata jucator</div>
+    </div>
+    <div class="stat-card round">
+      <div class="stat-label">Runda</div>
+      <div class="stat-value" id="stat-round">—</div>
+      <div class="stat-sub" id="stat-phase">—</div>
+    </div>
+    <div class="stat-card actions">
+      <div class="stat-label">Actiuni</div>
+      <div class="stat-value" id="stat-actions">0</div>
+      <div class="stat-sub" id="stat-errors">0 erori</div>
+    </div>
+  </div>
+
+  <!-- ULTIMA ACTIUNE -->
+  <div class="action-card">
+    <div class="section-label">Ultima Actiune</div>
+    <div>
+      <span class="action-badge" id="action-type">—</span>
+    </div>
+    <div class="action-reason" id="action-reason">Botul nu ruleaza.</div>
+    <div class="confidence-bar">
+      <div class="confidence-fill" id="confidence-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- MOD JOC -->
+  <div class="mode-selector">
+    <div class="section-label">Mod & Joc</div>
+    <div class="toggle-row">
+      <div class="toggle-group">
+        <button class="toggle-btn" id="mode-mobile" onclick="setMode('mobile')">iPhone</button>
+        <button class="toggle-btn active" id="mode-desktop" onclick="setMode('desktop')">PC</button>
+      </div>
+      <select id="game-select" style="flex:1;background:#0a0a0f;border:1px solid #1e1e2e;color:#e0e0e0;padding:8px 12px;border-radius:10px;font-size:13px;">
+        <option value="dota_underlords">Dota Underlords</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- CONTROALE START/STOP -->
+  <div class="controls">
+    <button class="btn btn-start" id="btn-start" onclick="startBot()">▶ Porneste</button>
+    <button class="btn btn-stop" id="btn-stop" onclick="stopBot()" disabled>■ Opreste</button>
+  </div>
+
+  <!-- YOUTUBE LEARNING -->
+  <div class="learn-card">
+    <div class="section-label">Invata din YouTube</div>
+    <input class="learn-input" id="learn-input" type="text"
+           placeholder="Cauta: dota underlords guide 2024"
+           autocomplete="off" spellcheck="false">
+    <div class="learn-row">
+      <div class="videos-counter">
+        <button onclick="changeVideos(-1)">−</button>
+        <span id="videos-count">3</span> video-uri
+        <button onclick="changeVideos(1)">+</button>
+      </div>
+      <button class="btn-learn" onclick="startLearning()">▶ Invata</button>
+    </div>
+  </div>
+
+  <!-- KNOWLEDGE BASE STATS -->
+  <div class="kb-card">
+    <div class="section-label">Knowledge Base</div>
+    <div class="kb-row">
+      <span class="kb-key">Jocuri invatate</span>
+      <span class="kb-val" id="kb-games">—</span>
+    </div>
+    <div class="kb-row">
+      <span class="kb-key">Strategii</span>
+      <span class="kb-val" id="kb-strategies">—</span>
+    </div>
+    <div class="kb-row">
+      <span class="kb-key">Experiente</span>
+      <span class="kb-val" id="kb-experiences">—</span>
+    </div>
+    <div class="kb-row">
+      <span class="kb-key">Surse YouTube</span>
+      <span class="kb-val" id="kb-youtube">—</span>
+    </div>
+  </div>
+
+  <!-- LOG -->
+  <div class="log-card">
+    <div class="section-label">Log</div>
+    <div class="log-lines" id="log-lines"></div>
+  </div>
+
+<script>
+  // ===== STATE =====
+  let selectedMode = 'desktop';
+  let maxVideos = 3;
+  let isRunning = false;
+
+  // ===== SOCKET.IO =====
+  const socket = io();
+
+  socket.on('connect', () => {
+    document.getElementById('conn-badge').textContent = 'Online';
+    document.getElementById('conn-badge').className = 'conn-badge connected';
+    loadKbStats();
+  });
+
+  socket.on('disconnect', () => {
+    document.getElementById('conn-badge').textContent = 'Offline';
+    document.getElementById('conn-badge').className = 'conn-badge disconnected';
+  });
+
+  socket.on('screenshot', (data) => {
+    const img = document.getElementById('screenshot-img');
+    const noScr = document.getElementById('no-screenshot');
+    if (data.data) {
+      img.src = 'data:image/jpeg;base64,' + data.data;
+      img.style.display = 'block';
+      noScr.style.display = 'none';
+    }
+  });
+
+  socket.on('state_update', (state) => {
+    isRunning = state.running;
+    updateUI(state);
+  });
+
+  socket.on('log_line', (line) => {
+    appendLog(line);
+  });
+
+  // ===== UI UPDATE =====
+  function updateUI(state) {
+    // Status dot
+    const dot = document.getElementById('status-dot');
+    dot.className = 'status-dot' + (state.running ? ' running' : '');
+
+    // Buttons
+    document.getElementById('btn-start').disabled = state.running;
+    document.getElementById('btn-stop').disabled = !state.running;
+
+    // Game state
+    const gs = state.game_state || {};
+    setText('stat-gold', gs.gold ?? '—');
+    setText('stat-hp', gs.hp ?? '—');
+    setText('stat-round', gs.round ?? '—');
+    setText('stat-phase', gs.phase ?? '—');
+
+    // Stats
+    const stats = state.stats || {};
+    setText('stat-actions', stats.actions ?? 0);
+    setText('stat-errors', (stats.errors ?? 0) + ' erori');
+
+    // Last action
+    const action = state.last_action;
+    if (action) {
+      setText('action-type', action.action || '—');
+      setText('action-reason', action.reason || '');
+      const conf = Math.round((action.confidence || 0) * 100);
+      document.getElementById('confidence-fill').style.width = conf + '%';
+    }
+  }
+
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+  function appendLog(line) {
+    const container = document.getElementById('log-lines');
+    const div = document.createElement('div');
+    div.className = 'log-line';
+    div.innerHTML = `<span class="log-time">${line.time}</span><span class="log-msg ${line.level}">${escapeHtml(line.msg)}</span>`;
+    container.appendChild(div);
+    // Scroll jos
+    container.scrollTop = container.scrollHeight;
+    // Limita 100 linii
+    while (container.children.length > 100) {
+      container.removeChild(container.firstChild);
+    }
+  }
+
+  function escapeHtml(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ===== ACTIONS =====
+  function setMode(mode) {
+    selectedMode = mode;
+    document.getElementById('mode-mobile').classList.toggle('active', mode === 'mobile');
+    document.getElementById('mode-desktop').classList.toggle('active', mode === 'desktop');
+  }
+
+  function startBot() {
+    const game = document.getElementById('game-select').value;
+    fetch('/api/start', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ game, mode: selectedMode })
+    }).then(r => r.json()).then(d => {
+      if (!d.ok) alert('Eroare: ' + d.error);
+    });
+  }
+
+  function stopBot() {
+    fetch('/api/stop', { method: 'POST' });
+  }
+
+  function changeVideos(delta) {
+    maxVideos = Math.max(1, Math.min(10, maxVideos + delta));
+    document.getElementById('videos-count').textContent = maxVideos;
+  }
+
+  function startLearning() {
+    const query = document.getElementById('learn-input').value.trim();
+    const game = document.getElementById('game-select').value;
+    if (!query) { alert('Scrie un query de cautare!'); return; }
+
+    const btn = document.querySelector('.btn-learn');
+    btn.textContent = 'Se invata...';
+    btn.disabled = true;
+
+    // Marcheaza status dot ca "learning"
+    document.getElementById('status-dot').className = 'status-dot learning';
+
+    fetch('/api/learn', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ game, query, max_videos: maxVideos })
+    }).then(r => r.json()).then(d => {
+      if (d.ok) {
+        appendLog({ time: new Date().toTimeString().slice(0,8), level: 'success', msg: 'Invatare pornita in background...' });
+      } else {
+        alert('Eroare: ' + d.error);
+        btn.textContent = '▶ Invata';
+        btn.disabled = false;
+      }
+      setTimeout(() => {
+        btn.textContent = '▶ Invata';
+        btn.disabled = false;
+        document.getElementById('status-dot').className = 'status-dot' + (isRunning ? ' running' : '');
+      }, 3000);
+    });
+  }
+
+  function loadKbStats() {
+    fetch('/api/kb_stats').then(r => r.json()).then(d => {
+      setText('kb-games', (d.games || []).join(', ') || '—');
+      setText('kb-strategies', d.total_strategies ?? '—');
+      setText('kb-experiences', d.total_experiences ?? '—');
+      setText('kb-youtube', d.youtube_sources ?? '—');
+    });
+  }
+
+  // Reload kb stats periodic
+  setInterval(loadKbStats, 10000);
+</script>
+</body>
+</html>
