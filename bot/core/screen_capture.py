@@ -101,6 +101,23 @@ class ScreenCapture:
         img.save(path)
         log.debug(f"Screenshot salvat: {path}")
 
+    def fingerprint(self) -> int:
+        """
+        Hash rapid al ecranului pentru a detecta daca s-a schimbat ceva.
+        Esantioneaza 200 de pixeli distribuiti uniform — rapid si suficient de sensibil.
+        """
+        img = self.capture()
+        w, h = img.size
+        pixels = img.load()
+        sample = 0
+        step_x = max(1, w // 20)
+        step_y = max(1, h // 10)
+        for x in range(0, w, step_x):
+            for y in range(0, h, step_y):
+                r, g, b = pixels[x, y]
+                sample = (sample * 31 + r * 3 + g * 5 + b * 7) & 0xFFFFFFFF
+        return sample
+
     def close(self):
         if self._sct:
             self._sct.close()

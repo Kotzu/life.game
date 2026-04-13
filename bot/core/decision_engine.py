@@ -18,12 +18,15 @@ la nivel optim. Ai acces la:
 1. Screenshot-uri ale jocului in timp real
 2. Starea curenta a jocului (resurse, unitati, etc.)
 3. Strategii si cunostinte invatate din gameplay-uri de pe YouTube
+4. Istoricul actiunilor anterioare SI daca au functionat
 
 Reguli de baza:
 - Ia decizii rapide si eficiente
 - Prioritizeaza actiunile cu impact maxim
-- Nu repeta actiuni care nu au dat rezultat
-- Adapteaza-te la situatia curenta
+- Daca o actiune anterioara a ESUAT (ecranul nu s-a schimbat), NU repeta aceeasi pozitie
+- Incearca pozitii diferite daca click-ul nu a reusit
+- Adapteaza-te constant la situatia curenta
+- Coordonatele se dau ca PROCENTE din ecran (0.0-1.0), NU pixeli
 - Raspunde DOAR cu JSON valid, fara alt text
 """
 
@@ -89,15 +92,21 @@ Strategii si cunostinte relevante:
 {knowledge if knowledge else "Nu exista cunostinte specifice inca. Joaca intuitiv bazat pe ce vezi."}
 
 Analizeaza screenshot-ul si starea jocului. Decide urmatoarea actiune optima.
+
+IMPORTANT - Coordonate ca PROCENTE (0.0=stanga/sus, 1.0=dreapta/jos):
+- x_pct=0.5, y_pct=0.5 = centrul ecranului
+- Fii PRECIS: estimeaza exact unde e elementul in imagine
+- Daca actiunea anterioara a esuat, incearca o pozitie usor diferita
+
 Returneaza EXCLUSIV un JSON valid:
 {{
   "action": "click|drag|key|wait|reroll|buy|sell|place|combine",
-  "x": <int sau null>,
-  "y": <int sau null>,
-  "from_x": <int sau null>,
-  "from_y": <int sau null>,
+  "x_pct": <0.0-1.0 sau null>,
+  "y_pct": <0.0-1.0 sau null>,
+  "from_x_pct": <0.0-1.0 sau null>,
+  "from_y_pct": <0.0-1.0 sau null>,
   "key": <"enter"|"space"|"esc" sau null>,
-  "target_description": "<ce element UI>,
+  "target_description": "<ce element UI tintesc>",
   "reason": "<de ce aceasta actiune>",
   "confidence": <0.0-1.0>,
   "priority": <1-10>
@@ -168,7 +177,18 @@ Returneaza EXCLUSIV un JSON valid:
         """Marcheaza rezultatul ultimei actiuni pentru invatare."""
         if self.history:
             self.history[-1]["result"] = "succes" if success else "esec"
-            self.history[-1]["notes"] = notes
+            if notes:
+                self.history[-1]["notes"] = notes
+            # Logheaza explicit ca LLM sa stie
+            if not success:
+                x = self.history[-1].get("x_pct")
+                y = self.history[-1].get("y_pct")
+                if x is not None and y is not None:
+                    log.info(
+                        f"Invatare: {self.history[-1].get('action')} la "
+                        f"({x:.0%}, {y:.0%}) -> ESEC. "
+                        f"Urmatoarea decizie va evita aceasta pozitie."
+                    )
 
     def analyze_and_learn(self, game_state: Dict, action: Dict, outcome: str):
         """Extrage lectii din experienta si le salveaza in knowledge base."""

@@ -202,13 +202,40 @@ def run_bot(game_name: str, config: dict, mobile: bool = False,
                     "info"
                 )
 
-            # 6. Executa actiunea
+            # 6. Fingerprint inainte de actiune (pentru verificare efect)
+            fp_before = screen.fingerprint() if hasattr(screen, 'fingerprint') else None
+
+            # 7. Executa actiunea
             success = game_bot.execute_action(action)
 
-            if success:
+            # 8. Verifica daca actiunea a avut efect real (ecranul s-a schimbat?)
+            time.sleep(1.5)  # Asteapta animatia/tranzitia
+            fp_after = screen.fingerprint() if hasattr(screen, 'fingerprint') else None
+            screen_changed = (fp_before is None or fp_after is None or fp_before != fp_after)
+
+            if success and screen_changed:
                 errors = 0
                 action_count += 1
                 decision.mark_action_result(action, True)
+                log.debug("Actiune confirmata: ecranul s-a schimbat")
+            elif success and not screen_changed:
+                # Actiunea s-a executat tehnic dar nu a avut efect vizibil
+                action_count += 1
+                decision.mark_action_result(
+                    action, False,
+                    notes="Ecranul nu s-a schimbat dupa actiune - click probabil ratat"
+                )
+                log.warning(
+                    f"Actiune '{action.get('action')}' fara efect vizibil "
+                    f"(tinta: {action.get('target_description', '?')}). "
+                    f"LLM va sti sa incerce altceva."
+                )
+                if dashboard:
+                    dashboard.push_log(
+                        f"Click fara efect la {action.get('target_description','?')} "
+                        f"- voi incerca alta pozitie",
+                        "warning"
+                    )
             else:
                 errors += 1
                 decision.mark_action_result(action, False)
@@ -216,8 +243,7 @@ def run_bot(game_name: str, config: dict, mobile: bool = False,
                     log.error(f"Prea multe erori consecutive ({MAX_ERRORS}). Opresc.")
                     break
 
-            # 7. Capteaza starea de dupa actiune (pentru reward)
-            time.sleep(0.5)  # Asteapta animatia
+            # 9. Capteaza starea de dupa actiune (pentru reward)
             new_screenshot_b64 = screen.capture_to_base64()
             if new_screenshot_b64:
                 new_state = game_bot.parse_game_state(new_screenshot_b64)
