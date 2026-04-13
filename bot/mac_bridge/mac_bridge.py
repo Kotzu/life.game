@@ -10,6 +10,8 @@ Rulare automata la boot Mac:
 Dupa instalare: ruleaza singur la fiecare pornire Mac, fara interactiune.
 """
 
+from __future__ import annotations
+
 import argparse
 import os
 import signal
