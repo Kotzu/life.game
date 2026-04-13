@@ -2,26 +2,33 @@ import SwiftUI
 import ActivityKit
 import Combine
 
-/// Orchestreaza: captura -> Claude -> Dynamic Island -> (optional) touch
+/// Orchestreaza: captura -> Claude -> Dynamic Island -> (optional) touch via Mac Bridge
 @MainActor
 class BotLoop: ObservableObject {
-    @Published var isRunning    = false
-    @Published var lastAction:    BotAction?
-    @Published var logLines:     [LogLine]  = []
+    @Published var isRunning     = false
+    @Published var lastAction:     BotAction?
+    @Published var logLines:      [LogLine]  = []
+    @Published var macBridgeOK   = false
+    @Published var touchRunning  = false
 
-    private let capture = ScreenCapture.shared
-    private var claude:   ClaudeAPI?
-    private var activity: Activity<BotActivityAttributes>?
-    private var task:     Task<Void, Never>?
-    private var knowledge = ""          // din KnowledgeBase JSON local
-    private var game      = "dota_underlords"
+    private let capture    = ScreenCapture.shared
+    private let macBridge  = MacBridgeClient.shared
+    private var claude:      ClaudeAPI?
+    private var activity:    Activity<BotActivityAttributes>?
+    private var task:        Task<Void, Never>?
+    private var knowledge  = ""
+    private var game       = "dota_underlords"
+    private var touchMode  = false
 
     // ── Public API ──────────────────────────────────────────────────────────
 
-    func start(apiKey: String, game: String) async {
+    /// Porneste botul.
+    /// - touchEnabled: daca true, porneste si TouchRunner via Mac Bridge
+    func start(apiKey: String, game: String, touchEnabled: Bool = false) async {
         guard !isRunning else { return }
-        self.game  = game
-        self.claude = ClaudeAPI(apiKey: apiKey)
+        self.game       = game
+        self.claude     = ClaudeAPI(apiKey: apiKey)
+        self.touchMode  = touchEnabled
 
         // Incarca knowledge base local (din Documents)
         knowledge = loadKnowledge(game: game)
@@ -34,10 +41,19 @@ class BotLoop: ObservableObject {
             return
         }
 
+        // Porneste Touch via Mac Bridge (daca e activat)
+        if touchEnabled {
+            let (ok, msg) = await macBridge.startTouch()
+            touchRunning = ok
+            log(ok ? "TouchRunner pornit via Mac Bridge" : "Touch eroare: \(msg)",
+                level: ok ? "success" : "error")
+        }
+
         // Porneste Live Activity (Dynamic Island)
         startLiveActivity()
         isRunning = true
-        log("Bot pornit pentru \(game)", level: "success")
+        log("Bot pornit pentru \(game)\(touchEnabled ? " (touch auto)" : " (coach)")",
+            level: "success")
 
         // Loop principal: primeste frames din ScreenCapture
         task = Task { [weak self] in
@@ -49,10 +65,29 @@ class BotLoop: ObservableObject {
         }
     }
 
+    func checkMacBridge() async {
+        let (available, running) = await macBridge.status()
+        macBridgeOK  = available
+        touchRunning = running
+    }
+
+    func autoDiscoverMac() async {
+        log("Caut Mac Bridge in retea...", level: "info")
+        if let ip = await macBridge.autoDiscoverMac() {
+            macBridge.host = ip
+            macBridgeOK = true
+            log("Mac Bridge gasit la \(ip)", level: "success")
+        } else {
+            log("Mac Bridge negasit. Seteaza IP manual in Settings.", level: "error")
+        }
+    }
+
     func stop() {
         task?.cancel()
         task = nil
         capture.stop()
+        if touchMode { Task { await macBridge.stopTouch() } }
+        touchRunning = false
         endLiveActivity()
         isRunning = false
         log("Bot oprit", level: "info")
