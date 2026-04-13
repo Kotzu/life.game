@@ -144,7 +144,15 @@ Daca nu poti citi o valoare, foloseste null.
                 return self._toggle_lock_shop()
 
             elif action_type == "click":
-                # Actiune generica click
+                # Prioritate: coordonate procentuale (0.0-1.0) -> independente de rezolutie
+                x_pct = action.get("x_pct")
+                y_pct = action.get("y_pct")
+                if x_pct is not None and y_pct is not None:
+                    x, y = self._pct_to_px(float(x_pct), float(y_pct))
+                    log.info(f"Click la {int(x_pct*100)}%,{int(y_pct*100)}% -> ({x},{y})")
+                    self.input.click(x, y)
+                    return True
+                # Fallback: coordonate absolute (legacy, evitat)
                 x = action.get("x")
                 y = action.get("y")
                 if x and y:
@@ -153,7 +161,17 @@ Daca nu poti citi o valoare, foloseste null.
                 return False
 
             elif action_type == "drag":
-                # Drag generic
+                # Prioritate: coordonate procentuale
+                fx_pct = action.get("from_x_pct")
+                fy_pct = action.get("from_y_pct")
+                tx_pct = action.get("x_pct")
+                ty_pct = action.get("y_pct")
+                if all(v is not None for v in [fx_pct, fy_pct, tx_pct, ty_pct]):
+                    fx, fy = self._pct_to_px(float(fx_pct), float(fy_pct))
+                    tx, ty = self._pct_to_px(float(tx_pct), float(ty_pct))
+                    self.input.drag(fx, fy, tx, ty)
+                    return True
+                # Fallback: coordonate absolute
                 fx, fy = action.get("from_x"), action.get("from_y")
                 tx, ty = action.get("x"), action.get("y")
                 if all([fx, fy, tx, ty]):
@@ -196,7 +214,13 @@ Daca nu poti citi o valoare, foloseste null.
             log.info(f"Cumpar eroul din slot {idx} la ({x}, {y})")
             return True
 
-        # Daca nu stim slot-ul, folosim coordonatele directe
+        # Daca nu stim slot-ul, folosim coordonatele procentuale sau absolute
+        x_pct = action.get("x_pct")
+        y_pct = action.get("y_pct")
+        if x_pct is not None and y_pct is not None:
+            x, y = self._pct_to_px(float(x_pct), float(y_pct))
+            self.input.click(x, y)
+            return True
         x, y = action.get("x"), action.get("y")
         if x and y:
             self.input.click(int(x), int(y))
@@ -207,14 +231,20 @@ Daca nu poti citi o valoare, foloseste null.
 
     def _sell_hero(self, action: Dict) -> bool:
         """Vinde un erou (drag pe icona de vanzare sau click dreapta)."""
-        x, y = action.get("x"), action.get("y")
-        if x and y:
-            # In Underlords: drag eroul afara din tabla/banca pentru vanzare
-            sell_x, sell_y = self._pct_to_px(0.5, 0.98)  # Zona de vanzare (jos-centru)
-            self.input.drag(int(x), int(y), sell_x, sell_y)
-            self.input.pause()
-            return True
-        return False
+        x_pct = action.get("x_pct")
+        y_pct = action.get("y_pct")
+        if x_pct is not None and y_pct is not None:
+            src_x, src_y = self._pct_to_px(float(x_pct), float(y_pct))
+        else:
+            src_x, src_y = action.get("x"), action.get("y")
+            if not (src_x and src_y):
+                return False
+            src_x, src_y = int(src_x), int(src_y)
+        # In Underlords: drag eroul afara din tabla/banca pentru vanzare
+        sell_x, sell_y = self._pct_to_px(0.5, 0.98)
+        self.input.drag(src_x, src_y, sell_x, sell_y)
+        self.input.pause()
+        return True
 
     def _reroll_shop(self) -> bool:
         """Apasa butonul de reroll (costa 2 gold)."""

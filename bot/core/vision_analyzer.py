@@ -108,12 +108,22 @@ Cunostinte si strategii invatate:
 {knowledge}
 
 Pe baza screenshot-ului si starii jocului, decide cea mai buna actiune urmatoare.
+
+IMPORTANT pentru coordonate:
+- Returneaza INTOTDEAUNA coordonatele ca procente (0.0-1.0) din ecran, NU pixeli
+- x_pct=0.0 = marginea stanga, x_pct=1.0 = marginea dreapta
+- y_pct=0.0 = marginea sus, y_pct=1.0 = marginea jos
+- Exemplu: un buton la jumatatea ecranului = x_pct=0.5, y_pct=0.5
+- Fii precis: uita-te exact unde e elementul in imagine si estimeaza procentul
+
 Returneaza DOAR un JSON valid cu structura:
 {{
   "action": "click|drag|key|wait|reroll|buy|sell|place|combine",
-  "target": "descriere sau coordonate",
-  "x": null,
-  "y": null,
+  "target": "descriere element UI tinta",
+  "x_pct": null,
+  "y_pct": null,
+  "from_x_pct": null,
+  "from_y_pct": null,
   "reason": "explicatie scurta",
   "confidence": 0.0-1.0
 }}
