@@ -116,7 +116,6 @@ class InputController:
 
     def click(self, x: Optional[int] = None, y: Optional[int] = None, button: str = "left"):
         """Click (cu miscare umana daca sunt specificate coordonate)."""
-        self._focus_game()
         if x is not None and y is not None:
             self.move_to(x, y)
 
