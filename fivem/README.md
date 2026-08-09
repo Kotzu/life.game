@@ -13,11 +13,42 @@ fivem/
         ├── lifecore/           # The framework core
         │   ├── fxmanifest.lua
         │   ├── config.lua
-        │   ├── shared/         # utils, job definitions, item registry
+        │   ├── shared/         # utils, service registry, job definitions, item registry
         │   ├── server/         # player lifecycle, API, callbacks, commands
         │   └── client/         # spawn/state sync, API, callbacks
+        ├── lifecore-hud/       # Modern NUI HUD (status bars, money, toasts)
         └── lifecore-example/   # Reference resource built on the core
 ```
+
+## Architecture: services, not spaghetti
+
+The classic FiveM failure mode: resources call each other's exports directly, so swapping your inventory or phone breaks every script that touched it, and you spend a day chasing bugs. LifeCore prevents that structurally with a **service registry** — named modules behind stable contracts.
+
+Consumers never name a concrete resource. They ask the core:
+
+```lua
+local inv = exports['lifecore']:GetService('inventory')
+inv.AddItem(source, 'water', 1)
+```
+
+Providers register an implementation fulfilling the contract (missing methods are rejected loudly at registration time, not at call time three resources away):
+
+```lua
+exports['lifecore']:RegisterService('inventory', {
+    AddItem      = function(source, item, count) ... end,
+    RemoveItem   = function(source, item, count) ... end,
+    GetItemCount = function(source, item) ... end,
+})
+```
+
+Swap the providing resource — a custom inventory, an ox_inventory bridge, anything — and **no other resource changes**. When a providing resource stops, its services are automatically unregistered, so consumers get a clean `nil` instead of calling into a dead resource. Contracts currently defined (in `shared/services.lua`): `inventory` (server), and `notify`, `progress`, `target`, `phone`, `fuel` (client).
+
+Two providers ship out of the box, proving the pattern end to end:
+
+- the core registers its **built-in player inventory** as the default `inventory` provider;
+- `lifecore-hud` registers itself as the `notify` provider — the moment it starts, every `LifeCore.Notify` in the entire framework renders as a HUD toast instead of a chat line, with zero changes anywhere else. Stop the HUD and notifications fall back to chat.
+
+The HUD itself is fully push-based: state changes are forwarded to the NUI as they happen, and the only polling is a 250 ms tick for health/armor (which have no event) — no per-frame `Wait(0)` loops eating frame time.
 
 ## Features
 

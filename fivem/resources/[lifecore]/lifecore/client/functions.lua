@@ -24,9 +24,16 @@ function LifeCore.UseItem(item)
     TriggerServerEvent('lifecore:server:requestUseItem', item)
 end
 
---- Simple notification (chat-based; swap for your notify UI of choice).
+--- Notification. Routed through the 'notify' service when one is registered
+--- (e.g. the lifecore-hud toasts); falls back to chat otherwise.
 ---@param message string
-function LifeCore.Notify(message)
+---@param level string|nil 'info' | 'success' | 'error'
+function LifeCore.Notify(message, level)
+    local notify = LifeServices.Get('notify')
+    if notify then
+        notify.Send(message, level or 'info')
+        return
+    end
     TriggerEvent('chat:addMessage', {
         color = { 116, 199, 236 },
         args = { 'life', message },
@@ -37,8 +44,17 @@ exports('GetCore', function()
     return LifeCore
 end)
 
-RegisterNetEvent('lifecore:client:notify', function(message)
-    LifeCore.Notify(tostring(message))
+-- Service registry (see shared/services.lua for the full contract docs).
+exports('RegisterService', function(name, impl)
+    LifeServices.Register(name, impl, GetInvokingResource() or GetCurrentResourceName())
+end)
+
+exports('GetService', function(name)
+    return LifeServices.Get(name)
+end)
+
+RegisterNetEvent('lifecore:client:notify', function(message, level)
+    LifeCore.Notify(tostring(message), level)
 end)
 
 RegisterNetEvent('lifecore:player:update', function(key, value)

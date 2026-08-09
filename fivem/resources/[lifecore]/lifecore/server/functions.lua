@@ -93,6 +93,33 @@ exports('GetCore', function()
     return LifeCore
 end)
 
+-- Service registry (see shared/services.lua for the full contract docs).
+exports('RegisterService', function(name, impl)
+    LifeServices.Register(name, impl, GetInvokingResource() or GetCurrentResourceName())
+end)
+
+exports('GetService', function(name)
+    return LifeServices.Get(name)
+end)
+
+-- The core's built-in player inventory is the *default* inventory provider.
+-- Installing a dedicated inventory resource (ox_inventory, a custom one, ...)
+-- just means registering a replacement service — no other resource changes.
+LifeServices.Register('inventory', {
+    AddItem = function(source, item, count)
+        local player = LifeCore.GetPlayer(source)
+        return player and player.AddItem(item, count) or false
+    end,
+    RemoveItem = function(source, item, count)
+        local player = LifeCore.GetPlayer(source)
+        return player and player.RemoveItem(item, count) or false
+    end,
+    GetItemCount = function(source, item)
+        local player = LifeCore.GetPlayer(source)
+        return player and player.GetItemCount(item) or 0
+    end,
+}, GetCurrentResourceName())
+
 AddEventHandler('lifecore:server:useItem', function(item)
     LifeCore.UseItem(source, item)
 end)

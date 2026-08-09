@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="hud" class="hidden">
+
+        <!-- Money + job, top right -->
+        <div class="topright">
+            <div class="money-row">
+                <span class="money-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                        fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+                </span>
+                <span id="cash" class="money-value">0</span>
+            </div>
+            <div class="money-row bank">
+                <span class="money-icon">
+                    <svg viewBox="0 0 24 24"><path d="M3 21h18M4 10h16M12 3l9 6H3l9-6Zm-6 7v8m4-8v8m4-8v8m4-8v8"
+                        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span id="bank" class="money-value">0</span>
+            </div>
+            <div id="job" class="job-label"></div>
+        </div>
+
+        <!-- Status bars, bottom left -->
+        <div class="statusbars">
+            <div class="stat" id="stat-health">
+                <span class="stat-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 21C7 16.5 3 13.2 3 8.9 3 6 5.2 4 7.8 4c1.7 0 3.2.9 4.2 2.3C13 4.9 14.5 4 16.2 4 18.8 4 21 6 21 8.9c0 4.3-4 7.6-9 12.1Z"
+                        fill="currentColor"/></svg>
+                </span>
+                <div class="bar"><div class="fill" id="bar-health"></div></div>
+            </div>
+            <div class="stat" id="stat-armor">
+                <span class="stat-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.2 3.4 9.5 8 11 4.6-1.5 8-5.8 8-11V5l-8-3Z"
+                        fill="currentColor"/></svg>
+                </span>
+                <div class="bar"><div class="fill" id="bar-armor"></div></div>
+            </div>
+            <div class="stat" id="stat-hunger">
+                <span class="stat-icon">
+                    <svg viewBox="0 0 24 24"><path d="M7 2v9a2 2 0 0 0 2 2v9h2v-9a2 2 0 0 0 2-2V2h-2v7H10V2H7Zm10 0c-1.7 0-3 1.8-3 4v6h2v10h2V2h-1Z"
+                        fill="currentColor"/></svg>
+                </span>
+                <div class="bar"><div class="fill" id="bar-hunger"></div></div>
+            </div>
+            <div class="stat" id="stat-thirst">
+                <span class="stat-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2s6 7.1 6 11.5a6 6 0 0 1-12 0C6 9.1 12 2 12 2Z"
+                        fill="currentColor"/></svg>
+                </span>
+                <div class="bar"><div class="fill" id="bar-thirst"></div></div>
+            </div>
+        </div>
+
+        <!-- Toast notifications -->
+        <div id="toasts"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -10,6 +10,7 @@ version '0.1.0'
 shared_scripts {
     'config.lua',
     'shared/utils.lua',
+    'shared/services.lua',
     'shared/jobs.lua',
     'shared/items.lua',
 }
