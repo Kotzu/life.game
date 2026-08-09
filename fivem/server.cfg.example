@@ -1,0 +1,29 @@
+# LifeCore example server.cfg
+# Copy the relevant parts into your own server.cfg.
+
+endpoint_add_tcp "0.0.0.0:30120"
+endpoint_add_udp "0.0.0.0:30120"
+
+sv_hostname "LifeCore Dev Server"
+sv_maxclients 32
+
+sv_licenseKey "changeme"   # https://keymaster.fivem.net
+
+# Database (oxmysql) — https://github.com/overextended/oxmysql
+set mysql_connection_string "mysql://user:password@localhost/lifecore?charset=utf8mb4"
+
+# Default FiveM resources
+ensure mapmanager
+ensure chat
+ensure spawnmanager
+ensure sessionmanager
+ensure basic-gamemode
+ensure hardcap
+
+# Framework
+ensure oxmysql
+ensure [lifecore]
+
+# Admin permissions for lifecore commands (/setjob, /givemoney, /giveitem, /saveall)
+add_ace group.admin lifecore.admin allow
+# add_principal identifier.license:YOUR_LICENSE_HERE group.admin
