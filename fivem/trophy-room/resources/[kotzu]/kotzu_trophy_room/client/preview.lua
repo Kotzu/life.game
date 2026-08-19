@@ -54,10 +54,11 @@ function PV.TryOn(uid)
     }
     SetResourceKvp(KVP_KEY, json.encode({ snapshot = snapshot, at = GetGameTimer() }))
 
+    -- per-frame loop is acceptable here: it exists only while a try-on session
+    -- is active (key presses must not be missed)
     CreateThread(function()
         while session do
-            Wait(500)
-            if not session then break end
+            Wait(0)
             if GetGameTimer() >= session.deadline
                 or IsEntityDead(PlayerPedId())
                 or IsControlJustPressed(0, 177) then
