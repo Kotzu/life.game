@@ -57,25 +57,31 @@ function Tx.PlaceWeapon(src, d, idKey)
     local id = KTRS.Perms.Identity(src)
     if not id then return nil, C.Err.NOT_ALLOWED end
 
-    -- metadata must carry a unique identifier so the EXACT item is locked
-    local meta = d.item.metadata or {}
-    local uniqueId = meta.serial or meta.serie or meta.uniqueId or meta.id
-    if not uniqueId then return nil, C.Err.BAD_INPUT end
-
-    if not lockInsert(idKey, 'place', id.citizenid, d.item.name, meta) then
+    if not lockInsert(idKey, 'place', id.citizenid, d.item.name, d.item.metadata) then
         -- replay: return stored outcome instead of re-executing
         local lock = lockGet(idKey)
         if lock and lock.state == 'done' then return lock.uid end
         return nil, C.Err.TX_FAILED
     end
 
-    -- 1. the exact item must exist NOW (ownership re-checked server-side)
-    local item = bridge.FindItem(src, d.item.name, meta)
+    -- 1. the exact item must exist NOW (ownership re-checked server-side).
+    -- Client metadata is only a narrowing filter; the FOUND item's metadata is
+    -- authoritative and must carry a unique identifier so the exact instance
+    -- is locked (weapon items in qb/ox always carry a serial).
+    local clientMeta = type(d.item.metadata) == 'table' and next(d.item.metadata) ~= nil
+        and d.item.metadata or nil
+    local item = bridge.FindItem(src, d.item.name, clientMeta)
     if not item then
         lockState(idKey, 'failed')
         return nil, C.Err.ITEM_MISSING
     end
-    d.item.metadata = item.metadata -- authoritative copy, never client's
+    local meta = item.metadata or {}
+    local uniqueId = meta.serial or meta.serie or meta.uniqueId or meta.id
+    if not uniqueId then
+        lockState(idKey, 'failed')
+        return nil, C.Err.BAD_INPUT
+    end
+    d.item.metadata = meta -- authoritative copy, never client's
 
     -- 2. remove item, then record that fact BEFORE inserting the display
     if not bridge.RemoveItem(src, item.name, item.slot, item.metadata) then
