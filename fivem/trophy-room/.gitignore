@@ -1,0 +1,26 @@
+# --- Never commit Rockstar-extracted or binary game assets -------------------
+# The pipeline consumes extracted assets locally and emits built assets into
+# the stream folder on the workstation only. Manifests/reports (JSON/MD) are
+# committable; binary game formats are not.
+tools/mannequin_pipeline/extracted/
+tools/mannequin_pipeline/build/
+tools/mannequin_pipeline/.cache/
+**/*.ydd
+**/*.ytd
+**/*.yft
+**/*.ymt
+**/*.ycd
+**/*.rpf
+**/*.awc
+
+# Blender working files (sources are kept; autosaves are not)
+**/*.blend1
+**/*.blend2
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local capture output
+captures/
