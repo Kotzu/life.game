@@ -1,0 +1,12 @@
+{
+  "schema": "kotzu_mannequin_manifest/1",
+  "version": 0,
+  "collection": "mannequin",
+  "game_build": null,
+  "allocations": { "male": {}, "female": {} },
+  "genders": {
+    "male": { "body": {}, "garments": {}, "props": {} },
+    "female": { "body": {}, "garments": {}, "props": {} }
+  },
+  "_note": "Seed manifest. Version 0 = no mannequin assets built yet; kotzu_trophy_room refuses to spawn mannequins on v0 and reports MANIFEST_NOT_BUILT. Replace by running the pipeline: scan -> classify -> convert -> export -> build-manifest."
+}

@@ -1,0 +1,2 @@
+# Built .ydd/.ytd files are deployed here by tools/mannequin_pipeline (export).
+# Binaries are intentionally git-ignored; this file keeps the directory.
