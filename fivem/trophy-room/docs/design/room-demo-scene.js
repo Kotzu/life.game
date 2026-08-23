@@ -284,14 +284,20 @@ scene.add(new T.AmbientLight(0x272220, 1.6));
 const hemi = new T.HemisphereLight(0x2a2620, 0x0c0a08, 0.7); scene.add(hemi);
 
 /* ------------------------------------------------------------ camera rig */
+// Full 360° orbit: walls are single-sided planes, so from outside they turn
+// invisible (dollhouse view) and every exhibit stays reachable.
 let yaw = 0.35, pitch = 0.28, dist = 6.4;
-const target = new T.Vector3(0, 1.15, -0.4);
-let lastInteract = -1e9;
+const OVERVIEW = { target: new T.Vector3(0, 1.15, -0.4), dist: 6.4 };
+const target = OVERVIEW.target.clone();
+const desired = { target: OVERVIEW.target.clone(), dist: OVERVIEW.dist };
+let userTouched = false;
 
 function applyCamera() {
-  pitch = Math.max(0.06, Math.min(1.1, pitch));
-  dist = Math.max(3.2, Math.min(9.5, dist));
-  yaw = Math.max(-1.15, Math.min(1.15, yaw)); // stay inside the open side
+  pitch = Math.max(0.06, Math.min(1.15, pitch));
+  desired.dist = Math.max(2.2, Math.min(10.5, desired.dist));
+  // glide toward the focused exhibit / overview
+  target.lerp(desired.target, 0.08);
+  dist += (desired.dist - dist) * 0.08;
   camera.position.set(
     target.x + Math.sin(yaw) * Math.cos(pitch) * dist,
     target.y + Math.sin(pitch) * dist,
@@ -305,29 +311,35 @@ canvas.addEventListener('pointerdown', (e) => {
   canvas.setPointerCapture(e.pointerId);
 });
 canvas.addEventListener('pointermove', (e) => {
-  if (!dragging) return;
+  if (!dragging || pinch) return;
   const dx = e.clientX - px, dy = e.clientY - py;
   moved += Math.abs(dx) + Math.abs(dy);
   px = e.clientX; py = e.clientY;
   yaw -= dx * 0.005; pitch += dy * 0.004;
-  lastInteract = performance.now();
+  userTouched = true;
 });
 addEventListener('pointerup', (e) => {
   if (dragging && moved < 6) pick(e.clientX, e.clientY);
   dragging = false;
 });
 canvas.addEventListener('wheel', (e) => {
-  e.preventDefault(); dist += e.deltaY * 0.004; lastInteract = performance.now();
+  e.preventDefault(); desired.dist += e.deltaY * 0.004; userTouched = true;
 }, { passive: false });
 canvas.addEventListener('touchmove', (e) => {
   if (e.touches.length === 2) {
     const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
                          e.touches[0].clientY - e.touches[1].clientY);
-    if (pinch) dist -= (d - pinch) * 0.01;
-    pinch = d; lastInteract = performance.now();
+    if (pinch) desired.dist -= (d - pinch) * 0.012;
+    pinch = d; userTouched = true;
   }
 }, { passive: true });
-canvas.addEventListener('touchend', () => { pinch = 0; });
+canvas.addEventListener('touchend', (e) => { if (e.touches.length < 2) pinch = 0; });
+
+document.getElementById('resetView').addEventListener('click', () => {
+  select(null);
+  desired.target.copy(OVERVIEW.target); desired.dist = OVERVIEW.dist;
+  pitch = 0.28; userTouched = true;
+});
 
 /* ------------------------------------------------------------ picking */
 const ray = new T.Raycaster();
@@ -350,6 +362,7 @@ function pick(cx, cy) {
 }
 
 const TIP_RO = { mannequin: 'Manechin', weapon_wall: 'Armă pe perete', weapon_case: 'Vitrină' };
+const focusPos = new T.Vector3();
 function select(d) {
   selected = d;
   if (!d) { card.classList.remove('show'); chip.classList.remove('show'); return; }
@@ -359,6 +372,11 @@ function select(d) {
   card.querySelector('.card-outfit').textContent = d.info.outfit;
   card.classList.add('show');
   chip.classList.add('show');
+  // glide the camera to the exhibit
+  d.group.getWorldPosition(focusPos);
+  desired.target.set(focusPos.x, d.info.tip === 'mannequin' ? 1.15 : focusPos.y, focusPos.z);
+  desired.dist = d.info.tip === 'mannequin' ? 3.4 : 3.0;
+  userTouched = true;
 }
 
 const chipPos = new T.Vector3();
@@ -381,8 +399,9 @@ function resize() {
 addEventListener('resize', resize); resize();
 
 renderer.setAnimationLoop((t) => {
-  if (!reduced && !dragging && t - lastInteract > 4000) {
-    yaw = Math.sin(t * 0.00012) * 0.75; // slow showcase sweep
+  // showcase sweep only until the first user interaction — never fight the user
+  if (!reduced && !userTouched) {
+    yaw = 0.35 + Math.sin(t * 0.00012) * 0.6;
   }
   applyCamera();
   placeChip();
