@@ -134,3 +134,17 @@ pending — see `docs/validation-matrix.md`).
 - Full Romanian (`ro`) locale pack for notifications/target labels.
 - `Config.DemoLayout` + `/kmq:demo_layout`: ready-made trophy-room arrangement
   (3 mannequins + 2 weapon displays, shell-relative) for acceptance T8/previews.
+
+## [1.1.2-dev] — 2026-08-23
+
+### Added — alignment to the design concept (docs/design/concept-target.png)
+- Concept image preserved as the design north star + concept→implementation
+  map (`docs/design/README.md`); explicitly NOT an in-game screenshot.
+- Pose list relabeled/reordered to match the concept (Default Stand, Arms
+  Crossed, Hands Behind Back, Hands On Belt, Military Attention/At Ease,
+  Security Guard, Inspecting, Relaxed, T-Pose); added anim-verified
+  `hands_on_belt` (cop idle base).
+- NUI "SELECT OUTFIT" panel rebuilt to match the concept: list with selected-
+  row highlight, live "N / total" counter, and a footer showing the outfit
+  name + source model (illenium has no saved-date column, so no invented date).
+- Concept palette documented and confirmed against style.css tokens.

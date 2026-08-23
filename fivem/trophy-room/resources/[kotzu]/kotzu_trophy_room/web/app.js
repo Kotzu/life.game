@@ -104,12 +104,31 @@ function renderWizard(data) {
         state.outfitSource = id;
         savedRow.replaceChildren();
         if (id === 'saved') {
-          savedRow.append(el('div', { class: 'section-label' }, 'Saved outfits'));
-          savedRow.append(chipRow(
-            data.savedOutfits.map((o) => ({ id: String(o.id), label: o.label })),
-            null, (sid) => { state.savedId = sid; }));
-          savedRow.append(el('div', { class: 'note' },
-            'Saved-outfit apply depends on your rcore_clothing build; if unsupported the capture of your current outfit is used instead.'));
+          // concept-style SELECT OUTFIT panel: list + count + selected + footer
+          const list = Array.isArray(data.savedOutfits) ? data.savedOutfits : [];
+          const panel = el('div', { class: 'outfit-panel' });
+          const head = el('div', { class: 'outfit-head' },
+            el('span', {}, 'SELECT OUTFIT'),
+            el('span', { class: 'outfit-count' }, `0 / ${list.length}`));
+          const listEl = el('div', { class: 'outfit-list' });
+          const footer = el('div', { class: 'outfit-foot' }, 'No outfit selected');
+          list.forEach((o, i) => {
+            const row = el('div', {
+              class: 'outfit-row',
+              onclick: () => {
+                state.savedId = String(o.id);
+                listEl.querySelectorAll('.outfit-row').forEach((r) => r.classList.remove('selected'));
+                row.classList.add('selected');
+                head.querySelector('.outfit-count').textContent = `${i + 1} / ${list.length}`;
+                footer.replaceChildren(
+                  el('div', { class: 'outfit-foot-name' }, o.label),
+                  el('div', { class: 'outfit-foot-sub' }, o.model || ''));
+              },
+            }, o.label);
+            listEl.append(row);
+          });
+          panel.append(head, listEl, footer);
+          savedRow.append(panel);
         }
       }));
       typeSection.append(savedRow);
