@@ -86,9 +86,29 @@ KTR.Config = {
     -- -------------------------------------------------------- weapon display
     Weapons = {
         WallOffsetProbe = 1.5,        -- raycast length for wall mounts
-        CaseModel = 'prop_display_case_01',
         StandModel = 'prop_weapon_rack_01', -- validated at runtime; config per server
         RequireInventoryBridge = true, -- refuse weapon displays without a working bridge
+
+        -- Case styles (base-game props, names verified against the object list):
+        --   w_am_case            = Ammu-Nation counter case (horizontal)
+        --   ch_prop_ch_case_01a  = casino-heist museum case (tall/vertical)
+        --   ch_prop_ch_case_sm_01x = small square case (cube)
+        -- itemZ = vertical offset of the displayed item above the case origin.
+        DefaultCaseStyle = 'vertical',
+        CaseStyles = {
+            cube       = { model = 'ch_prop_ch_case_sm_01x', itemZ = 0.55, label = 'Cube case' },
+            vertical   = { model = 'ch_prop_ch_case_01a',    itemZ = 1.05, label = 'Vertical case' },
+            horizontal = { model = 'w_am_case',              itemZ = 0.95, label = 'Counter case' },
+        },
+    },
+
+    -- ------------------------------------------------------- display motion
+    Display = {
+        DefaultRotateSpeed = 12.0,  -- degrees/second (slow showcase spin)
+        MinRotateSpeed = 3.0,
+        MaxRotateSpeed = 90.0,
+        -- The rotation thread runs per-frame ONLY while at least one rotating
+        -- display is streamed in; it exits completely otherwise.
     },
 
     -- ------------------------------------------------------------- housing

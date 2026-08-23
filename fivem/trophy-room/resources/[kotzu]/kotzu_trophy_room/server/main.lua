@@ -26,6 +26,7 @@ local function publicView(d)
         scopeType = d.scopeType, scopeId = d.scopeId, bucket = d.bucket,
         transform = d.transform, gender = d.gender, outfit = d.outfit,
         poseId = d.poseId, platform = d.platform,
+        caseStyle = d.caseStyle, settings = d.settings,
         item = d.item and { name = d.item.name, metadata = {
             serial = d.item.metadata and d.item.metadata.serial or nil,
             tint = d.item.metadata and d.item.metadata.tint or nil,
@@ -151,6 +152,8 @@ RPC.Register('displays:update', function(src, args)
         outfit = args.patch.outfit or d.outfit,
         poseId = args.patch.poseId or d.poseId,
         platform = args.patch.platform or d.platform,
+        caseStyle = args.patch.caseStyle or d.caseStyle,
+        settings = args.patch.settings or d.settings,
         label = args.patch.label or d.label,
         description = args.patch.description or d.description,
         item = d.item,
@@ -160,8 +163,8 @@ RPC.Register('displays:update', function(src, args)
 
     -- only allow known-safe fields through
     local patch = {}
-    for _, k in ipairs({ 'transform', 'outfit', 'poseId', 'platform', 'label',
-                         'description', 'permissions' }) do
+    for _, k in ipairs({ 'transform', 'outfit', 'poseId', 'platform', 'caseStyle',
+                         'settings', 'label', 'description', 'permissions' }) do
         if args.patch[k] ~= nil then patch[k] = args.patch[k] end
     end
     if patch.outfit then patch.manifestVersion = merged.manifestVersion or d.manifestVersion end

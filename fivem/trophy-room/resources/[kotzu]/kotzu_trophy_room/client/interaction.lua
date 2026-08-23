@@ -101,6 +101,18 @@ local function buildOptions(display)
         end),
     }
 
+    if display.displayType == C.DisplayType.WEAPON_CASE
+        or display.displayType == C.DisplayType.WEAPON_STAND then
+        opts[#opts + 1] = {
+            label = KTR.L('auto_rotate'), icon = 'fas fa-rotate',
+            action = managed(function()
+                if KTRC.UI and KTRC.UI.OpenRotateMenu then
+                    KTRC.UI.OpenRotateMenu(display)
+                end
+            end),
+        }
+    end
+
     if display.item and display.displayType:find('^weapon_') then
         opts[#opts + 1] = {
             label = KTR.L('retrieve_weapon'), icon = 'fas fa-hand',

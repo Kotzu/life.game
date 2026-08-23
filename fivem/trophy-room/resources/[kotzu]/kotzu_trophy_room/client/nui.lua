@@ -34,10 +34,17 @@ function UI.OpenWizard()
         saved = clothingBridge.GetSavedOutfits()
     end
     local bridges = KTR.RPC.Call('bridges:describe') or {}
+    local caseStyles = {}
+    for id in pairs(KTR.Config.Weapons.CaseStyles) do
+        caseStyles[#caseStyles + 1] = { id = id }
+    end
+    table.sort(caseStyles, function(a, b) return a.id < b.id end)
     post('open', {
         screen = 'wizard',
         poses = KTRC.Poses.List(KTR.Config.Debug),
         platforms = KTR.Config.Platforms,
+        caseStyles = caseStyles,
+        defaultCaseStyle = KTR.Config.Weapons.DefaultCaseStyle,
         manifestBuilt = KTRC.Manifest.Built(),
         manifestVersion = KTRC.Manifest.Version(),
         savedOutfits = saved,
@@ -60,6 +67,16 @@ end
 function UI.OpenPoseMenu(display)
     post('open', { screen = 'poses', uid = display.uid,
                    current = display.poseId, poses = KTRC.Poses.List(KTR.Config.Debug) })
+    setOpen(true)
+end
+
+function UI.OpenRotateMenu(display)
+    local cfg = KTR.Config.Display
+    local rotate = (display.settings and display.settings.rotate) or {}
+    post('open', { screen = 'rotate', uid = display.uid,
+                   enabled = rotate.enabled == true,
+                   speed = rotate.speed or cfg.DefaultRotateSpeed,
+                   minSpeed = cfg.MinRotateSpeed, maxSpeed = cfg.MaxRotateSpeed })
     setOpen(true)
 end
 
@@ -148,8 +165,13 @@ RegisterNUICallback('ktr:placeWeapon', function(data, cb)
         local dtype = (kind == 'wall' and C.DisplayType.WEAPON_WALL)
             or (kind == 'case' and C.DisplayType.WEAPON_CASE)
             or C.DisplayType.WEAPON_STAND
+        local caseStyle = nil
+        if kind == 'case' and KTR.Config.Weapons.CaseStyles[data.caseStyle] then
+            caseStyle = data.caseStyle
+        end
         local draft = {
             displayType = dtype,
+            caseStyle = caseStyle,
             item = { name = tostring(data.itemName or ''):lower():sub(1, 64), metadata = {} },
             label = data.label and data.label:sub(1, KTR.Config.Limits.LabelLength) or nil,
         }
@@ -177,6 +199,22 @@ RegisterNUICallback('ktr:rename', function(data, cb)
         local res, err = KTR.RPC.Call('displays:update', { uid = data.uid, patch = {
             label = tostring(data.label or ''):sub(1, KTR.Config.Limits.LabelLength),
             description = tostring(data.description or ''):sub(1, KTR.Config.Limits.DescriptionLength),
+        } })
+        local fw = KTR.Bridge.Get('framework')
+        if not res then fw.Notify(KTR.ErrText(err), 'error')
+        else fw.Notify(KTR.L('updated'), 'success') end
+    end)
+end)
+
+RegisterNUICallback('ktr:setRotate', function(data, cb)
+    setOpen(false)
+    cb({ ok = true })
+    CreateThread(function()
+        local cfg = KTR.Config.Display
+        local speed = math.max(cfg.MinRotateSpeed,
+            math.min(cfg.MaxRotateSpeed, tonumber(data.speed) or cfg.DefaultRotateSpeed))
+        local res, err = KTR.RPC.Call('displays:update', { uid = data.uid, patch = {
+            settings = { rotate = { enabled = data.enabled == true, speed = speed } },
         } })
         local fw = KTR.Bridge.Get('framework')
         if not res then fw.Notify(KTR.ErrText(err), 'error')

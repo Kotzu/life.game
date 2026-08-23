@@ -170,3 +170,23 @@ pending — see `docs/validation-matrix.md`).
 - All web UI strings now come from the Lua locale packs (`ui` tables, en + ro,
   per-key English fallback) delivered on every screen open; `Config.Locale =
   'ro'` localizes the entire interface including the SELECT OUTFIT panel.
+
+## [1.2.0-dev] — 2026-08-23
+
+### Added — trophy case shapes + showcase auto-rotate
+- Three case styles using base-game props (names verified against the object
+  list): `ch_prop_ch_case_sm_01x` (cube), `ch_prop_ch_case_01a` (vertical
+  museum case), `w_am_case` (Ammu-Nation counter) — selectable in the wizard
+  ("Case shape"), persisted per display (`case_style` column).
+- Per-display settings (`settings` column, migration 004, idempotent
+  ADD COLUMN IF NOT EXISTS): `rotate = { enabled, speed }` with server-side
+  bounds validation (3–90 °/s). Owner menu "Auto-rotate" opens a NUI screen
+  with toggle + speed slider (en+ro).
+- `client/rotator.lua`: showcase spin for case/stand items; the per-frame
+  thread exists ONLY while ≥1 rotating display is streamed in, and exits
+  completely otherwise (perf contract documented in-file).
+- fxsim S13 (5 checks): case place with style+settings, DB persistence,
+  settings update, out-of-range speed rejected, unknown style rejected —
+  suite now **43/43** on real MariaDB.
+- 3D demo updated: three case shapes with rotating items and a live
+  toggle + speed slider on the selection card.

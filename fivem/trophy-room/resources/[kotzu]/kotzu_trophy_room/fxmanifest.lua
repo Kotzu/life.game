@@ -30,6 +30,7 @@ client_scripts {
     'client/manifest.lua',
     'client/mannequin.lua',
     'client/poses.lua',
+    'client/rotator.lua',
     'client/renderers.lua',
     'client/streaming.lua',
     'client/placement.lua',

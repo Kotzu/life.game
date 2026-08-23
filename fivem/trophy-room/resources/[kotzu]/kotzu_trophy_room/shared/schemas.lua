@@ -142,6 +142,11 @@ function S.ValidateDisplayInput(d, cfg)
     end
     if d.poseId ~= nil and not isStr(d.poseId, 32) then return false, 'bad pose id' end
     if d.platform ~= nil and not isStr(d.platform, 32) then return false, 'bad platform' end
+    if d.caseStyle ~= nil and not isStr(d.caseStyle, 16) then return false, 'bad case style' end
+    if d.settings ~= nil then
+        local ok, err = S.ValidateSettings(d.settings, cfg)
+        if not ok then return false, err end
+    end
 
     if d.displayType == C.DisplayType.MANNEQUIN then
         if d.gender ~= C.Gender.MALE and d.gender ~= C.Gender.FEMALE then
@@ -156,6 +161,28 @@ function S.ValidateDisplayInput(d, cfg)
         if not isStr(d.item.name, 64) then return false, 'bad item name' end
         if d.item.metadata ~= nil and type(d.item.metadata) ~= 'table' then
             return false, 'bad item metadata'
+        end
+    end
+    return true
+end
+
+---Per-display settings: currently { rotate = { enabled, speed } }.
+function S.ValidateSettings(s, cfg)
+    cfg = cfg or KTR.Config
+    if type(s) ~= 'table' then return false, 'settings not a table' end
+    for k in pairs(s) do
+        if k ~= 'rotate' then return false, 'unknown settings key ' .. tostring(k) end
+    end
+    if s.rotate ~= nil then
+        local r = s.rotate
+        if type(r) ~= 'table' then return false, 'rotate not a table' end
+        if type(r.enabled) ~= 'boolean' then return false, 'rotate.enabled must be boolean' end
+        local sp = r.speed
+        if sp ~= nil then
+            if type(sp) ~= 'number' or sp ~= sp
+                or sp < cfg.Display.MinRotateSpeed or sp > cfg.Display.MaxRotateSpeed then
+                return false, 'rotate.speed out of range'
+            end
         end
     end
     return true

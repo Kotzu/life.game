@@ -124,12 +124,20 @@ local function spawnWeaponObject(display, t, zOffset)
     return obj
 end
 
+local function caseStyleFor(display)
+    local styles = KTR.Config.Weapons.CaseStyles
+    return styles[display.caseStyle] or styles[KTR.Config.Weapons.DefaultCaseStyle]
+end
+
 local function weaponRenderer(kind)
     return {
         spawn = function(display, t)
             local entities = {}
+            local zOff = 0.0
             if kind == 'case' then
-                local hash = loadModel(KTR.Config.Weapons.CaseModel)
+                local style = caseStyleFor(display)
+                zOff = style.itemZ
+                local hash = loadModel(style.model)
                 if hash then
                     local case = CreateObject(hash, t.x, t.y, t.z, false, false, false)
                     SetModelAsNoLongerNeeded(hash)
@@ -138,6 +146,7 @@ local function weaponRenderer(kind)
                     entities[#entities + 1] = case
                 end
             elseif kind == 'stand' then
+                zOff = 1.1
                 local hash = loadModel(KTR.Config.Weapons.StandModel)
                 if hash then
                     local stand = CreateObject(hash, t.x, t.y, t.z, false, false, false)
@@ -147,16 +156,22 @@ local function weaponRenderer(kind)
                     entities[#entities + 1] = stand
                 end
             end
-            local zOff = kind == 'wall' and 0.0 or (kind == 'case' and 0.95 or 1.1)
             local weapon = spawnWeaponObject(display, t, zOff)
             if not weapon then
                 for _, e in ipairs(entities) do DeleteEntity(e) end
                 return nil, C.Err.INTERNAL
             end
             entities[#entities + 1] = weapon
+
+            -- showcase auto-rotate (cases and stands; never wall mounts)
+            local rotate = display.settings and display.settings.rotate
+            if kind ~= 'wall' and rotate and rotate.enabled then
+                KTRC.Rotator.Add(weapon, rotate.speed)
+            end
             return { entities = entities, weapon = weapon, state = {} }
         end,
         despawn = function(handle)
+            if handle.weapon then KTRC.Rotator.Remove(handle.weapon) end
             for _, e in ipairs(handle.entities) do
                 if DoesEntityExist(e) then DeleteEntity(e) end
             end

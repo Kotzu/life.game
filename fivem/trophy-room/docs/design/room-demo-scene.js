@@ -257,27 +257,83 @@ addMannequinDisplay(1.9, -1.2, -0.15, { pose: 'crossed' },
     label: 'Armă de colecție', pose: 'Montare pe perete', outfit: 'Carabină · tint auriu', tip: 'weapon_wall' } });
 })();
 
-/* ------------------------------------------------- glass case (left) */
-(function glassCase() {
-  const ped = new T.Mesh(new T.BoxGeometry(0.8, 0.9, 0.8), plinthMat);
-  ped.position.set(-ROOM_W / 2 + 1.3, 0.45, 0.6); ped.castShadow = true; scene.add(ped);
-  const glass = new T.Mesh(new T.BoxGeometry(0.7, 0.55, 0.7),
-    new T.MeshPhysicalMaterial({ color: 0xbfd4dd, transparent: true, opacity: 0.1, roughness: 0.05, metalness: 0 }));
-  glass.position.set(-ROOM_W / 2 + 1.3, 1.18, 0.6); scene.add(glass);
-  const edges = new T.LineSegments(new T.EdgesGeometry(glass.geometry),
-    new T.LineBasicMaterial({ color: GOLD }));
-  edges.position.copy(glass.position); scene.add(edges);
+/* --------------------------------------- trophy cases (3 shapes + rotate) */
+const glassMat = new T.MeshPhysicalMaterial({
+  color: 0xbfd4dd, transparent: true, opacity: 0.1, roughness: 0.05, metalness: 0 });
 
+function makePistol() {
   const pistol = new T.Group();
   const slide = new T.Mesh(new T.BoxGeometry(0.3, 0.07, 0.05), gunMat); pistol.add(slide);
   const grip = new T.Mesh(new T.BoxGeometry(0.07, 0.16, 0.05), gunMat);
   grip.position.set(0.1, -0.1, 0); grip.rotation.z = -0.25; pistol.add(grip);
-  pistol.position.set(-ROOM_W / 2 + 1.3, 1.12, 0.6); pistol.rotation.z = 0.12;
-  scene.add(pistol);
-  spot(-ROOM_W / 2 + 1.3, 0.6, 0xffe6c0, 0.6);
-  displays.push({ group: glass, info: {
-    label: 'Pistol de serviciu', pose: 'Vitrină de sticlă', outfit: 'Serial #KTZ-0001', tip: 'weapon_case' } });
-})();
+  return pistol;
+}
+
+function makeTrophyCup() {
+  const cup = new T.Group();
+  const bowl = new T.Mesh(new T.CylinderGeometry(0.11, 0.05, 0.14, 16), goldMat);
+  bowl.position.y = 0.16; cup.add(bowl);
+  const stemP = new T.Mesh(new T.CylinderGeometry(0.02, 0.03, 0.1, 10), goldMat);
+  stemP.position.y = 0.05; cup.add(stemP);
+  const foot = new T.Mesh(new T.CylinderGeometry(0.07, 0.08, 0.03, 14), goldMat);
+  foot.position.y = 0; cup.add(foot);
+  for (const s of [-1, 1]) {
+    const handle = new T.Mesh(new T.TorusGeometry(0.05, 0.012, 8, 16), goldMat);
+    handle.position.set(s * 0.12, 0.17, 0); handle.rotation.y = Math.PI / 2; cup.add(handle);
+  }
+  cup.traverse((o) => { o.castShadow = true; });
+  return cup;
+}
+
+function makeCase(opts) {
+  // opts: x, z, style: 'cube'|'vertical'|'horizontal', item, itemY, info
+  const g = new T.Group();
+  let glassGeom, glassY;
+  if (opts.style === 'vertical') {
+    const ped = new T.Mesh(new T.BoxGeometry(0.7, 0.85, 0.7), plinthMat);
+    ped.position.y = 0.425; ped.castShadow = true; g.add(ped);
+    glassGeom = new T.BoxGeometry(0.62, 1.05, 0.62); glassY = 1.38;
+  } else if (opts.style === 'cube') {
+    const ped = new T.Mesh(new T.BoxGeometry(0.75, 0.55, 0.75), plinthMat);
+    ped.position.y = 0.275; ped.castShadow = true; g.add(ped);
+    glassGeom = new T.BoxGeometry(0.62, 0.62, 0.62); glassY = 0.86;
+  } else { // horizontal counter (Ammu-Nation style)
+    const body = new T.Mesh(new T.BoxGeometry(1.7, 0.8, 0.7), plinthMat);
+    body.position.y = 0.4; body.castShadow = true; g.add(body);
+    glassGeom = new T.BoxGeometry(1.6, 0.42, 0.6); glassY = 1.01;
+  }
+  const glass = new T.Mesh(glassGeom, glassMat);
+  glass.position.y = glassY; g.add(glass);
+  const edges = new T.LineSegments(new T.EdgesGeometry(glassGeom),
+    new T.LineBasicMaterial({ color: GOLD }));
+  edges.position.y = glassY; g.add(edges);
+
+  const itemGroup = new T.Group();
+  itemGroup.position.y = opts.itemY;
+  itemGroup.add(opts.item);
+  g.add(itemGroup);
+
+  g.position.set(opts.x, 0, opts.z);
+  if (opts.ry) g.rotation.y = opts.ry;
+  scene.add(g);
+  spot(opts.x, opts.z, 0xffe6c0, 0.6);
+  displays.push({ group: g, info: opts.info,
+                  rotate: { enabled: true, speed: 12, item: itemGroup } });
+}
+
+const p1 = makePistol(); p1.rotation.z = 0.1;
+makeCase({ x: -ROOM_W / 2 + 1.3, z: 0.6, style: 'vertical', item: p1, itemY: 1.32,
+  info: { label: 'Pistol de serviciu', pose: 'Vitrină verticală', outfit: 'Serial #KTZ-0001', tip: 'weapon_case' } });
+
+makeCase({ x: -ROOM_W / 2 + 1.5, z: 2.6, style: 'cube', item: makeTrophyCup(), itemY: 0.62,
+  info: { label: 'Cupa serverului', pose: 'Vitrină cub', outfit: 'Sezonul 2026', tip: 'weapon_case' } });
+
+const pair = new T.Group();
+const pa = makePistol(); pa.scale.setScalar(0.9); pa.position.x = -0.35; pair.add(pa);
+const pb = makePistol(); pb.scale.setScalar(0.9); pb.position.x = 0.35;
+pb.rotation.y = Math.PI; pair.add(pb);
+makeCase({ x: ROOM_W / 2 - 1.6, z: 2.4, style: 'horizontal', item: pair, itemY: 0.95, ry: -0.35,
+  info: { label: 'Pistoale gemene', pose: 'Tejghea Ammu-Nation', outfit: 'Serial #KTZ-0002/0003', tip: 'weapon_case' } });
 
 /* ambient fill */
 scene.add(new T.AmbientLight(0x272220, 1.6));
@@ -363,6 +419,29 @@ function pick(cx, cy) {
 
 const TIP_RO = { mannequin: 'Manechin', weapon_wall: 'Armă pe perete', weapon_case: 'Vitrină' };
 const focusPos = new T.Vector3();
+const rotCtl = document.getElementById('rotCtl');
+const rotToggle = document.getElementById('rotToggle');
+const rotSlider = document.getElementById('rotSlider');
+const rotValue = document.getElementById('rotValue');
+
+function syncRotCtl(d) {
+  if (!d || !d.rotate) { rotCtl.style.display = 'none'; return; }
+  rotCtl.style.display = 'block';
+  rotToggle.classList.toggle('on', d.rotate.enabled);
+  rotSlider.value = String(d.rotate.speed);
+  rotValue.textContent = d.rotate.speed + ' °/s';
+}
+rotToggle.addEventListener('click', () => {
+  if (!selected || !selected.rotate) return;
+  selected.rotate.enabled = !selected.rotate.enabled;
+  syncRotCtl(selected);
+});
+rotSlider.addEventListener('input', () => {
+  if (!selected || !selected.rotate) return;
+  selected.rotate.speed = Number(rotSlider.value);
+  rotValue.textContent = selected.rotate.speed + ' °/s';
+});
+
 function select(d) {
   selected = d;
   if (!d) { card.classList.remove('show'); chip.classList.remove('show'); return; }
@@ -370,11 +449,12 @@ function select(d) {
   card.querySelector('.card-title').textContent = d.info.label;
   card.querySelector('.card-pose').textContent = d.info.pose;
   card.querySelector('.card-outfit').textContent = d.info.outfit;
+  syncRotCtl(d);
   card.classList.add('show');
   chip.classList.add('show');
   // glide the camera to the exhibit
   d.group.getWorldPosition(focusPos);
-  desired.target.set(focusPos.x, d.info.tip === 'mannequin' ? 1.15 : focusPos.y, focusPos.z);
+  desired.target.set(focusPos.x, d.info.tip === 'mannequin' ? 1.15 : focusPos.y + 1.0, focusPos.z);
   desired.dist = d.info.tip === 'mannequin' ? 3.4 : 3.0;
   userTouched = true;
 }
@@ -398,10 +478,21 @@ function resize() {
 }
 addEventListener('resize', resize); resize();
 
+let lastT = 0;
 renderer.setAnimationLoop((t) => {
+  const dt = lastT ? Math.min((t - lastT) / 1000, 0.1) : 0;
+  lastT = t;
   // showcase sweep only until the first user interaction — never fight the user
   if (!reduced && !userTouched) {
     yaw = 0.35 + Math.sin(t * 0.00012) * 0.6;
+  }
+  // auto-rotate case items (same behavior as the in-game rotator)
+  if (!reduced) {
+    for (const d of displays) {
+      if (d.rotate && d.rotate.enabled) {
+        d.rotate.item.rotation.y += (d.rotate.speed * Math.PI / 180) * dt;
+      }
+    }
   }
   applyCamera();
   placeChip();

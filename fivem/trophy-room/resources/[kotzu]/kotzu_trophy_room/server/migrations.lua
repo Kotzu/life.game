@@ -11,6 +11,7 @@ local MIGRATIONS = {
     '001_init.sql',
     '002_tx_locks.sql',
     '003_audit.sql',
+    '004_case_settings.sql',
 }
 
 local function splitStatements(sqlText)

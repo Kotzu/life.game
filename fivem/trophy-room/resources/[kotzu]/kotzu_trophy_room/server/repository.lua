@@ -32,6 +32,8 @@ local function rowToRecord(row)
         outfit = row.outfit and json.decode(row.outfit) or nil,
         poseId = row.pose_id,
         platform = row.platform,
+        caseStyle = row.case_style,
+        settings = row.settings and json.decode(row.settings) or nil,
         item = row.item_name and {
             name = row.item_name,
             metadata = row.item_metadata and json.decode(row.item_metadata) or {},
@@ -94,12 +96,14 @@ function Repo.Create(d)
         INSERT INTO kotzu_displays
             (uid, owner_citizenid, display_type, scope_type, scope_id, routing_bucket,
              loc_x, loc_y, loc_z, loc_heading, gender, outfit, pose_id, platform,
+             case_style, settings,
              item_name, item_metadata, label, description, permissions, manifest_version)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ]], {
         uid, d.owner, d.displayType, d.scopeType, d.scopeId, d.bucket,
         d.transform.x, d.transform.y, d.transform.z, d.transform.heading,
         d.gender, d.outfit and json.encode(d.outfit) or nil, d.poseId, d.platform,
+        d.caseStyle, d.settings and json.encode(d.settings) or nil,
         d.item and d.item.name or nil,
         d.item and json.encode(d.item.metadata or {}) or nil,
         d.label, d.description, json.encode(d.permissions or {}),
@@ -130,6 +134,12 @@ function Repo.Update(uid, patch)
         end,
         poseId = function(v) sets[#sets + 1] = 'pose_id = ?' params[#params + 1] = v d.poseId = v end,
         platform = function(v) sets[#sets + 1] = 'platform = ?' params[#params + 1] = v d.platform = v end,
+        caseStyle = function(v) sets[#sets + 1] = 'case_style = ?' params[#params + 1] = v d.caseStyle = v end,
+        settings = function(v)
+            sets[#sets + 1] = 'settings = ?'
+            params[#params + 1] = json.encode(v)
+            d.settings = v
+        end,
         label = function(v) sets[#sets + 1] = 'label = ?' params[#params + 1] = v d.label = v end,
         description = function(v) sets[#sets + 1] = 'description = ?' params[#params + 1] = v d.description = v end,
         permissions = function(v)

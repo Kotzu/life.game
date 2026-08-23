@@ -87,6 +87,9 @@ function V.DisplayInput(src, d)
     local poses, platforms = whitelists()
     if d.poseId and not poses[d.poseId] then return false, C.Err.BAD_INPUT, 'unknown pose' end
     if d.platform and not platforms[d.platform] then return false, C.Err.BAD_INPUT, 'unknown platform' end
+    if d.caseStyle and not KTR.Config.Weapons.CaseStyles[d.caseStyle] then
+        return false, C.Err.BAD_INPUT, 'unknown case style'
+    end
 
     -- distance check: the resolved WORLD position must be near the player
     local ped = GetPlayerPed(src)

@@ -1,6 +1,7 @@
 [kotzu_trophy] migration applied: 001_init.sql
 [kotzu_trophy] migration applied: 002_tx_locks.sql
 [kotzu_trophy] migration applied: 003_audit.sql
+[kotzu_trophy] migration applied: 004_case_settings.sql
 [kotzu_trophy] repository loaded 0 display(s)
 == S1 boot: migrations + repository ==
   PASS S1 repo ready
@@ -59,5 +60,13 @@
   PASS S12 savedList returns the outfit
   PASS S12 savedGet returns payload
   PASS S12 other player cannot read it
+== S13 case styles + auto-rotate settings ==
+  PASS S13 case place ok
+  PASS S13 case style + settings persisted
+  PASS S13 settings update ok
+  PASS S13 settings updated in db
+  PASS S13 out-of-range speed rejected
+[kotzu_trophy] place rejected for QBX00001: BAD_INPUT unknown case style
+  PASS S13 unknown case style rejected
 
-RESULT: 37 passed, 0 failed
+RESULT: 43 passed, 0 failed

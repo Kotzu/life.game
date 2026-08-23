@@ -69,6 +69,7 @@ function renderWizard(data) {
     poseId: (data.poses[0] || {}).id || 'neutral',
     platform: 'none',
     weaponKind: 'stand',
+    caseStyle: data.defaultCaseStyle || 'vertical',
     itemName: '',
     label: '',
   };
@@ -151,11 +152,23 @@ function renderWizard(data) {
           'No functional inventory bridge detected — weapon displays are disabled.')));
       }
       typeSection.append(el('div', { class: 'section-label' }, T('mount', 'Mount')));
+      const caseRow = el('div', {});
+      function renderCaseStyles() {
+        caseRow.replaceChildren();
+        if (state.weaponKind !== 'case') return;
+        caseRow.append(el('div', { class: 'section-label' }, T('caseStyleLabel', 'Case shape')));
+        const styles = (data.caseStyles || []).map((s) => ({
+          id: s.id, label: T('case_' + s.id, s.id),
+        }));
+        caseRow.append(chipRow(styles, state.caseStyle, (id) => { state.caseStyle = id; }));
+      }
       typeSection.append(chipRow([
         { id: 'wall', label: T('wallMount', 'Wall mount') },
         { id: 'stand', label: T('floorStand', 'Floor stand') },
         { id: 'case', label: T('glassCase', 'Glass case') },
-      ], state.weaponKind, (id) => { state.weaponKind = id; }));
+      ], state.weaponKind, (id) => { state.weaponKind = id; renderCaseStyles(); }));
+      typeSection.append(caseRow);
+      renderCaseStyles();
       typeSection.append(el('div', { class: 'section-label' }, T('weaponItemName', 'Weapon item name')));
       typeSection.append(el('input', {
         type: 'text', placeholder: 'weapon_pistol',
@@ -194,6 +207,7 @@ function renderWizard(data) {
         if (!data.inventoryFunctional || !state.itemName.trim()) return;
         nui('ktr:placeWeapon', {
           kind: state.weaponKind,
+          caseStyle: state.caseStyle,
           itemName: state.itemName.trim(),
           label: state.label,
         });
@@ -263,6 +277,43 @@ function renderConfirmRemove(data) {
   screenEl.replaceChildren(body);
 }
 
+function renderRotate(data) {
+  titleEl.textContent = T('rotateTitle', 'Auto-rotate');
+  const body = el('div', {});
+  const state = { enabled: data.enabled === true, speed: data.speed || 12 };
+
+  const toggle = el('button', {
+    class: state.enabled ? 'selected' : '',
+    onclick: () => {
+      state.enabled = !state.enabled;
+      toggle.classList.toggle('selected', state.enabled);
+    },
+  }, T('rotateEnable', 'Rotate the item slowly'));
+  body.append(el('div', { class: 'row' }, toggle));
+
+  body.append(el('div', { class: 'section-label' }, T('rotateSpeed', 'Rotation speed')));
+  const readout = el('span', { class: 'slider-value' },
+    `${state.speed} ${T('degPerSec', '°/s')}`);
+  const slider = el('input', {
+    type: 'range', min: String(data.minSpeed || 3), max: String(data.maxSpeed || 90),
+    step: '1', value: String(state.speed),
+    oninput: (e) => {
+      state.speed = Number(e.target.value);
+      readout.textContent = `${state.speed} ${T('degPerSec', '°/s')}`;
+    },
+  });
+  body.append(el('div', { class: 'slider-row' }, slider, readout));
+
+  body.append(el('button', {
+    class: 'primary',
+    onclick: () => {
+      nui('ktr:setRotate', { uid: data.uid, enabled: state.enabled, speed: state.speed });
+      root.classList.add('hidden');
+    },
+  }, T('saveBtn', 'Save')));
+  screenEl.replaceChildren(body);
+}
+
 function renderOptions(data) {
   titleEl.textContent = T('interact', 'Interact');
   const body = el('div', {});
@@ -291,6 +342,7 @@ window.addEventListener('message', (event) => {
     case 'details': renderDetails(data); break;
     case 'poses': renderPoses(data); break;
     case 'confirmRemove': renderConfirmRemove(data); break;
+    case 'rotate': renderRotate(data); break;
     case 'options': renderOptions(data); break;
     default: close();
   }

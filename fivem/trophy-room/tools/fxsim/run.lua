@@ -92,7 +92,7 @@ SIM.AddPlayer(4, { license = 'license:probe4' })
 print('== S1 boot: migrations + repository ==')
 check('S1 repo ready', KTRS.Repo.Ready())
 check('S1 migrations recorded',
-    MySQL.scalar.await('SELECT COUNT(*) FROM kotzu_schema_migrations') == 3)
+    MySQL.scalar.await('SELECT COUNT(*) FROM kotzu_schema_migrations') == 4)
 
 print('== S2 place bare mannequin (world scope) ==')
 local ok2, res2 = rpc(1, 'displays:place', { display = {
@@ -295,6 +295,45 @@ check('S12 savedGet returns payload', okG == true and getRes.model == 'mp_m_free
     json.encode(getRes or {}))
 local okG2, errG2 = rpc(2, 'outfit:savedGet', { id = outfitId })
 check('S12 other player cannot read it', okG2 == false, tostring(errG2))
+
+print('== S13 case styles + auto-rotate settings ==')
+mockItems[1] = { { name = 'weapon_carbinerifle', slot = 2,
+                   metadata = { serial = 'SER777' }, count = 1 } }
+local ok13, res13 = rpc(1, 'displays:place', { display = {
+    displayType = C.DisplayType.WEAPON_CASE, scopeType = C.ScopeType.WORLD,
+    transform = { x = 6.0, y = 6.0, z = 6.0, heading = 0.0 },
+    caseStyle = 'horizontal',
+    settings = { rotate = { enabled = true, speed = 15.0 } },
+    item = { name = 'weapon_carbinerifle', metadata = {} },
+}, idKey = 'simkey_case_1' })
+check('S13 case place ok', ok13 == true and res13.uid ~= nil, json.encode(res13))
+local cUid = ok13 and res13.uid or nil
+check('S13 case style + settings persisted', cUid and (function()
+    local row = MySQL.single.await(
+        'SELECT case_style, settings FROM kotzu_displays WHERE uid = ?', { cUid })
+    return row and row.case_style == 'horizontal'
+        and (row.settings or ''):find('"enabled":true') ~= nil
+end)() == true)
+
+local ok13b, err13b = rpc(1, 'displays:update', { uid = cUid, patch = {
+    settings = { rotate = { enabled = false, speed = 30.0 } } } })
+check('S13 settings update ok', ok13b == true, tostring(err13b))
+check('S13 settings updated in db', cUid and (MySQL.scalar.await(
+    'SELECT settings FROM kotzu_displays WHERE uid = ?', { cUid }) or '')
+    :find('"enabled":false') ~= nil)
+
+local ok13c, err13c = rpc(1, 'displays:update', { uid = cUid, patch = {
+    settings = { rotate = { enabled = true, speed = 9999 } } } })
+check('S13 out-of-range speed rejected', ok13c == false and err13c == C.Err.BAD_INPUT,
+    tostring(err13c))
+local ok13d, err13d = rpc(1, 'displays:place', { display = {
+    displayType = C.DisplayType.WEAPON_CASE, scopeType = C.ScopeType.WORLD,
+    transform = { x = 6.0, y = 6.0, z = 6.0, heading = 0.0 },
+    caseStyle = 'pyramid',
+    item = { name = 'weapon_carbinerifle', metadata = {} },
+}, idKey = 'simkey_case_2' })
+check('S13 unknown case style rejected', ok13d == false and err13d == C.Err.BAD_INPUT,
+    tostring(err13d))
 
 print('')
 print(('RESULT: %d passed, %d failed'):format(passes, #failures))

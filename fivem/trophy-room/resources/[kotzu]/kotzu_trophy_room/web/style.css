@@ -122,6 +122,26 @@ input[type=text]:focus { border-color: var(--accent); }
 .outfit-foot-name { color: var(--text); font-size: 14px; }
 .outfit-foot-sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
 
+/* rotation speed slider */
+.slider-row { display: flex; align-items: center; gap: 12px; }
+.slider-value {
+  min-width: 58px; text-align: right; font-size: 13px; color: var(--accent2);
+  font-variant-numeric: tabular-nums;
+}
+input[type=range] {
+  flex: 1; appearance: none; -webkit-appearance: none;
+  height: 4px; border-radius: 2px; background: var(--line); outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  appearance: none; -webkit-appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); border: 2px solid #17130c; cursor: pointer;
+}
+input[type=range]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); border: 2px solid #17130c; cursor: pointer;
+}
+
 .outfit-panel.shake { animation: ktr-shake 0.4s; border-color: var(--danger); }
 @keyframes ktr-shake {
   0%, 100% { transform: translateX(0); }
