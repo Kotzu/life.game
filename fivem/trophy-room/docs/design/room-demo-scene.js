@@ -436,6 +436,11 @@ rotToggle.addEventListener('click', () => {
   selected.rotate.enabled = !selected.rotate.enabled;
   syncRotCtl(selected);
 });
+// touches on the card must never reach the canvas orbit underneath
+for (const evName of ['pointerdown', 'pointermove', 'pointerup', 'touchstart', 'touchmove']) {
+  card.addEventListener(evName, (e) => e.stopPropagation());
+}
+
 rotSlider.addEventListener('input', () => {
   if (!selected || !selected.rotate) return;
   selected.rotate.speed = Number(rotSlider.value);
@@ -486,15 +491,24 @@ renderer.setAnimationLoop((t) => {
   if (!reduced && !userTouched) {
     yaw = 0.35 + Math.sin(t * 0.00012) * 0.6;
   }
-  // auto-rotate case items (same behavior as the in-game rotator)
-  if (!reduced) {
-    for (const d of displays) {
-      if (d.rotate && d.rotate.enabled) {
-        d.rotate.item.rotation.y += (d.rotate.speed * Math.PI / 180) * dt;
-      }
+  // auto-rotate case items (same behavior as the in-game rotator).
+  // Deliberately NOT gated by prefers-reduced-motion: this is the demoed
+  // feature and has its own on/off toggle per case.
+  for (const d of displays) {
+    if (d.rotate && d.rotate.enabled) {
+      d.rotate.item.rotation.y += (d.rotate.speed * Math.PI / 180) * dt;
     }
   }
   applyCamera();
   placeChip();
   renderer.render(scene, camera);
 });
+
+
+/* test hook (harmless in production demo) */
+window.__ktrDemo = {
+  displays,
+  select,
+  itemAngle: (i) => displays[i] && displays[i].rotate
+    ? displays[i].rotate.item.rotation.y : null,
+};
