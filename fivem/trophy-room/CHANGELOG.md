@@ -65,3 +65,23 @@ pending — see `docs/validation-matrix.md`).
 ### Added
 - `tools/setup-sandbox.ps1`: one-click Windows sandbox installer with live-server
   safety rail, prerequisite scan, mirrored copy, and server.cfg guidance.
+
+## [1.0.2-dev] — 2026-08-23
+
+### Added — headless integration verification (no FiveM client needed)
+- `tools/fxsim/`: FXServer-environment simulator (natives/events/scheduler/
+  oxmysql shims) running the REAL server scripts against REAL MariaDB —
+  **32/32 scenario checks pass** (S1–S11: boot/migrations, placement,
+  permissions, validation, rate limits, full weapon transaction with
+  idempotent replay + zero duplication + stranded-lock recovery, DB
+  consistency). Evidence: `tools/fxsim/last_run.txt`,
+  `docs/headless-verification-report.md`.
+- SQL semantics proven directly on MariaDB 10.11 (INSERT IGNORE gate,
+  soft-delete-as-lock, idempotent migrations).
+
+### Fixed — Sollumz API verification against real source + headless Blender
+- Confirmed: `sollumz.import_assets(directory, files)`,
+  `sollumz.export_assets`, `create_shader('ped_default.sps')` (szio
+  ShaderManager). Gap fixed: install-dependent Sollumz module path
+  (`Sollumz` addon vs `bl_ext.<repo>.sollumz[_dev]` extension) now resolved
+  dynamically; export now passes `direct_export=True` for headless runs.

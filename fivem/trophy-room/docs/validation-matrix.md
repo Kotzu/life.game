@@ -29,6 +29,17 @@ No row may be flipped to PASS without an evidence path in the last column.
 | T19 | Actual performance numbers recorded | PENDING-INGAME | template: `docs/performance-report.md` |
 | T20 | Final screenshots + video from FiveM | PENDING-INGAME | — |
 
+## Headless integration validation (2026-08-23)
+
+- **32/32 FXServer-simulation checks pass** — real server scripts on real
+  MariaDB 10.11: migrations, placement, permissions, validation, rate limits,
+  the full weapon transaction (idempotent replay, zero duplication, recovery),
+  DB consistency. Details: `docs/headless-verification-report.md`; harness:
+  `tools/fxsim/`.
+- **Sollumz API verified against real source + headless Blender**: operator ids
+  and `create_shader('ped_default.sps')` confirmed; one real gap (install-
+  dependent module path) found and fixed. Same report.
+
 ## Static validation already performed (this repo, headless)
 
 - All 34 Lua files parse clean (luaparser, Lua 5.4-compatible syntax).

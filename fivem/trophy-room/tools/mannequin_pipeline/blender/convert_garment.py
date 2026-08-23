@@ -62,9 +62,10 @@ def sollumz_import(path: str) -> None:
 def sollumz_export(out_dir: str) -> None:
     Path(out_dir).mkdir(parents=True, exist_ok=True)
     candidates = (
+        # verified against Sollumz 2.9: export_assets(directory, direct_export)
+        lambda: bpy.ops.sollumz.export_assets(directory=out_dir, direct_export=True),
         lambda: bpy.ops.sollumz.export_assets(directory=out_dir),
         lambda: bpy.ops.sollumz.exportydd(directory=out_dir),
-        lambda: bpy.ops.export_scene.ydd(filepath=out_dir),
     )
     errors = []
     for fn in candidates:

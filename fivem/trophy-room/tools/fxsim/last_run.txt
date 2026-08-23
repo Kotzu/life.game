@@ -1,0 +1,57 @@
+[kotzu_trophy] migration applied: 001_init.sql
+[kotzu_trophy] migration applied: 002_tx_locks.sql
+[kotzu_trophy] migration applied: 003_audit.sql
+[kotzu_trophy] repository loaded 0 display(s)
+== S1 boot: migrations + repository ==
+  PASS S1 repo ready
+  PASS S1 migrations recorded
+== S2 place bare mannequin (world scope) ==
+[kotzu_trophy] bridge framework -> standalone
+[kotzu_trophy] bridge housing -> generic
+  PASS S2 place ok
+  PASS S2 row persisted
+  PASS S2 broadcast upsert sent
+  PASS S2 owner not leaked in broadcast
+== S3 outfit vs manifest v0 -> MANIFEST_NOT_BUILT ==
+[kotzu_trophy] place rejected for license:owner1: MANIFEST_NOT_BUILT []
+  PASS S3 refused with MANIFEST_NOT_BUILT
+== S4 permissions: visitor cannot update/delete; admin can ==
+  PASS S4 visitor update denied
+  PASS S4 visitor delete denied
+  PASS S4 admin update allowed
+  PASS S4 visitor caps shape
+== S5 bad input rejected ==
+[kotzu_trophy] place rejected for license:owner1: BAD_INPUT bad display type
+  PASS S5 bad type
+[kotzu_trophy] place rejected for license:owner1: BAD_INPUT bad transform field x
+  PASS S5 NaN transform
+  PASS S5 pose whitelist
+== S6 rate limiting ==
+  PASS S6 place rate-limited within a minute
+== S7 weapon transaction (mock inventory) ==
+[kotzu_trophy] bridge inventory -> mock
+  PASS S7 weapon place ok
+  PASS S7 item removed from inventory
+  PASS S7 metadata authoritative (serial persisted)
+  PASS S7 idempotent replay returns same uid
+  PASS S7 no duplicate rows
+  PASS S7 retrieve ok
+  PASS S7 item back exactly once
+  PASS S7 second retrieve refused
+  PASS S7 no item duplication
+== S8 missing item -> ITEM_MISSING, lock closed ==
+  PASS S8 ITEM_MISSING
+  PASS S8 lock failed-closed
+== S9 stranded-lock recovery ==
+[kotzu_trophy] RECOVERY: stranded place simkey_stranded — item weapon_pistol owed to license:owner1 (see audit)
+[kotzu_trophy] transaction recovery processed 1 stranded lock(s)
+  PASS S9 stranded place recovered
+  PASS S9 recovery credit audited
+== S10 delete + scope listing ==
+  PASS S10 owner delete ok
+  PASS S10 double delete NOT_FOUND
+  PASS S10 listScope works
+== S11 db consistency ==
+  PASS S11 validateDb clean
+
+RESULT: 32 passed, 0 failed

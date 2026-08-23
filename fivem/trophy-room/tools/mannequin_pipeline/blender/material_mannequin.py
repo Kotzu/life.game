@@ -64,6 +64,31 @@ def looks_like_skin(mat, hints: dict | None = None) -> tuple[bool, str]:
     return False, "no skin tokens"
 
 
+def _find_sollumz_create_shader():
+    """Locate Sollumz's create_shader regardless of install flavor."""
+    import importlib
+    import sys
+
+    candidates = []
+    # extension installs register under bl_ext.<repo>.<id>
+    for name, mod in list(sys.modules.items()):
+        base = name.rsplit(".", 1)[-1].lower()
+        if base in ("sollumz", "sollumz_dev") and mod is not None:
+            candidates.append(name)
+    candidates += ["Sollumz", "sollumz",
+                   "bl_ext.user_default.sollumz", "bl_ext.blender_org.sollumz",
+                   "bl_ext.user_default.sollumz_dev"]
+    for name in candidates:
+        try:
+            mod = importlib.import_module(name + ".ydr.shader_materials")
+            fn = getattr(mod, "create_shader", None)
+            if fn is not None:
+                return fn
+        except Exception:
+            continue
+    return None
+
+
 def make_mannequin_material(source_mat=None) -> bpy.types.Material:
     """Create (once) the mannequin plastic as a Sollumz ped shader material so it
     exports as a game-compatible shader, not a Blender-only BSDF."""
@@ -72,13 +97,15 @@ def make_mannequin_material(source_mat=None) -> bpy.types.Material:
         return existing
 
     mat = None
-    # Preferred: Sollumz shader material creation (API name varies by version)
-    try:
-        from sollumz.ydr.shader_materials import create_shader  # Sollumz 2.x
-        mat = create_shader("ped_default.sps")
-    except Exception:
+    # Preferred: Sollumz's create_shader (verified against Sollumz 2.9 source:
+    # ydr/shader_materials.py, signature create_shader(filename, in_place_material=None),
+    # and 'ped_default.sps' confirmed present in szio ShaderManager).
+    # The module name depends on how Sollumz is installed, so resolve dynamically:
+    #   - Blender 4.2+ extension: bl_ext.<repo>.sollumz / bl_ext.<repo>.sollumz_dev
+    #   - legacy addon folder:    Sollumz / sollumz
+    create_shader = _find_sollumz_create_shader()
+    if create_shader is not None:
         try:
-            from sollumz.shared.shader_materials import create_shader  # newer layouts
             mat = create_shader("ped_default.sps")
         except Exception:
             mat = None
