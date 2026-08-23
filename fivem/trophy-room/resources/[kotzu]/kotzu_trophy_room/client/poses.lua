@@ -32,17 +32,43 @@ local function loadDict(dict, timeoutMs)
     return true
 end
 
+local function pedGender(ped)
+    if GetEntityModel(ped) == joaat(KTR.Const.Model.female) then
+        return KTR.Const.Gender.FEMALE
+    end
+    return KTR.Const.Gender.MALE
+end
+
 ---Apply a pose; safe to call again after re-stream (idempotent).
+---Resolution order: genderDict[gender] → dict → scenario → fallbackDict →
+---fallbackScenario. A gender-specific dict that fails to load falls through
+---to the shared dict, so no pose ever silently leaves the ped in a-pose.
 ---@return boolean ok, string|nil detail
 function P.Apply(ped, poseId)
     local pose = P.Get(poseId)
     ClearPedTasksImmediately(ped)
 
-    if pose.dict and pose.anim and loadDict(pose.dict) then
+    local dict = pose.dict
+    if pose.genderDict then
+        dict = pose.genderDict[pedGender(ped)] or pose.dict
+    end
+
+    if dict and pose.anim and loadDict(dict) then
+        TaskPlayAnim(ped, dict, pose.anim, 4.0, -4.0, -1, pose.flag or 1,
+            0.0, false, false, false)
+        RemoveAnimDict(dict)
+        return true
+    end
+    -- shared dict as a second try when a gender dict was chosen but missing
+    if dict ~= pose.dict and pose.dict and pose.anim and loadDict(pose.dict) then
         TaskPlayAnim(ped, pose.dict, pose.anim, 4.0, -4.0, -1, pose.flag or 1,
             0.0, false, false, false)
         RemoveAnimDict(pose.dict)
-        return true
+        return true, 'shared dict used'
+    end
+    if pose.scenario then
+        TaskStartScenarioInPlace(ped, pose.scenario, 0, true)
+        return true, 'scenario used'
     end
     if pose.fallbackDict and pose.fallbackAnim and loadDict(pose.fallbackDict) then
         TaskPlayAnim(ped, pose.fallbackDict, pose.fallbackAnim, 4.0, -4.0, -1,
@@ -50,10 +76,9 @@ function P.Apply(ped, poseId)
         RemoveAnimDict(pose.fallbackDict)
         return true, 'fallback dict used'
     end
-    local scenario = pose.scenario or pose.fallbackScenario
-    if scenario then
-        TaskStartScenarioInPlace(ped, scenario, 0, true)
-        return true, 'scenario used'
+    if pose.fallbackScenario then
+        TaskStartScenarioInPlace(ped, pose.fallbackScenario, 0, true)
+        return true, 'fallback scenario used'
     end
     return false, ('pose %s: no dict/scenario available'):format(pose.id)
 end

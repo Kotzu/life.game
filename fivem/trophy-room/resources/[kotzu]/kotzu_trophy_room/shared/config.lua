@@ -43,17 +43,32 @@ KTR.Config = {
     },
 
     -- --------------------------------------------------------------- poses
-    -- Validated per acceptance §10; anims chosen from base-game dictionaries.
+    -- Every dict+clip below was verified to EXIST against the DurtyFree
+    -- animDictsCompact dump (20,179 dicts); scenarios verified against
+    -- scenariosCompact. `genderDict` overrides `dict` per gender where the
+    -- game ships male/female-specific clips (poses.lua picks by ped model).
+    -- Priority when applying: genderDict → dict → scenario → fallback*.
     Poses = {
-        { id = 'neutral',     label = 'Retail stance',      dict = 'anim@heists@heist_corona@team_idles@male_a', anim = 'idle',      flag = 1 },
-        { id = 'attention',   label = 'Military attention', dict = 'anim@mp_point',                              anim = 'standing_idle', flag = 1,
-          fallbackScenario = 'WORLD_HUMAN_GUARD_STAND_ARMY' },
-        { id = 'at_ease',     label = 'Military at ease',   scenario = 'WORLD_HUMAN_GUARD_STAND', },
-        { id = 'hands_back',  label = 'Hands behind back',  dict = 'anim@amb@casino@valet_scenario@pose_d@', anim = 'base_a_m_y_vinewood_01', flag = 1 },
-        { id = 'arms_crossed',label = 'Arms crossed',       dict = 'anim@amb@nightclub@peds@',               anim = 'amb_world_human_hang_out_street_base', flag = 1,
-          fallbackDict = 'mini@strip_club@idles@bouncer@base', fallbackAnim = 'base' },
-        { id = 'relaxed',     label = 'Relaxed display',    dict = 'anim@amb@board_room@supervising@',       anim = 'base', flag = 1 },
-        { id = 'tpose',       label = 'T-pose (debug)',     dict = 'nm@hands',                                anim = 'front', flag = 2, debugOnly = true },
+        { id = 'neutral',     label = 'Retail stance',      anim = 'idle', flag = 1,
+          genderDict = { male = 'anim@heists@heist_corona@team_idles@male_a',
+                         female = 'anim@heists@heist_corona@team_idles@female_a' },
+          fallbackScenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+        { id = 'attention',   label = 'Military attention', scenario = 'WORLD_HUMAN_GUARD_STAND_ARMY' },
+        { id = 'at_ease',     label = 'Military at ease',   scenario = 'WORLD_HUMAN_GUARD_STAND' },
+        { id = 'guard',       label = 'Security guard',     scenario = 'WORLD_HUMAN_GUARD_PATROL',
+          fallbackScenario = 'WORLD_HUMAN_COP_IDLES' },
+        { id = 'inspect',     label = 'Inspecting',         scenario = 'WORLD_HUMAN_CLIPBOARD',
+          fallbackScenario = 'WORLD_HUMAN_INSPECT_STAND' },
+        { id = 'hands_back',  label = 'Hands behind back',  dict = 'anim@amb@casino@valet_scenario@pose_d@',
+          anim = 'base_a_m_y_vinewood_01', flag = 1,
+          fallbackScenario = 'WORLD_HUMAN_GUARD_STAND' },
+        { id = 'arms_crossed',label = 'Arms crossed',       dict = 'mini@strip_club@idles@bouncer@base',
+          anim = 'base', flag = 1 },
+        { id = 'relaxed',     label = 'Relaxed display',    dict = 'amb@world_human_hang_out_street@male_c@base',
+          anim = 'base', flag = 1,
+          fallbackScenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+        { id = 'tpose',       label = 'T-pose (debug)',     dict = 'nm@hands', anim = 'front',
+          flag = 2, debugOnly = true },
     },
     DefaultPose = 'neutral',
 
@@ -89,6 +104,27 @@ KTR.Config = {
                 bucket = 101,
             },
         },
+    },
+
+    -- ---------------------------------------------------- demo room layout
+    -- A ready-made trophy-room arrangement (transforms are shell/property-LOCAL,
+    -- i.e. relative to the room origin). Used by /kmq:demo_layout to populate a
+    -- shell for acceptance test T8 and for design previews. Poses reference the
+    -- verified pose ids above.
+    DemoLayout = {
+        { displayType = 'mannequin', gender = 'male',   poseId = 'attention',
+          platform = 'plinth', label = 'Uniformă patrulare',
+          transform = { x = -2.0, y = 2.0, z = 0.0, heading = 180.0 } },
+        { displayType = 'mannequin', gender = 'female', poseId = 'at_ease',
+          platform = 'plinth', label = 'Uniformă ceremonie',
+          transform = { x = 0.0,  y = 2.0, z = 0.0, heading = 180.0 } },
+        { displayType = 'mannequin', gender = 'male',   poseId = 'arms_crossed',
+          platform = 'round',  label = 'Ținută tactică',
+          transform = { x = 2.0,  y = 2.0, z = 0.0, heading = 180.0 } },
+        { displayType = 'weapon_wall',  label = 'Armă de colecție',
+          transform = { x = -2.5, y = 3.4, z = 1.3, heading = 0.0 } },
+        { displayType = 'weapon_stand', label = 'Pistol de serviciu',
+          transform = { x = 2.5,  y = 3.2, z = 0.0, heading = 90.0 } },
     },
 
     -- ------------------------------------------------------------ interaction

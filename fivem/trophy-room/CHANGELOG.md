@@ -118,3 +118,19 @@ pending — see `docs/validation-matrix.md`).
   (Search/AddItem/RemoveItem export names confirmed).
 - fxsim: external-exports faking; whole suite now runs on the Qbox identity
   path + 5 new S12 checks — **37/37 passing** on real MariaDB.
+
+## [1.1.1-dev] — 2026-08-23
+
+### Fixed — pose set verified against the game's real animation data
+- Replaced pose entries whose anim clips don't exist in-game (verified against
+  the DurtyFree animDictsCompact dump, 20,179 dicts): `neutral` now uses the
+  real per-gender corona team-idle clips; `attention`/`at_ease`/`guard`/
+  `inspect` use verified scenarios; `hands_back`/`arms_crossed`/`relaxed` use
+  verified dict+clip pairs. Added `guard` and `inspect` poses.
+- poses.lua: per-gender dict resolution (genderDict) with a shared-dict then
+  scenario fallback cascade, so no pose can silently leave a ped in A-pose.
+
+### Added
+- Full Romanian (`ro`) locale pack for notifications/target labels.
+- `Config.DemoLayout` + `/kmq:demo_layout`: ready-made trophy-room arrangement
+  (3 mannequins + 2 weapon displays, shell-relative) for acceptance T8/previews.

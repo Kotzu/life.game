@@ -177,6 +177,34 @@ RegisterCommand('kmq:sim_reconnect', function()
     KTRC.Streaming.RequestScope()
 end, false)
 
+-- Populate the current room with the configured demo layout (acceptance T8).
+-- Mannequins place without a captured outfit (base plastic); weapon displays
+-- are skipped here (they need a real inventory item + transaction) with a note.
+RegisterCommand('kmq:demo_layout', function()
+    local layout = KTR.Config.DemoLayout or {}
+    local placed, skipped = 0, 0
+    for _, d in ipairs(layout) do
+        if d.displayType:find('^weapon_') then
+            skipped = skipped + 1
+        else
+            local draft = {
+                displayType = d.displayType, gender = d.gender,
+                poseId = d.poseId, platform = d.platform, label = d.label,
+                scopeType = KTR.Const.ScopeType.WORLD, transform = d.transform,
+            }
+            local housing = KTR.Bridge.Get('housing')
+            local room = housing and housing.CurrentRoom and housing.CurrentRoom()
+            if room then
+                draft.scopeType = room.scopeType
+                draft.scopeId = room.scopeId
+            end
+            local res = KTR.RPC.Call('displays:place', { display = draft })
+            if res then placed = placed + 1 else skipped = skipped + 1 end
+        end
+    end
+    say(('demo layout: %d placed, %d skipped (weapon displays need a real item — use the wizard)'):format(placed, skipped))
+end, false)
+
 RegisterCommand('kmq:probe_clothing', function()
     local cb = KTR.Bridge.Get('clothing')
     if cb and cb.Describe then
