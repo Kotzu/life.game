@@ -167,12 +167,24 @@ function RegisterCommand(name, fn, restricted)
     SIM.commands[name] = { fn = fn, restricted = restricted }
 end
 
--- exports: callable to register, indexable for cross-resource calls
+-- exports: callable to register, indexable for cross-resource calls.
+-- External resources (qbx_core, ox_inventory, ...) can be faked with
+-- SIM.RegisterExternalExports; colon-call convention (self stripped) matched.
 local exportsRegistry = {}
+local externalExports = {}
+
+function SIM.RegisterExternalExports(res, tbl)
+    externalExports[res] = tbl
+end
+
 exports = setmetatable({}, {
     __call = function(_, name, fn) exportsRegistry[name] = fn end,
     __index = function(_, res)
+        local ext = externalExports[res]
         return setmetatable({}, { __index = function(_, fnName)
+            if ext and ext[fnName] then
+                return function(_, ...) return ext[fnName](...) end
+            end
             return function() error(('export %s.%s not available in sim'):format(res, fnName)) end
         end })
     end,

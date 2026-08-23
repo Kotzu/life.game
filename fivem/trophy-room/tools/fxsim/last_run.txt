@@ -6,14 +6,14 @@
   PASS S1 repo ready
   PASS S1 migrations recorded
 == S2 place bare mannequin (world scope) ==
-[kotzu_trophy] bridge framework -> standalone
+[kotzu_trophy] bridge framework -> qbox
 [kotzu_trophy] bridge housing -> generic
   PASS S2 place ok
   PASS S2 row persisted
   PASS S2 broadcast upsert sent
   PASS S2 owner not leaked in broadcast
 == S3 outfit vs manifest v0 -> MANIFEST_NOT_BUILT ==
-[kotzu_trophy] place rejected for license:owner1: MANIFEST_NOT_BUILT []
+[kotzu_trophy] place rejected for QBX00001: MANIFEST_NOT_BUILT []
   PASS S3 refused with MANIFEST_NOT_BUILT
 == S4 permissions: visitor cannot update/delete; admin can ==
   PASS S4 visitor update denied
@@ -21,9 +21,9 @@
   PASS S4 admin update allowed
   PASS S4 visitor caps shape
 == S5 bad input rejected ==
-[kotzu_trophy] place rejected for license:owner1: BAD_INPUT bad display type
+[kotzu_trophy] place rejected for QBX00001: BAD_INPUT bad display type
   PASS S5 bad type
-[kotzu_trophy] place rejected for license:owner1: BAD_INPUT bad transform field x
+[kotzu_trophy] place rejected for QBX00001: BAD_INPUT bad transform field x
   PASS S5 NaN transform
   PASS S5 pose whitelist
 == S6 rate limiting ==
@@ -53,5 +53,11 @@
   PASS S10 listScope works
 == S11 db consistency ==
   PASS S11 validateDb clean
+== S12 Qbox framework bridge + illenium saved outfits ==
+  PASS S12 qbox bridge selected
+  PASS S12 identity from qbx PlayerData
+  PASS S12 savedList returns the outfit
+  PASS S12 savedGet returns payload
+  PASS S12 other player cannot read it
 
-RESULT: 32 passed, 0 failed
+RESULT: 37 passed, 0 failed

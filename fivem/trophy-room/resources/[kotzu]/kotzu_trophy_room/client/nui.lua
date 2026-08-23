@@ -97,18 +97,29 @@ RegisterNUICallback('ktr:placeMannequin', function(data, cb)
     CreateThread(function()
         local gender = data.gender == 'female' and C.Gender.FEMALE or C.Gender.MALE
         local outfit = nil
+        local cbridge = KTR.Bridge.Get('clothing')
         if data.outfitSource == 'current' then
-            local cbridge = KTR.Bridge.Get('clothing')
             local captured, err = cbridge.Capture(PlayerPedId())
-            if not captured then
-                KTR.Bridge.Get('framework').Notify(KTR.ErrText(C.Err.OUTFIT_INVALID), 'error')
-                return
-            end
-            if captured.gender ~= gender then
+            if not captured or captured.gender ~= gender then
                 KTR.Bridge.Get('framework').Notify(KTR.ErrText(C.Err.OUTFIT_INVALID), 'error')
                 return
             end
             outfit = captured
+        elseif data.outfitSource == 'saved' and data.savedId then
+            if cbridge.GetSavedOutfit then
+                local saved, err = cbridge.GetSavedOutfit(tonumber(data.savedId) or data.savedId, gender)
+                if not saved then
+                    KTR.Bridge.Get('framework').Notify(
+                        KTR.ErrText(err or C.Err.OUTFIT_INVALID), 'error')
+                    return
+                end
+                outfit = saved
+            else
+                -- installed clothing system can't fetch saved outfits: explicit
+                -- fallback to capturing the current outfit (announced in the UI)
+                local captured = cbridge.Capture(PlayerPedId())
+                if captured and captured.gender == gender then outfit = captured end
+            end
         end
         local draft = {
             displayType = C.DisplayType.MANNEQUIN,

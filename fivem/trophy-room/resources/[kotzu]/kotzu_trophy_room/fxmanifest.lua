@@ -17,9 +17,11 @@ shared_scripts {
 }
 
 client_scripts {
+    'bridge/framework/qbox.lua',
     'bridge/framework/qbcore.lua',
     'bridge/framework/standalone.lua',
     'bridge/clothing/natives.lua',
+    'bridge/clothing/illenium.lua',
     'bridge/clothing/rcore.lua',
     'bridge/target/qb.lua',
     'bridge/target/ox.lua',
@@ -40,6 +42,7 @@ client_scripts {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    'bridge/framework/qbox.lua',
     'bridge/framework/qbcore.lua',
     'bridge/framework/standalone.lua',
     'bridge/inventory/qb.lua',

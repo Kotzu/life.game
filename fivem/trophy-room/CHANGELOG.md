@@ -99,3 +99,22 @@ pending — see `docs/validation-matrix.md`).
   missing/unknown/texture-mismatch, exit 1 on gaps).
 - EXTRACTION_LIST + compatibility report updated with the real counts.
 - +2 test modules (19 pytest cases total, all passing).
+
+## [1.1.0-dev] — 2026-08-23
+
+### Added — first-class Qbox framework support (verified against real sources)
+- `bridge/framework/qbox.lua`: qbx_core identity (PlayerData.citizenid,
+  job.grade.level), ACE/HasPermission admin checks, qbx Notify server-side +
+  ox_lib notify client-side. Verified against Qbox-project/qbx_core source;
+  outranks the qb-core bridge when both are present.
+- `bridge/clothing/illenium.lua`: illenium-appearance support — saved outfits
+  read SERVER-side from its `player_outfits` table (feature-detected), payloads
+  normalized from global drawable indexes to (collection, local) via the
+  global->collection lookup natives (`NormalizeIllenium`).
+- Saved-outfit RPCs (`outfit:savedList` / `outfit:savedGet`) with per-citizen
+  ownership enforced in SQL; wizard "Saved outfit…" path now actually applies
+  the selected outfit.
+- ox_inventory/ox_target bridges re-verified against CommunityOx sources
+  (Search/AddItem/RemoveItem export names confirmed).
+- fxsim: external-exports faking; whole suite now runs on the Qbox identity
+  path + 5 new S12 checks — **37/37 passing** on real MariaDB.

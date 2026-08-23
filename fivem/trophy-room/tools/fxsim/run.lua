@@ -21,11 +21,30 @@ local ROOT = '../../resources/[kotzu]'
 SIM.RegisterResource('kotzu_trophy_room', ROOT .. '/kotzu_trophy_room')
 SIM.RegisterResource('kotzu_mannequin_assets', ROOT .. '/kotzu_mannequin_assets')
 
+-- Fake Qbox core so the whole suite exercises the qbox framework bridge.
+-- Export surface mirrors the real qbx_core (GetPlayer/HasPermission/Notify).
+SIM.RegisterResource('qbx_core', '.')
+SIM.RegisterExternalExports('qbx_core', {
+    GetPlayer = function(src)
+        if not SIM.players[src] then return nil end
+        return { PlayerData = {
+            citizenid = ('QBX%05d'):format(src),
+            charinfo = { firstname = 'Sim', lastname = 'Qbx' .. src },
+            job = { name = 'police', grade = { name = 'officer', level = 2 } },
+        } }
+    end,
+    HasPermission = function(_, _) return false end,
+    Notify = function(src, text, _)
+        table.insert(SIM.clientEvents, { name = 'qbx:notify', src = src, args = { text } })
+    end,
+})
+
 SIM.LoadScripts('kotzu_trophy_room', ROOT .. '/kotzu_trophy_room', {
     -- shared (fxmanifest order)
     'shared/constants.lua', 'shared/config.lua', 'shared/schemas.lua',
     'shared/locales.lua', 'shared/rpc.lua', 'bridge/init.lua',
     -- server scripts (oxmysql replaced by mysql_shim)
+    'bridge/framework/qbox.lua',
     'bridge/framework/qbcore.lua', 'bridge/framework/standalone.lua',
     'bridge/inventory/qb.lua', 'bridge/inventory/ox.lua', 'bridge/inventory/fallback.lua',
     'bridge/housing/generic.lua',
@@ -240,6 +259,42 @@ print('== S11 db consistency ==')
 local okV, resV = rpc(3, 'admin:validateDb', {})
 check('S11 validateDb clean', okV == true and #resV.problems == 0,
     okV and json.encode(resV.problems) or tostring(resV))
+
+print('== S12 Qbox framework bridge + illenium saved outfits ==')
+local fw = KTR.Bridge.Get('framework')
+check('S12 qbox bridge selected', fw ~= nil and fw.__name == 'qbox',
+    fw and fw.__name or 'none')
+local ident = KTRS.Perms.Identity(1)
+check('S12 identity from qbx PlayerData', ident ~= nil
+    and ident.citizenid == 'QBX00001' and ident.job == 'police' and ident.grade == 2,
+    json.encode(ident or {}))
+
+-- illenium-appearance player_outfits table (as shipped in its sql/)
+MySQL.query.await([[CREATE TABLE IF NOT EXISTS `player_outfits` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `citizenid` varchar(50) DEFAULT NULL,
+    `outfitname` varchar(50) NOT NULL DEFAULT '0',
+    `model` varchar(50) DEFAULT NULL,
+    `props` varchar(1000) DEFAULT NULL,
+    `components` varchar(1500) DEFAULT NULL,
+    PRIMARY KEY (`id`))]])
+MySQL.update.await(
+    "INSERT INTO player_outfits (citizenid, outfitname, model, components, props) VALUES (?, ?, ?, ?, ?)",
+    { 'QBX00001', 'patrol', 'mp_m_freemode_01',
+      '[{"component_id":11,"drawable":55,"texture":0}]',
+      '[{"prop_id":0,"drawable":12,"texture":0}]' })
+
+local okS, listRes = rpc(1, 'outfit:savedList', {})
+check('S12 savedList returns the outfit', okS == true and listRes.outfits
+    and #listRes.outfits == 1 and listRes.outfits[1].label == 'patrol',
+    json.encode(listRes or {}))
+local outfitId = okS and listRes.outfits and listRes.outfits[1] and listRes.outfits[1].id
+local okG, getRes = rpc(1, 'outfit:savedGet', { id = outfitId })
+check('S12 savedGet returns payload', okG == true and getRes.model == 'mp_m_freemode_01'
+    and getRes.components[1].component_id == 11 and getRes.components[1].drawable == 55,
+    json.encode(getRes or {}))
+local okG2, errG2 = rpc(2, 'outfit:savedGet', { id = outfitId })
+check('S12 other player cannot read it', okG2 == false, tostring(errG2))
 
 print('')
 print(('RESULT: %d passed, %d failed'):format(passes, #failures))

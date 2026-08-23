@@ -5,9 +5,28 @@
 - FXServer (recent artifact, game build with collection natives — b2189+; project
   developed against b3258 conventions)
 - MySQL/MariaDB + `oxmysql`
-- QBCore (`qb-core`); works standalone with reduced identity features
-- Optional: `rcore_clothing` (outfit snapshots/saved outfits), `qb-target` or
-  `ox_target`, `qb-inventory` or `ox_inventory` (required for weapon displays)
+- Framework: **Qbox (`qbx_core`) — first-class, verified against its source** — or
+  QBCore (`qb-core`); works standalone with reduced identity features. When both
+  are present (Qbox's qb-core compat layer), the qbox bridge wins by priority.
+- Optional: `illenium-appearance` (saved outfits read server-side from
+  `player_outfits` — the standard on Qbox) or `rcore_clothing` (capability-probed),
+  `ox_target` or `qb-target`, `ox_inventory` or `qb-inventory` (required for
+  weapon displays)
+
+### Qbox stack (recommended)
+
+```
+ensure oxmysql
+ensure ox_lib
+ensure qbx_core
+ensure ox_inventory
+ensure ox_target
+ensure illenium-appearance
+ensure kotzu_mannequin_assets
+ensure kotzu_trophy_room
+```
+All five bridges (framework/clothing/target/inventory/housing) auto-detect this
+stack; notifications go through qbx_core server-side and ox_lib client-side.
 
 ## Steps
 

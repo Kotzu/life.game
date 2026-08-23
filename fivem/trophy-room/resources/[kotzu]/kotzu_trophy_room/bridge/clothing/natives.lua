@@ -92,6 +92,80 @@ function impl.Apply(ped, outfit)
     return true
 end
 
+---Normalize an illenium-appearance style payload (GLOBAL drawable indexes,
+---components = [{component_id, drawable, texture}], props = [{prop_id, ...}])
+---into the v2 schema using the global->collection lookup natives. Needs a ped
+---of the target model to anchor the lookups; spawns a hidden temp ped when the
+---player's model differs.
+---@return table|nil outfit, string|nil err
+function impl.NormalizeIllenium(model, rawComponents, rawProps)
+    local C2 = KTR.Const
+    local gender
+    if model == C2.Model.male then gender = C2.Gender.MALE
+    elseif model == C2.Model.female then gender = C2.Gender.FEMALE
+    else return nil, 'unsupported model ' .. tostring(model) end
+
+    local anchor = PlayerPedId()
+    local temp = nil
+    if GetEntityModel(anchor) ~= joaat(model) then
+        local hash = joaat(model)
+        RequestModel(hash)
+        local deadline = GetGameTimer() + 8000
+        while not HasModelLoaded(hash) do
+            if GetGameTimer() > deadline then return nil, 'model load timeout' end
+            Wait(25)
+        end
+        local p = GetEntityCoords(PlayerPedId())
+        temp = CreatePed(4, hash, p.x, p.y, p.z - 50.0, 0.0, false, false)
+        SetModelAsNoLongerNeeded(hash)
+        if not DoesEntityExist(temp) then return nil, 'temp ped spawn failed' end
+        SetEntityVisible(temp, false, false)
+        FreezeEntityPosition(temp, true)
+        anchor = temp
+    end
+
+    local outfit = {
+        schema = C2.OUTFIT_SCHEMA, gender = gender, model = model,
+        components = {}, props = {},
+        raw = { source = 'illenium-appearance' },
+    }
+    for _, comp in ipairs(rawComponents or {}) do
+        local id = tonumber(comp.component_id)
+        local globalIdx = tonumber(comp.drawable) or 0
+        if id ~= nil and id >= 0 and id <= 11 then
+            local coll = GetPedCollectionNameFromDrawable(anchor, id, globalIdx) or ''
+            local localIdx = GetPedCollectionLocalIndexFromDrawable(anchor, id, globalIdx)
+            if localIdx == nil or localIdx < 0 then coll, localIdx = '', globalIdx end
+            outfit.components[tostring(id)] = {
+                collection = coll, drawable = localIdx,
+                texture = math.max(tonumber(comp.texture) or 0, 0), palette = 0,
+            }
+        end
+    end
+    for _, prop in ipairs(rawProps or {}) do
+        local id = tonumber(prop.prop_id)
+        local globalIdx = tonumber(prop.drawable)
+        if id ~= nil and id >= 0 and id <= 8 then
+            if globalIdx == nil or globalIdx < 0 then
+                outfit.props[tostring(id)] = { cleared = true }
+            else
+                -- prop global->local conversion native is not available; props in
+                -- illenium payloads are global indexes, which SetPedPropIndex
+                -- accepts directly, so store as base-collection global.
+                outfit.props[tostring(id)] = {
+                    collection = '', drawable = globalIdx,
+                    texture = math.max(tonumber(prop.texture) or 0, 0),
+                }
+            end
+        end
+    end
+
+    if temp and DoesEntityExist(temp) then DeleteEntity(temp) end
+    local okV, errV = KTR.Schemas.ValidateOutfit(outfit)
+    if not okV then return nil, 'normalized outfit invalid: ' .. tostring(errV) end
+    return outfit
+end
+
 ---Verify a component tuple actually exists on this ped model (anti-garbage).
 function impl.ComponentExists(ped, compId, collection, drawable)
     if collection and collection ~= '' then

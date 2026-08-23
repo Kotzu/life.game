@@ -217,6 +217,57 @@ RPC.Register('outfit:forTryOn', function(src, args)
     return { outfit = d.outfit, seconds = KTR.Config.Interaction.TryOnSeconds }
 end)
 
+-- Saved outfits from illenium-appearance's player_outfits table (Qbox setups).
+-- Feature-detected: if the table doesn't exist the RPCs answer with an explicit
+-- 'unsupported' instead of erroring.
+
+local savedOutfitsAvailable = nil
+local function outfitsTableExists()
+    if savedOutfitsAvailable ~= nil then return savedOutfitsAvailable end
+    local ok, res = pcall(function()
+        return MySQL.scalar.await("SHOW TABLES LIKE 'player_outfits'")
+    end)
+    savedOutfitsAvailable = ok and res ~= nil
+    return savedOutfitsAvailable
+end
+
+RPC.Register('outfit:savedList', function(src)
+    if not KTRS.RateLimit.Check(src, 'query') then return nil, C.Err.RATE_LIMITED end
+    if not outfitsTableExists() then return { outfits = nil, unsupported = true } end
+    local id = KTRS.Perms.Identity(src)
+    if not id then return nil, C.Err.NOT_ALLOWED end
+    local rows = MySQL.query.await(
+        'SELECT id, outfitname, model FROM player_outfits WHERE citizenid = ? LIMIT 100',
+        { id.citizenid }) or {}
+    local outfits = {}
+    for _, r in ipairs(rows) do
+        outfits[#outfits + 1] = { id = r.id, label = r.outfitname, model = r.model }
+    end
+    return { outfits = outfits }
+end)
+
+RPC.Register('outfit:savedGet', function(src, args)
+    if not KTRS.RateLimit.Check(src, 'query') then return nil, C.Err.RATE_LIMITED end
+    if not outfitsTableExists() then return nil, C.Err.BAD_INPUT end
+    if type(args) ~= 'table' or tonumber(args.id) == nil then return nil, C.Err.BAD_INPUT end
+    local id = KTRS.Perms.Identity(src)
+    if not id then return nil, C.Err.NOT_ALLOWED end
+    -- ownership enforced in the WHERE clause: players read only their outfits
+    local row = MySQL.single.await(
+        'SELECT outfitname, model, components, props FROM player_outfits WHERE id = ? AND citizenid = ?',
+        { tonumber(args.id), id.citizenid })
+    if not row then return nil, C.Err.NOT_FOUND end
+    local okC, components = pcall(json.decode, row.components or '[]')
+    local okP, props = pcall(json.decode, row.props or '[]')
+    if not okC or type(components) ~= 'table' then return nil, C.Err.OUTFIT_INVALID end
+    return {
+        label = row.outfitname,
+        model = row.model,
+        components = components,
+        props = okP and props or {},
+    }
+end)
+
 -- -------------------------------------------------------------------- admin
 
 RPC.Register('admin:reloadManifest', function(src)
