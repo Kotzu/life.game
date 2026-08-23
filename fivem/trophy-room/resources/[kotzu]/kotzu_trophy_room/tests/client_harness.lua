@@ -181,6 +181,14 @@ end, false)
 -- Mannequins place without a captured outfit (base plastic); weapon displays
 -- are skipped here (they need a real inventory item + transaction) with a note.
 RegisterCommand('kmq:demo_layout', function()
+    -- transforms in DemoLayout are ROOM-LOCAL; without a room they would land
+    -- as absolute world coords near the map origin — refuse instead.
+    local housing = KTR.Bridge.Get('housing')
+    local room = housing and housing.CurrentRoom and housing.CurrentRoom()
+    if not room then
+        say('enter a shell first (/kmq:testshell a) — demo layout transforms are room-relative')
+        return
+    end
     local layout = KTR.Config.DemoLayout or {}
     local placed, skipped = 0, 0
     for _, d in ipairs(layout) do
@@ -190,14 +198,9 @@ RegisterCommand('kmq:demo_layout', function()
             local draft = {
                 displayType = d.displayType, gender = d.gender,
                 poseId = d.poseId, platform = d.platform, label = d.label,
-                scopeType = KTR.Const.ScopeType.WORLD, transform = d.transform,
+                scopeType = room.scopeType, scopeId = room.scopeId,
+                transform = d.transform,
             }
-            local housing = KTR.Bridge.Get('housing')
-            local room = housing and housing.CurrentRoom and housing.CurrentRoom()
-            if room then
-                draft.scopeType = room.scopeType
-                draft.scopeId = room.scopeId
-            end
             local res = KTR.RPC.Call('displays:place', { display = draft })
             if res then placed = placed + 1 else skipped = skipped + 1 end
         end

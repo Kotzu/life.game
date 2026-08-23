@@ -148,3 +148,25 @@ pending — see `docs/validation-matrix.md`).
   row highlight, live "N / total" counter, and a footer showing the outfit
   name + source model (illenium has no saved-date column, so no invented date).
 - Concept palette documented and confirmed against style.css tokens.
+
+## [1.1.3-dev] — 2026-08-23
+
+### Fixed — second self code-review (8 findings, all addressed)
+- Saved-outfit flow never silently substitutes: missing bridge support, no
+  selection, or a failed fetch all abort with a visible error; the UI blocks
+  "Start placement" (with visual feedback) until a saved outfit is picked.
+- `player_outfits` feature detection no longer caches a negative probe —
+  transient DB errors or late illenium startup can't disable saved outfits
+  until restart.
+- run-extraction.ps1: Pillow probe survives PS 5.1 + EAP=Stop; classify exit
+  code now checked (no more false "extraction complete").
+- Sollumz resolver re-gained the `shared/shader_materials` layout fallback.
+- `/kmq:demo_layout` refuses to run outside a room (its transforms are
+  room-relative; would have persisted displays near the map origin).
+- New `Bridge.Find(kind, name)` helper replaces three hand-rolled registry
+  scans (rcore ×2, illenium ×1).
+
+### Added — fully localized NUI
+- All web UI strings now come from the Lua locale packs (`ui` tables, en + ro,
+  per-key English fallback) delivered on every screen open; `Config.Locale =
+  'ro'` localizes the entire interface including the SELECT OUTFIT panel.

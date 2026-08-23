@@ -10,6 +10,9 @@ local open = false
 local optionMenuCtx = nil
 
 local function post(action, data)
+    if action == 'open' and data then
+        data.strings = KTR.UIStrings()
+    end
     SendNUIMessage({ action = action, data = data })
 end
 
@@ -105,21 +108,25 @@ RegisterNUICallback('ktr:placeMannequin', function(data, cb)
                 return
             end
             outfit = captured
-        elseif data.outfitSource == 'saved' and data.savedId then
-            if cbridge.GetSavedOutfit then
-                local saved, err = cbridge.GetSavedOutfit(tonumber(data.savedId) or data.savedId, gender)
-                if not saved then
-                    KTR.Bridge.Get('framework').Notify(
-                        KTR.ErrText(err or C.Err.OUTFIT_INVALID), 'error')
-                    return
-                end
-                outfit = saved
-            else
-                -- installed clothing system can't fetch saved outfits: explicit
-                -- fallback to capturing the current outfit (announced in the UI)
-                local captured = cbridge.Capture(PlayerPedId())
-                if captured and captured.gender == gender then outfit = captured end
+        elseif data.outfitSource == 'saved' then
+            -- No silent substitution: a chosen-saved-outfit flow either applies
+            -- exactly that outfit or aborts with a visible error.
+            if not data.savedId then
+                KTR.Bridge.Get('framework').Notify(KTR.ErrText(C.Err.BAD_INPUT), 'error')
+                return
             end
+            if not cbridge.GetSavedOutfit then
+                KTR.Bridge.Get('framework').Notify(
+                    KTR.ErrText(C.Err.OUTFIT_INVALID) .. ' (saved outfits unsupported by the installed clothing system)', 'error')
+                return
+            end
+            local saved, err = cbridge.GetSavedOutfit(tonumber(data.savedId) or data.savedId, gender)
+            if not saved then
+                KTR.Bridge.Get('framework').Notify(
+                    KTR.ErrText(err or C.Err.OUTFIT_INVALID), 'error')
+                return
+            end
+            outfit = saved
         end
         local draft = {
             displayType = C.DisplayType.MANNEQUIN,

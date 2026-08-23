@@ -121,3 +121,10 @@ input[type=text]:focus { border-color: var(--accent); }
 }
 .outfit-foot-name { color: var(--text); font-size: 14px; }
 .outfit-foot-sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
+
+.outfit-panel.shake { animation: ktr-shake 0.4s; border-color: var(--danger); }
+@keyframes ktr-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}

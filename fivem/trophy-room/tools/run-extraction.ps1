@@ -31,8 +31,17 @@ function Fail($m) { Write-Host "[X] $m" -ForegroundColor Red; exit 1 }
 # ---- 1. Python -------------------------------------------------------------
 $py = Get-Command python -ErrorAction SilentlyContinue
 if (-not $py) { Fail "Python not found in PATH. Install Python 3.10+ from python.org, then re-run." }
-& python -c "import PIL" 2>$null
-if ($LASTEXITCODE -ne 0) {
+# PS 5.1 + EAP=Stop turns redirected native stderr into a terminating error,
+# so the import probe must run with EAP relaxed and output captured.
+$pilMissing = $false
+$prevEap = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
+try {
+    $null = & python -c "import PIL" 2>&1
+    if ($LASTEXITCODE -ne 0) { $pilMissing = $true }
+} catch { $pilMissing = $true }
+$ErrorActionPreference = $prevEap
+if ($pilMissing) {
     Warn "Pillow missing - installing (enables automatic skin-texture analysis)"
     & python -m pip install --quiet pillow
 }
@@ -99,6 +108,7 @@ Ok "running: scan"
 if ($LASTEXITCODE -ne 0) { Fail "scan failed" }
 Ok "running: classify"
 & python -m pipeline classify
+if ($LASTEXITCODE -ne 0) { Fail "classify failed - fix the reported problem and re-run" }
 Ok "running: crosscheck (vs reference catalog)"
 & python -m pipeline crosscheck
 $cross = $LASTEXITCODE

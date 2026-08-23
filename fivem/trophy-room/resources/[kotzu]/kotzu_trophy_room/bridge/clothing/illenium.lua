@@ -15,9 +15,7 @@
 ]]
 
 local function nativesImpl()
-    for _, i in ipairs(KTR.Bridge._impls.clothing) do
-        if i.__name == 'natives' then return i end
-    end
+    return KTR.Bridge.Find('clothing', 'natives')
 end
 
 local impl = {

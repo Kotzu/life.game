@@ -61,10 +61,7 @@ local impl = {
 }
 
 function impl.Capture(ped)
-    natives = natives or KTR.Bridge._impls.clothing[1] -- natives registered first
-    for _, i in ipairs(KTR.Bridge._impls.clothing) do
-        if i.__name == 'natives' then natives = i end
-    end
+    natives = natives or KTR.Bridge.Find('clothing', 'natives')
     local outfit, err = natives.Capture(ped)
     if not outfit then return nil, err end
     local snap = callCap('getCurrentSnapshot')
@@ -75,15 +72,11 @@ function impl.Capture(ped)
 end
 
 impl.Apply = function(ped, outfit)
-    for _, i in ipairs(KTR.Bridge._impls.clothing) do
-        if i.__name == 'natives' then return i.Apply(ped, outfit) end
-    end
+    return KTR.Bridge.Find('clothing', 'natives').Apply(ped, outfit)
 end
 
 impl.ComponentExists = function(ped, compId, collection, drawable)
-    for _, i in ipairs(KTR.Bridge._impls.clothing) do
-        if i.__name == 'natives' then return i.ComponentExists(ped, compId, collection, drawable) end
-    end
+    return KTR.Bridge.Find('clothing', 'natives').ComponentExists(ped, compId, collection, drawable)
 end
 
 ---Enumerate saved outfits if the installed rcore build supports it.

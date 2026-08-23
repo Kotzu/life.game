@@ -221,13 +221,15 @@ end)
 -- Feature-detected: if the table doesn't exist the RPCs answer with an explicit
 -- 'unsupported' instead of erroring.
 
-local savedOutfitsAvailable = nil
+-- Only a POSITIVE probe is cached: a missing table (illenium not yet started)
+-- or a transient DB error must not disable the feature until restart.
+local savedOutfitsAvailable = false
 local function outfitsTableExists()
-    if savedOutfitsAvailable ~= nil then return savedOutfitsAvailable end
+    if savedOutfitsAvailable then return true end
     local ok, res = pcall(function()
         return MySQL.scalar.await("SHOW TABLES LIKE 'player_outfits'")
     end)
-    savedOutfitsAvailable = ok and res ~= nil
+    if ok and res ~= nil then savedOutfitsAvailable = true end
     return savedOutfitsAvailable
 end
 

@@ -78,14 +78,16 @@ def _find_sollumz_create_shader():
     candidates += ["Sollumz", "sollumz",
                    "bl_ext.user_default.sollumz", "bl_ext.blender_org.sollumz",
                    "bl_ext.user_default.sollumz_dev"]
+    # module layout differs across Sollumz versions: ydr/ (2.9) or shared/
     for name in candidates:
-        try:
-            mod = importlib.import_module(name + ".ydr.shader_materials")
-            fn = getattr(mod, "create_shader", None)
-            if fn is not None:
-                return fn
-        except Exception:
-            continue
+        for sub in (".ydr.shader_materials", ".shared.shader_materials"):
+            try:
+                mod = importlib.import_module(name + sub)
+                fn = getattr(mod, "create_shader", None)
+                if fn is not None:
+                    return fn
+            except Exception:
+                continue
     return None
 
 

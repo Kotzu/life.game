@@ -33,6 +33,14 @@ function B.Get(kind)
     return nil
 end
 
+---Find a specific registered impl by name (regardless of detection winner).
+function B.Find(kind, name)
+    for _, impl in ipairs(B._impls[kind] or {}) do
+        if impl.__name == name then return impl end
+    end
+    return nil
+end
+
 function B.Describe()
     local out = {}
     for kind, impls in pairs(B._impls) do

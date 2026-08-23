@@ -33,6 +33,37 @@ local Locales = {
         err_TX_FAILED = 'Transaction failed — nothing was changed',
         err_ITEM_MISSING = 'Required item not found in your inventory',
         err_INTERNAL = 'Internal error — check server console',
+
+        -- NUI strings (sent to web/app.js on every open)
+        ui = {
+            newDisplay = 'New Display',
+            displayType = 'Display type',
+            mannequin = 'Mannequin', weapon = 'Weapon',
+            gender = 'Gender', male = 'Male', female = 'Female',
+            outfit = 'Outfit',
+            myCurrentOutfit = 'My current outfit',
+            bareMannequin = 'Bare mannequin',
+            savedOutfit = 'Saved outfit…',
+            selectOutfit = 'SELECT OUTFIT',
+            noOutfitSelected = 'No outfit selected',
+            pose = 'Pose', stand = 'Stand', mount = 'Mount',
+            wallMount = 'Wall mount', floorStand = 'Floor stand', glassCase = 'Glass case',
+            weaponItemName = 'Weapon item name',
+            weaponNote = 'The server verifies you own this exact weapon (by serial) and removes it from your inventory atomically. Retrieve it any time from the display.',
+            labelOptional = 'Label (optional)',
+            labelPlaceholder = 'e.g. Patrol uniform 2024',
+            startPlacement = 'Start placement',
+            placementHint = 'Placement: arrows move · Q/E rotate · PgUp/PgDn height · Shift fine · G ground · Tab snap · X collision · Enter confirm · Backspace cancel',
+            manifestWarn = 'Mannequin assets are not built (manifest v0). Run the asset pipeline first — placement will be refused.',
+            inventoryWarn = 'No functional inventory bridge detected — weapon displays are disabled.',
+            rename = 'Rename', saveBtn = 'Save',
+            poseTitle = 'Pose', interact = 'Interact',
+            removeTitle = 'Remove display',
+            removeConfirm = 'Remove "%s"? This cannot be undone.',
+            removeBtn = 'Remove',
+            descriptionPlaceholder = 'Description',
+            displayFallback = 'Display',
+        },
     },
 
     ro = {
@@ -67,8 +98,47 @@ local Locales = {
         err_TX_FAILED = 'Tranzacția a eșuat — nimic nu a fost modificat',
         err_ITEM_MISSING = 'Obiectul necesar nu a fost găsit în inventar',
         err_INTERNAL = 'Eroare internă — verifică consola serverului',
+
+        ui = {
+            newDisplay = 'Exponat nou',
+            displayType = 'Tip de exponat',
+            mannequin = 'Manechin', weapon = 'Armă',
+            gender = 'Gen', male = 'Bărbat', female = 'Femeie',
+            outfit = 'Ținută',
+            myCurrentOutfit = 'Ținuta mea actuală',
+            bareMannequin = 'Manechin gol',
+            savedOutfit = 'Ținută salvată…',
+            selectOutfit = 'ALEGE ȚINUTA',
+            noOutfitSelected = 'Nicio ținută selectată',
+            pose = 'Poză', stand = 'Suport', mount = 'Montare',
+            wallMount = 'Pe perete', floorStand = 'Stativ de podea', glassCase = 'Vitrină de sticlă',
+            weaponItemName = 'Numele item-ului de armă',
+            weaponNote = 'Serverul verifică (după serie) că deții exact această armă și o scoate atomic din inventar. O poți recupera oricând de pe exponat.',
+            labelOptional = 'Etichetă (opțional)',
+            labelPlaceholder = 'ex. Uniformă de patrulare 2024',
+            startPlacement = 'Începe plasarea',
+            placementHint = 'Plasare: săgeți mută · Q/E rotește · PgUp/PgDn înălțime · Shift fin · G sol · Tab snap · X coliziune · Enter confirmă · Backspace anulează',
+            manifestWarn = 'Asset-urile de manechin nu sunt generate (manifest v0). Rulează întâi pipeline-ul — plasarea va fi refuzată.',
+            inventoryWarn = 'Niciun bridge de inventar funcțional — exponatele de arme sunt dezactivate.',
+            rename = 'Redenumește', saveBtn = 'Salvează',
+            poseTitle = 'Poză', interact = 'Interacționează',
+            removeTitle = 'Elimină exponatul',
+            removeConfirm = 'Elimini „%s"? Acțiunea nu poate fi anulată.',
+            removeBtn = 'Elimină',
+            descriptionPlaceholder = 'Descriere',
+            displayFallback = 'Exponat',
+        },
     },
 }
+
+---UI string pack for the active locale, with English fallback per key.
+function KTR.UIStrings()
+    local en = Locales.en.ui
+    local active = (Locales[KTR.Config.Locale] or Locales.en).ui or {}
+    local out = {}
+    for k, v in pairs(en) do out[k] = active[k] or v end
+    return out
+end
 
 function KTR.L(key, ...)
     local pack = Locales[KTR.Config.Locale] or Locales.en
