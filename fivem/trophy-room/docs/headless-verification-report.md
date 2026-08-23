@@ -4,7 +4,7 @@ What could be verified WITHOUT a FiveM client, executed in the cloud dev
 environment on 2026-08-23. This complements (does not replace) the in-game
 acceptance suite.
 
-## 1. FXServer-environment simulation — 32/32 checks PASS
+## 1. FXServer-environment simulation — 37/37 checks PASS (Qbox identity path)
 
 `tools/fxsim/` shims the FXServer server-side natives (events, scheduler,
 players, buckets, aces, resource files) and oxmysql (over the `mariadb` CLI),
@@ -24,6 +24,7 @@ then loads the **real, unmodified** trophy-room server scripts against a
 | S9 stranded `item_removed` lock → `recovered` + audit credit row | PASS |
 | S10 owner delete, double-delete `NOT_FOUND`, scope listing | PASS |
 | S11 `admin:validateDb` reports zero inconsistencies | PASS |
+| S12 Qbox bridge selected; qbx identity; illenium saved outfits (list/get/ownership isolation) | PASS |
 
 Reproduce: start MariaDB, then `cd tools/fxsim && lua5.4 run.lua`
 (env `FXSIM_MYSQL_SOCKET`, `FXSIM_MYSQL_DB`). Exit code 0 = all pass.
