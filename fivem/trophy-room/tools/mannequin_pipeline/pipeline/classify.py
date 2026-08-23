@@ -72,6 +72,13 @@ def classify_record(rec: dict, cfg: dict, png_dir: Path,
                               "base skin carrier — replaced by mannequin body set")
     if comp in SKIN_FREE_COMPONENTS:
         return Classification(key, "skin_free", "overlay/decal slot never carries skin")
+    # designated bare-body drawables for lowr/feet: converted into plastic body
+    # twins so a bare mannequin has mannequin legs/feet, never engine defaults
+    body_base = cfg.get("body_base", {"4": 0, "6": 0})
+    if (str(comp) in body_base and rec["collection"] == ""
+            and rec["local_drawable"] == int(body_base[str(comp)])):
+        return Classification(key, "body_skin",
+                              "designated bare-body drawable — mannequin base piece")
     if comp in ANALYZE_COMPONENTS:
         return _classify_by_texture(key, rec, cfg, png_dir)
     return Classification(key, "ambiguous", f"unknown component {comp}")

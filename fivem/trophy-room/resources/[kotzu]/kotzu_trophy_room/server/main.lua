@@ -182,7 +182,7 @@ RPC.Register('displays:delete', function(src, args)
     if not d then return nil, C.Err.NOT_FOUND end
     local caps = KTRS.Perms.Capabilities(src, d)
     if not caps.remove then return nil, C.Err.NOT_ALLOWED end
-    if d.item then
+    if d.displayType:find('^weapon_') then
         -- weapon displays must go through the retrieval transaction
         return nil, C.Err.BAD_INPUT
     end

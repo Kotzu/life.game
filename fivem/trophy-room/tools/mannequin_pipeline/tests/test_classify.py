@@ -36,6 +36,14 @@ def test_props_are_skin_free(tmp_path):
     assert c.category == "skin_free"
 
 
+def test_designated_bare_body_drawables_are_body_skin(tmp_path):
+    # lowr/feet drawable 0 in the base collection become mannequin base pieces
+    assert classify_record(rec(4, "lowr", idx=0), CFG, tmp_path).category == "body_skin"
+    assert classify_record(rec(6, "feet", idx=0), CFG, tmp_path).category == "body_skin"
+    # other lowr/feet drawables still go through texture analysis
+    assert classify_record(rec(4, "lowr", idx=3), CFG, tmp_path).category == "ambiguous"
+
+
 def test_analyze_component_without_textures_is_ambiguous(tmp_path):
     c = classify_record(rec(11, "jbib", texs=["mp_m_freemode_01^jbib_diff_000_a_uni"]),
                         CFG, tmp_path)

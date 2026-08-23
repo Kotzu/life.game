@@ -20,7 +20,9 @@ def validate(build_dir: Path, cfg: dict, manifest_path: Path) -> dict:
     else:
         for gender in ("male", "female"):
             body = manifest["genders"][gender]["body"]
-            for comp in ("0", "2", "3", "4", "6"):
+            # must match the runtime contract: client ApplyBase hard-requires
+            # 0/2/3/5 (head/hair/uppr/hand) and uses 4/6 for the bare base
+            for comp in ("0", "2", "3", "4", "5", "6"):
                 if comp not in body:
                     problems.append(
                         f"{gender}: mannequin body missing component {comp} — "

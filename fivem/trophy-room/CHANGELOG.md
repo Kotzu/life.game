@@ -48,3 +48,20 @@ pending — see `docs/validation-matrix.md`).
 - rcore_clothing saved-outfit apply depends on the installed build's exports
   (capability-probed, surfaced via `/kmq:probe_clothing`).
 - All in-game acceptance evidence pending (no FiveM client in the dev environment).
+
+## [1.0.1-dev] — 2026-08-19
+
+### Fixed (self code-review, 4 findings, all addressed)
+- Rate limiter used `os.clock()` (CPU time) instead of wall-clock; now
+  `GetGameTimer()` — the per-minute limits are real minutes.
+- Bare-mannequin skin leak: lowr(4)/feet(6) base drawables are now designated
+  body pieces produced by the pipeline (`body_base` config), the client refuses
+  spawn if they're missing, and `pipeline validate` checks the exact component
+  set the runtime requires (0/2/3/4/5/6) — producer, validator and consumer now
+  agree.
+- `displays:delete` keyed its weapon guard on item presence, permanently
+  blocking removal of rare_item/achievement displays; now keys on display type.
+
+### Added
+- `tools/setup-sandbox.ps1`: one-click Windows sandbox installer with live-server
+  safety rail, prerequisite scan, mirrored copy, and server.cfg guidance.

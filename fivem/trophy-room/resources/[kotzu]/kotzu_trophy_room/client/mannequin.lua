@@ -42,12 +42,13 @@ function MQ.ApplyBase(ped, gender)
             applyCollectionComp(ped, compId, coll, idx, 0, 0)
         end
     end
-    -- garment slots start empty/naked-safe: lowr/feet get mannequin body pieces
+    -- garment slots start naked-safe: lowr/feet get the designated mannequin
+    -- base pieces; if the manifest lacks them the whole spawn is refused —
+    -- engine-default legs/feet (human skin) must never be shown
     for _, compId in ipairs({ C.Comp.LOWR, C.Comp.FEET }) do
         local idx = M.BodyDrawable(gender, compId, '', 0)
-        if idx ~= nil then
-            applyCollectionComp(ped, compId, coll, idx, 0, 0)
-        end
+        if idx == nil then return false, C.Err.MANIFEST_NOT_BUILT end
+        applyCollectionComp(ped, compId, coll, idx, 0, 0)
     end
     for _, compId in ipairs({ C.Comp.BERD, C.Comp.ACCS, C.Comp.TASK, C.Comp.DECL, C.Comp.JBIB }) do
         SetPedComponentVariation(ped, compId, 0, 0, 0)

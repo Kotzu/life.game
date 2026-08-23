@@ -10,7 +10,7 @@ local windows = {} -- src -> action -> { timestamps }
 function RL.Check(src, action)
     local limit = KTR.Config.RateLimit[action]
     if not limit then return true end
-    local now = os.clock() * 1000
+    local now = GetGameTimer() -- server wall-clock milliseconds
     windows[src] = windows[src] or {}
     local w = windows[src][action] or {}
     local fresh = {}
