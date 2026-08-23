@@ -35,3 +35,14 @@ only from the acceptance runbook (T1/T2/T20).
 - Outfit "saved date" in the concept: illenium's `player_outfits` table has no
   timestamp column, so the panel shows the outfit name + source model as the
   subtitle instead of inventing a date.
+
+## Interactive demos (Artifacts)
+
+- **UI demo** — the real NUI (verbatim css/js) on mock data, RO/EN, all screens:
+  `docs/design/ui-demo.html` (published as a private artifact for review).
+- **Trophy Room 3D** — original stylized visualization of the room concept
+  (faceless plastic mannequins on lit plinths in three outfits/poses, weapon
+  wall, glass case, spot lighting, orbit/inspect interaction). Scene source:
+  `docs/design/room-demo-scene.js`; rendered with Three.js (MIT) inlined at
+  publish time. Original geometry only — explicitly NOT game assets and NOT an
+  in-game capture; the in-game look is decided by acceptance tests T1/T2/T20.
