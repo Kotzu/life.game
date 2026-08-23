@@ -60,3 +60,18 @@ the in-game matrix run (`/kmq:cycle_outfits`) and recorded below.
 
 Current coverage: **see generated `coverage_report.md`** (none committed yet — the
 committed seed manifest is v0 by design).
+
+## Known denominators (from the committed reference catalog, 2026-08-23)
+
+Built from the open DurtyFree metadata dump (IDs/counts only, no assets):
+
+| Gender | Garment drawables (need classification) | Body-skin drawables (mannequin twins) | Props |
+|---|---|---|---|
+| Male | 1,340 | 613 | 336 |
+| Female | 1,442 | 621 | 314 |
+
+Spread over the base collection + 43 MP DLC collections per gender.
+"100% default clothing coverage" therefore means, concretely: 2,782 garment
+drawables classified `skin_free` or `converted`, with the two body sets built.
+`python -m pipeline crosscheck` verifies a local extraction against these
+numbers drawable-by-drawable.

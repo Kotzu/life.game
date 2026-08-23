@@ -35,7 +35,15 @@ python -m pipeline export                   # -> Sollumz export to the assets re
 python -m pipeline validate                 # checks exports, naming, sizes, LODs, textures
 python -m pipeline build-manifest           # -> mannequin_manifest.json (stable indexes)
 python -m pipeline report-coverage          # -> coverage_report.md + conversion_report.json
+python -m pipeline crosscheck               # diff local scan vs reference catalog
+python -m pipeline import-reference --dump …  # (maintenance) rebuild the reference
 ```
+
+A **reference clothing catalog** ships in `reference/freemode_reference_catalog.json`
+(aggregated from the open [DurtyFree data dumps](https://github.com/DurtyFree/gta-v-data-dumps);
+metadata only — IDs and counts, no game assets). `crosscheck` uses it to verify
+your extraction is complete and to detect game-build drift. Real totals per
+gender are documented in `EXTRACTION_LIST.md`.
 
 Every step is **incremental**: re-running after adding addon clothing (e.g. Romanian
 Police uniforms in a new `extracted/` subfolder) only processes new/changed inputs, and

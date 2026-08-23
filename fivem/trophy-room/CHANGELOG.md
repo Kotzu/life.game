@@ -85,3 +85,17 @@ pending — see `docs/validation-matrix.md`).
   ShaderManager). Gap fixed: install-dependent Sollumz module path
   (`Sollumz` addon vs `bl_ext.<repo>.sollumz[_dev]` extension) now resolved
   dynamically; export now passes `direct_export=True` for headless runs.
+
+## [1.0.3-dev] — 2026-08-23
+
+### Added — reference clothing catalog (from open metadata, no game assets)
+- `reference/freemode_reference_catalog.json`: aggregated from the open
+  DurtyFree `gta-v-data-dumps` (pedComponentVariations_free.json, commit
+  b65684e) — every freemode drawable/texture count per collection, both
+  genders. Real §6 denominators now known: male 1,340 garment + 613 body +
+  336 prop drawables; female 1,442 + 621 + 314 (base + 43 DLC collections).
+- New pipeline commands: `import-reference` (rebuild the catalog from a dump)
+  and `crosscheck` (diff a local extraction against the reference —
+  missing/unknown/texture-mismatch, exit 1 on gaps).
+- EXTRACTION_LIST + compatibility report updated with the real counts.
+- +2 test modules (19 pytest cases total, all passing).

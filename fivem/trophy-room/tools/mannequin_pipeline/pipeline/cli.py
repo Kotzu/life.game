@@ -13,6 +13,7 @@ from . import convert as convert_mod
 from . import manifest as manifest_mod
 from . import validate as validate_mod
 from . import reports as reports_mod
+from . import reference as reference_mod
 from .model import load_json
 
 
@@ -36,6 +37,14 @@ def main(argv=None) -> int:
     sub.add_parser("validate")
     sub.add_parser("build-manifest")
     sub.add_parser("report-coverage")
+    imp = sub.add_parser("import-reference",
+                         help="build the reference catalog from a "
+                              "pedComponentVariations_free.json dump")
+    imp.add_argument("--dump", required=True)
+    imp.add_argument("--commit", default="",
+                     help="source repo commit hash, for provenance")
+    sub.add_parser("crosscheck",
+                   help="diff local scan against the reference catalog")
     args = p.parse_args(argv)
 
     cfg = _cfg(args)
@@ -69,4 +78,15 @@ def main(argv=None) -> int:
     elif args.cmd == "report-coverage":
         out = reports_mod.report(build_dir, cfg, manifest_path)
         print(f"coverage: {out['coverage_pct']}% -> coverage_report.md")
+    elif args.cmd == "import-reference":
+        ref = reference_mod.build_reference(Path(args.dump),
+                                            source_commit=args.commit)
+        for gender, g in ref["genders"].items():
+            print(gender, json.dumps(g["totals"]))
+    elif args.cmd == "crosscheck":
+        out = reference_mod.crosscheck(build_dir)
+        print(json.dumps(out["summary"], indent=2))
+        if out["summary"]["missing"]:
+            print("missing drawables listed in build/crosscheck_report.json")
+            return 1
     return 0

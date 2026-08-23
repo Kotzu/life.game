@@ -63,10 +63,22 @@ review instead (safe, but slower for you).
 
 ```
 python -m pipeline scan
+python -m pipeline crosscheck   # diffs your extraction against the reference catalog
 ```
-Expect roughly: male base ≈ 200–400 drawables, female similar (varies by build).
-`skipped` entries should be only non-freemode strays. Then continue with
-`classify` per the README.
+
+Real expected counts (from the committed reference catalog, built from the open
+DurtyFree metadata dump — `reference/freemode_reference_catalog.json`):
+
+| Scope | Male | Female |
+|---|---|---|
+| Base game only | 192 component drawables + 39 props | 183 + 38 |
+| Full (base + 43 MP DLC collections) | 1,953 component drawables + 336 props | 2,063 + 314 |
+| …of which garments (need skin classification) | 1,340 | 1,442 |
+| …of which body-skin (mannequin twins) | 613 | 621 |
+
+`crosscheck` tells you exactly which drawables your extraction is missing and
+which local ones the reference doesn't know (addon packs / build drift) — no
+guessing about whether the export was complete.
 
 ## Reminder
 
