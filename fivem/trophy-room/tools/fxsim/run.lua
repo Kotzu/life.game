@@ -92,7 +92,7 @@ SIM.AddPlayer(4, { license = 'license:probe4' })
 print('== S1 boot: migrations + repository ==')
 check('S1 repo ready', KTRS.Repo.Ready())
 check('S1 migrations recorded',
-    MySQL.scalar.await('SELECT COUNT(*) FROM kotzu_schema_migrations') == 4)
+    MySQL.scalar.await('SELECT COUNT(*) FROM kotzu_schema_migrations') == 5)
 
 print('== S2 place bare mannequin (world scope) ==')
 local ok2, res2 = rpc(1, 'displays:place', { display = {
@@ -451,6 +451,66 @@ check('S17 no serial claim leaked', next(KTRS.Tx._serialClaims) == nil)
 local okAfter = rpc(5, 'weapons:retrieve', { uid = nil, idKey = 'errtest_2' })
 check('S17 player can still transact after the error',
     okAfter == false, 'not RATE_LIMITED-locked (NOT_FOUND/BAD_INPUT expected)')
+
+print('== S18 DB-level serial uniqueness (multi-server / restart safety) ==')
+check('S18 migration 005 applied', MySQL.scalar.await(
+    "SELECT COUNT(*) FROM kotzu_schema_migrations WHERE name = '005_item_serial_unique.sql'") == 1)
+check('S18 unique index exists', MySQL.scalar.await(
+    "SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = DATABASE() "
+    .. "AND table_name = 'kotzu_displays' AND index_name = 'uq_item_serial'") >= 1)
+
+SIM.AddPlayer(7, { license = 'license:dbserial7' })
+mockItems[7] = { { name = 'weapon_smg', slot = 1,
+                   metadata = { serial = 'DB-UNIQ-1' }, count = 1 } }
+local okDb, resDb = rpc(7, 'displays:place', { display = {
+    displayType = C.DisplayType.WEAPON_CASE, scopeType = C.ScopeType.WORLD,
+    transform = { x = 9.0, y = 9.0, z = 9.0, heading = 0.0 },
+    item = { name = 'weapon_smg', metadata = {} },
+}, idKey = 'dbserial_place1' })
+check('S18 place stores item_serial', okDb == true and resDb.uid ~= nil
+    and MySQL.scalar.await('SELECT item_serial FROM kotzu_displays WHERE uid = ?',
+        { resDb.uid }) == 'DB-UNIQ-1', json.encode(resDb))
+
+-- the DB itself must reject a second live row with that serial, even if the
+-- in-memory guard were bypassed (other server process, restart race)
+local dbBlocked = not pcall(function()
+    MySQL.update.await([[INSERT INTO kotzu_displays
+        (uid, owner_citizenid, display_type, scope_type, routing_bucket,
+         loc_x, loc_y, loc_z, loc_heading, item_name, item_serial)
+        VALUES ('sim-dup-row', 'other', 'weapon_stand', 'world', 0,
+                1, 1, 1, 0, 'weapon_smg', 'DB-UNIQ-1')]])
+end)
+check('S18 DB rejects a duplicate live serial', dbBlocked)
+
+local okDbR = rpc(7, 'weapons:retrieve', { uid = resDb.uid, idKey = 'dbserial_retr1' })
+check('S18 retrieve clears item_serial', okDbR == true and MySQL.scalar.await(
+    'SELECT item_serial FROM kotzu_displays WHERE uid = ?', { resDb.uid }) == nil)
+local okDb2 = rpc(7, 'displays:place', { display = {
+    displayType = C.DisplayType.WEAPON_CASE, scopeType = C.ScopeType.WORLD,
+    transform = { x = 9.0, y = 9.0, z = 9.0, heading = 0.0 },
+    item = { name = 'weapon_smg', metadata = {} },
+}, idKey = 'dbserial_place2' })
+check('S18 serial re-placeable after retrieval', okDb2 == true, tostring(okDb2))
+
+print('== S19 weapon placements consume the weapon_tx budget ==')
+SIM.AddPlayer(8, { license = 'license:ratelimit8' })
+mockItems[8] = {}
+for i = 1, 12 do
+    mockItems[8][i] = { name = 'weapon_knife', slot = i,
+                        metadata = { serial = 'RL-' .. i }, count = 1 }
+end
+local weaponLimited = false
+for i = 1, KTR.Config.RateLimit.weapon_tx + 3 do
+    local okRl, errRl = rpc(8, 'displays:place', { display = {
+        displayType = C.DisplayType.WEAPON_STAND, scopeType = C.ScopeType.WORLD,
+        transform = { x = 10.0 + i * 0.1, y = 10.0, z = 9.0, heading = 0.0 },
+        item = { name = 'weapon_knife', metadata = { serial = 'RL-' .. i } },
+    }, idKey = ('rl_place_%02d'):format(i) })
+    if okRl == false and errRl == C.Err.RATE_LIMITED then weaponLimited = true break end
+end
+check('S19 weapon placement hits weapon_tx limit before the place limit',
+    weaponLimited, ('weapon_tx=%d place=%d'):format(
+        KTR.Config.RateLimit.weapon_tx, KTR.Config.RateLimit.place))
 
 print('')
 print(('RESULT: %d passed, %d failed'):format(passes, #failures))

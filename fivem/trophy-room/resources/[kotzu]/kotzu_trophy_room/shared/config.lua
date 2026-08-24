@@ -164,6 +164,10 @@ KTR.Config = {
         TargetDistance = 2.2,
         AllowVisitorTryOn = true,      -- temporary try-on (auto-restore)
         TryOnSeconds = 60,
+        -- A borrowed outfit is restored the moment the player leaves this
+        -- radius around the display (anti-exploit: stops a preview outfit from
+        -- being carried to a clothing store / appearance-save trigger).
+        PreviewLeashDistance = 12.0,
         AllowVisitorEquip = false,     -- permanent equip needs explicit permission
     },
 

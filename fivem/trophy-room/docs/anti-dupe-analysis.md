@@ -16,6 +16,7 @@ Grep-verified: the only `AddItem`/`RemoveItem` calls in the whole resource are i
 | Try-on (visitor) | temporary; restored on timeout/cancel/death/resource-stop + KVP crash recovery |
 | Saved outfit apply | read-only lookup from `player_outfits`, ownership enforced in SQL |
 | Change/rename/pose/move | metadata only, no item transfer |
+| **CL1 — preview outfit persisted by another resource** (wear a borrowed outfit to a clothing store / appearance-save trigger and keep it for free) | the session is **leashed to the display**: leaving `PreviewLeashDistance` (12 m), changing ped model, dying, timing out, cancelling or stopping the resource all restore instantly; `exports.kotzu_trophy_room:IsPreviewActive()` lets appearance/save resources refuse to persist a borrowed outfit |
 
 Rare-item / achievement displays are **decorative metadata** — placing one does
 NOT remove an inventory item, so deleting one cannot create value. ⚠️ If a future
@@ -43,17 +44,19 @@ transaction path (`Tx.PlaceWeapon`/`RetrieveWeapon`), not `Repo.Create`/`Delete`
 
 ## Residual risk & hardening notes
 
-- **Single-server assumption.** `SerialInUse` scans the in-memory registry, which
-  is authoritative per server. For a **multi-server cluster sharing one DB**, add a
-  DB-level guard: a dedicated `item_serial` column with a UNIQUE index, NULLed on
-  soft-delete so retrieved serials free up. Documented here rather than shipped,
-  because this resource's registry model is per-server.
+- **Multi-server safe (shipped).** Beyond the in-memory guard, migration 005 adds
+  an `item_serial` column with a UNIQUE index, written on placement and NULLed on
+  soft-delete (MySQL allows unlimited NULLs, so retrieved serials free up). The
+  database therefore rejects a second live display for one serial even across
+  server processes or a restart race; `Repo.Restore` re-claims the serial when
+  free and audits `restore_serial_conflict` when it is not.
 - The per-citizen lock also serializes a player's place vs. retrieve (returns
   `RATE_LIMITED` if one is mid-flight) — intentional and safe.
 - All dupe attempts and compensations are written to `kotzu_display_audit`;
   `/kmq:validate_db` surfaces cache/DB/lock inconsistencies and stale locks.
 
-Verified headlessly: `tools/fxsim` scenarios **S7, S8, S9, S14, S15, S16, S17** —
-62/62 checks pass on real MariaDB. S15 exercises the outfit paths against a live
+Verified headlessly: `tools/fxsim` scenarios **S7–S9, S14–S19** — 69/69 checks pass
+on real MariaDB (S18 asserts the database itself rejects a duplicate live serial;
+S19 asserts weapon placements consume the stricter `weapon_tx` budget). S15 exercises the outfit paths against a live
 mannequin + populated `player_outfits` row (byte-identical inventory asserted),
 not a short-circuit.

@@ -89,6 +89,14 @@ function Repo.CountForOwner(owner)
     return n
 end
 
+---The unique serial a display holds at DB level (weapon displays only).
+function Repo.SerialOf(d)
+    if not d or not d.displayType or not d.displayType:find('^weapon_') then return nil end
+    local m = d.item and d.item.metadata
+    if type(m) ~= 'table' then return nil end
+    return m.serial or m.serie or m.uniqueId or m.id
+end
+
 ---Anti-dupe: is this weapon serial already on a LIVE display? (cache holds
 ---only non-deleted rows, so a retrieved weapon's serial is free to re-place.)
 function Repo.SerialInUse(itemName, serial)
@@ -115,8 +123,8 @@ function Repo.Create(d)
             (uid, owner_citizenid, display_type, scope_type, scope_id, routing_bucket,
              loc_x, loc_y, loc_z, loc_heading, gender, outfit, pose_id, platform,
              case_style, settings,
-             item_name, item_metadata, label, description, permissions, manifest_version)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             item_name, item_metadata, item_serial, label, description, permissions, manifest_version)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ]], {
         uid, d.owner, d.displayType, d.scopeType, d.scopeId, d.bucket,
         d.transform.x, d.transform.y, d.transform.z, d.transform.heading,
@@ -124,6 +132,7 @@ function Repo.Create(d)
         d.caseStyle, d.settings and json.encode(d.settings) or nil,
         d.item and d.item.name or nil,
         d.item and json.encode(d.item.metadata or {}) or nil,
+        Repo.SerialOf(d),
         d.label, d.description, json.encode(d.permissions or {}),
         d.manifestVersion or 0,
     })
@@ -181,8 +190,10 @@ end
 ---Soft delete with row-level guard; returns true only if THIS call deleted it
 ---(used as the retrieval transaction's lock — see transactions.lua).
 function Repo.Delete(uid)
+    -- clearing item_serial frees it under the UNIQUE index so the weapon can be
+    -- placed again after retrieval
     local affected = MySQL.update.await(
-        'UPDATE kotzu_displays SET deleted_at = NOW() WHERE uid = ? AND deleted_at IS NULL',
+        'UPDATE kotzu_displays SET deleted_at = NOW(), item_serial = NULL WHERE uid = ? AND deleted_at IS NULL',
         { uid })
     if affected and affected > 0 then
         cache[uid] = nil
@@ -193,14 +204,29 @@ end
 
 ---Undo a soft delete (compensation path).
 function Repo.Restore(uid)
-    local affected = MySQL.update.await(
-        'UPDATE kotzu_displays SET deleted_at = NULL WHERE uid = ?', { uid })
-    if affected and affected > 0 then
-        local row = MySQL.single.await('SELECT * FROM kotzu_displays WHERE uid = ?', { uid })
-        if row then cache[uid] = rowToRecord(row) end
-        return true
+    local row = MySQL.single.await('SELECT * FROM kotzu_displays WHERE uid = ?', { uid })
+    if not row then return false end
+    local rec = rowToRecord(row)
+    local serial = Repo.SerialOf(rec)
+    -- Re-claim the serial if it is still free; if another display took it
+    -- meanwhile the row is still restored (no item loss) but without the
+    -- claim, and the conflict is audited for the admin.
+    local ok = pcall(function()
+        MySQL.update.await(
+            'UPDATE kotzu_displays SET deleted_at = NULL, item_serial = ? WHERE uid = ?',
+            { serial, uid })
+    end)
+    if not ok then
+        MySQL.update.await(
+            'UPDATE kotzu_displays SET deleted_at = NULL, item_serial = NULL WHERE uid = ?',
+            { uid })
+        Repo.Audit(uid, 'system', 'restore_serial_conflict', { serial = serial })
+        print(('[kotzu_trophy] restore %s: serial %s already claimed elsewhere')
+            :format(uid, tostring(serial)))
     end
-    return false
+    local fresh = MySQL.single.await('SELECT * FROM kotzu_displays WHERE uid = ?', { uid })
+    if fresh then cache[uid] = rowToRecord(fresh) end
+    return true
 end
 
 function Repo.Audit(uid, actor, action, detail)

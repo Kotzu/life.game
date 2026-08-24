@@ -12,12 +12,17 @@ local MIGRATIONS = {
     '002_tx_locks.sql',
     '003_audit.sql',
     '004_case_settings.sql',
+    '005_item_serial_unique.sql',
 }
 
 local function splitStatements(sqlText)
+    -- Comments must be stripped BEFORE splitting: a `;` inside a `--` comment
+    -- would otherwise cut a statement in half and feed the comment tail to the
+    -- server as SQL.
+    local stripped = sqlText:gsub('%-%-[^\n]*', '')
     local statements = {}
-    for stmt in sqlText:gmatch('([^;]+);') do
-        local trimmed = stmt:gsub('%-%-[^\n]*', ''):gsub('^%s+', ''):gsub('%s+$', '')
+    for stmt in stripped:gmatch('([^;]+);') do
+        local trimmed = stmt:gsub('^%s+', ''):gsub('%s+$', '')
         if #trimmed > 0 then statements[#statements + 1] = trimmed end
     end
     return statements

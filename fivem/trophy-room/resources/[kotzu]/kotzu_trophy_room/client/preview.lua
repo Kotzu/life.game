@@ -48,9 +48,22 @@ function PV.TryOn(uid)
     local okApply, applyErr = cb.Apply(PlayerPedId(), res.outfit)
     if not okApply then return false, applyErr end
 
+    -- Anchor the session to the display. A borrowed outfit must never leave the
+    -- trophy room: if the player wanders off (e.g. toward a clothing store or a
+    -- save trigger) the outfit is restored immediately. Without this, any
+    -- resource that persists appearance while the preview is active would grant
+    -- the borrowed clothes permanently — a real economy exploit on servers
+    -- where clothing costs money.
+    local anchor = KTRC.Streaming and KTRC.Streaming.EntityFor(uid)
+    local anchorPos = anchor and DoesEntityExist(anchor)
+        and GetEntityCoords(anchor) or GetEntityCoords(PlayerPedId())
+    local model = GetEntityModel(PlayerPedId())
+
     session = {
         snapshot = snapshot,
         deadline = GetGameTimer() + (res.seconds or 60) * 1000,
+        anchorPos = anchorPos,
+        model = model,
     }
     SetResourceKvp(KVP_KEY, json.encode({ snapshot = snapshot, at = GetGameTimer() }))
 
@@ -59,9 +72,20 @@ function PV.TryOn(uid)
     CreateThread(function()
         while session do
             Wait(0)
-            if GetGameTimer() >= session.deadline
-                or IsEntityDead(PlayerPedId())
-                or IsControlJustPressed(0, 177) then
+            local ped = PlayerPedId()
+            local reason
+            if GetGameTimer() >= session.deadline then reason = 'timeout'
+            elseif IsEntityDead(ped) then reason = 'death'
+            elseif IsControlJustPressed(0, 177) then reason = 'cancel'
+            elseif GetEntityModel(ped) ~= session.model then reason = 'model change'
+            elseif #(GetEntityCoords(ped) - session.anchorPos)
+                > KTR.Config.Interaction.PreviewLeashDistance then
+                reason = 'walked away'
+            end
+            if reason then
+                if KTR.Config.Debug then
+                    print('[kotzu_trophy] try-on restored: ' .. reason)
+                end
                 restore()
                 break
             end
@@ -69,6 +93,10 @@ function PV.TryOn(uid)
     end)
     return true
 end
+
+-- Exported so appearance/save resources can refuse to persist a borrowed
+-- outfit:  if exports.kotzu_trophy_room:IsPreviewActive() then return end
+exports('IsPreviewActive', function() return session ~= nil end)
 
 function PV.Cancel()
     restore()

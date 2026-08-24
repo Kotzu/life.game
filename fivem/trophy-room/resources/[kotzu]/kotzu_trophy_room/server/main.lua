@@ -121,6 +121,9 @@ RPC.Register('displays:place', function(src, args)
 
     local uid
     if d.displayType:find('^weapon_') then
+        -- weapon placements consume the stricter transaction budget too, so
+        -- inventory-touching operations share one limit with retrieval
+        if not KTRS.RateLimit.Check(src, 'weapon_tx') then return nil, C.Err.RATE_LIMITED end
         -- (weapon payloads are validated + re-read from inventory in the tx)
         local wUid, wErr = KTRS.Tx.PlaceWeapon(src, d, args.idKey)
         if not wUid then return nil, wErr end

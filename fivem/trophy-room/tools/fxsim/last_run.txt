@@ -2,6 +2,7 @@
 [kotzu_trophy] migration applied: 002_tx_locks.sql
 [kotzu_trophy] migration applied: 003_audit.sql
 [kotzu_trophy] migration applied: 004_case_settings.sql
+[kotzu_trophy] migration applied: 005_item_serial_unique.sql
 [kotzu_trophy] repository loaded 0 display(s)
 == S1 boot: migrations + repository ==
   PASS S1 repo ready
@@ -77,6 +78,29 @@
   PASS S14 re-place after retrieve allowed
   PASS S14 per-player inflight lock exists
 == S15 clothing has no economy dupe (outfit RPCs never touch inventory) ==
-  PASS S15 inventory unchanged by outfit RPCs
+  PASS S15 mannequin display placed (no outfit: manifest v0)
+  PASS S15 savedList reached real outfit logic
+  PASS S15 savedGet returned outfit payload
+  PASS S15 inventory byte-identical after full outfit round-trip
+  PASS S15 no inventory audit rows from outfit paths
+== S16 serial squatting via decorative display is blocked ==
+  PASS S16 decorative display placed
+  PASS S16 crafted serial stripped from decorative display
+  PASS S16 real owner not locked out by squatter
+== S17 lock is released even when a transaction errors ==
+[kotzu_trophy] transaction error for QBX00005: run.lua:443: simulated DB/bridge failure
+  PASS S17 erroring tx returns TX_FAILED
+  PASS S17 inflight lock released after error
+  PASS S17 no serial claim leaked
+  PASS S17 player can still transact after the error
+== S18 DB-level serial uniqueness (multi-server / restart safety) ==
+  PASS S18 migration 005 applied
+  PASS S18 unique index exists
+  PASS S18 place stores item_serial
+  PASS S18 DB rejects a duplicate live serial
+  PASS S18 retrieve clears item_serial
+  PASS S18 serial re-placeable after retrieval
+== S19 weapon placements consume the weapon_tx budget ==
+  PASS S19 weapon placement hits weapon_tx limit before the place limit
 
-RESULT: 51 passed, 0 failed
+RESULT: 69 passed, 0 failed

@@ -258,3 +258,31 @@ pending — see `docs/validation-matrix.md`).
   commemorative pistol (two side-by-side pistols swept ~0.50 m in a case with
   0.26 m clearance). Browser test asserts every rotating item's radius stays
   within its glass — **18/18 pass**.
+
+## [1.3.0-dev] — 2026-08-23
+
+### Security — clothing preview exploit closed
+- **CL1**: a borrowed try-on outfit could be made permanent for free if any
+  other resource persisted the player's appearance while it was worn (clothing
+  store, disconnect save) — a real economy exploit where clothes cost money.
+  The preview is now **leashed to the display**: walking beyond
+  `Interaction.PreviewLeashDistance` (12 m), a ped-model change, death, timeout,
+  cancel or resource stop restore instantly. Added
+  `exports.kotzu_trophy_room:IsPreviewActive()` so appearance/save resources can
+  refuse to persist a borrowed outfit.
+
+### Security — DB-level serial uniqueness (multi-server / restart safe)
+- Migration 005 adds `item_serial` + UNIQUE index, written on placement and
+  NULLed on soft-delete, so the database rejects a second live display for one
+  serial even across server processes. `Repo.Restore` re-claims it when free and
+  audits `restore_serial_conflict` otherwise.
+- Weapon placements now also consume the stricter `weapon_tx` rate budget
+  (previously only retrieval did, though the docs claimed both).
+
+### Fixed — migration runner could corrupt a migration
+- `splitStatements` split on `;` *before* stripping comments, so a semicolon
+  inside a `--` comment cut a statement in half and fed the comment tail to the
+  server as SQL (caught by the new S18 test). Comments are now stripped first.
+
+- fxsim: S18 (DB uniqueness incl. a raw duplicate-INSERT rejection) and S19
+  (rate-limit budget) added — **69/69 checks pass** on real MariaDB.
