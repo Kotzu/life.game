@@ -39,6 +39,7 @@ KTR.Const = {
         SCOPE_MISMATCH = 'SCOPE_MISMATCH',
         TX_FAILED = 'TX_FAILED',
         ITEM_MISSING = 'ITEM_MISSING',
+        DUPLICATE = 'DUPLICATE',
         INTERNAL = 'INTERNAL',
     },
 

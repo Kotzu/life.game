@@ -335,6 +335,51 @@ local ok13d, err13d = rpc(1, 'displays:place', { display = {
 check('S13 unknown case style rejected', ok13d == false and err13d == C.Err.BAD_INPUT,
     tostring(err13d))
 
+print('== S14 anti-dupe: weapon serial uniqueness across displays ==')
+-- fresh player (no rate-limit history from earlier scenarios)
+SIM.AddPlayer(5, { license = 'license:dupe5' })
+mockItems[5] = {
+    { name = 'weapon_pistol50', slot = 3, metadata = { serial = 'DUPE-1' }, count = 1 },
+    { name = 'weapon_pistol50', slot = 4, metadata = { serial = 'DUPE-1' }, count = 1 },
+}
+local dispA = {
+    displayType = C.DisplayType.WEAPON_STAND, scopeType = C.ScopeType.WORLD,
+    transform = { x = 7.0, y = 7.0, z = 7.0, heading = 0.0 },
+    item = { name = 'weapon_pistol50', metadata = {} },
+}
+local okA, resA = rpc(5, 'displays:place', { display = dispA, idKey = 'dupetest_a' })
+check('S14 first place ok', okA == true and resA.uid ~= nil, json.encode(resA))
+local dupUid = okA and resA.uid or nil
+
+local okB, errB = rpc(5, 'displays:place', {
+    display = {
+        displayType = C.DisplayType.WEAPON_STAND, scopeType = C.ScopeType.WORLD,
+        transform = { x = 7.5, y = 7.0, z = 7.0, heading = 0.0 },
+        item = { name = 'weapon_pistol50', metadata = {} },
+    }, idKey = 'dupetest_b' })
+check('S14 second place (same serial) refused DUPLICATE',
+    okB == false and errB == C.Err.DUPLICATE, tostring(errB))
+check('S14 only one live display holds the serial', MySQL.scalar.await(
+    "SELECT COUNT(*) FROM kotzu_displays WHERE item_name='weapon_pistol50' AND deleted_at IS NULL") == 1)
+check('S14 dupe attempt audited', MySQL.scalar.await(
+    "SELECT COUNT(*) FROM kotzu_display_audit WHERE action='weapon_dupe_blocked'") >= 1)
+
+-- after retrieving, the serial is freed and can be re-placed (not a permanent ban)
+local okR = rpc(5, 'weapons:retrieve', { uid = dupUid, idKey = 'dupetest_r' })
+check('S14 retrieve frees the serial', okR == true)
+local okC = rpc(5, 'displays:place', { display = dispA, idKey = 'dupetest_c' })
+check('S14 re-place after retrieve allowed', okC == true, tostring(okC))
+
+check('S14 per-player inflight lock exists', type(KTRS.Tx._inflight) == 'table')
+
+print('== S15 clothing has no economy dupe (outfit RPCs never touch inventory) ==')
+-- capturing/try-on is cosmetic: prove the outfit RPCs return data only and the
+-- inventory is untouched by an outfit round-trip.
+local invBefore = #(mockItems[5] or {})
+rpc(5, 'outfit:savedList', {})
+rpc(5, 'outfit:forTryOn', { uid = dupUid }) -- dupUid now deleted -> NOT_FOUND, still no item change
+check('S15 inventory unchanged by outfit RPCs', #(mockItems[5] or {}) == invBefore)
+
 print('')
 print(('RESULT: %d passed, %d failed'):format(passes, #failures))
 for _, f in ipairs(failures) do print('  FAILED: ' .. f) end

@@ -190,3 +190,23 @@ pending — see `docs/validation-matrix.md`).
   suite now **43/43** on real MariaDB.
 - 3D demo updated: three case shapes with rotating items and a live
   toggle + speed slider on the selection card.
+
+## [1.2.1-dev] — 2026-08-23
+
+### Security — weapon anti-dupe hardening + clothing dupe audit
+- Closed the classic FiveM race (concurrent place of the same weapon
+  interleaving between FindItem and RemoveItem across the cooperative-yield
+  boundary): added a **synchronous per-citizen critical-section lock** in
+  transactions.lua acquired before the first yield.
+- Added **serial-uniqueness guard** (`Repo.SerialInUse`) checked inside the
+  critical section: a serial already on a live display refuses the second place
+  with a new `DUPLICATE` error and a `weapon_dupe_blocked` audit row; retrieving
+  frees the serial for re-placement.
+- Audited clothing: grep-verified the ONLY inventory mutations are the weapon
+  transaction; outfit capture/try-on/saved-outfit are cosmetic/read-only — no
+  economy dupe. Documented that rare-item displays are decorative and must use
+  the weapon transaction if ever tied to real inventory.
+- `docs/anti-dupe-analysis.md`: enumerated matrix W1–W12 + clothing, each mapped
+  to its defense and test; linked from the security review.
+- fxsim S14 (serial uniqueness, re-place after retrieve, lock present) + S15
+  (outfit RPCs never touch inventory) — **51/51 checks pass** on real MariaDB.

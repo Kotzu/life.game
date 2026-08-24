@@ -33,6 +33,7 @@ local Locales = {
         err_SCOPE_MISMATCH = 'You are not in the right place for that display',
         err_TX_FAILED = 'Transaction failed — nothing was changed',
         err_ITEM_MISSING = 'Required item not found in your inventory',
+        err_DUPLICATE = 'That exact item is already on display',
         err_INTERNAL = 'Internal error — check server console',
 
         -- NUI strings (sent to web/app.js on every open)
@@ -105,6 +106,7 @@ local Locales = {
         err_SCOPE_MISMATCH = 'Nu ești în locul potrivit pentru acest exponat',
         err_TX_FAILED = 'Tranzacția a eșuat — nimic nu a fost modificat',
         err_ITEM_MISSING = 'Obiectul necesar nu a fost găsit în inventar',
+        err_DUPLICATE = 'Exact acest obiect este deja expus',
         err_INTERNAL = 'Eroare internă — verifică consola serverului',
 
         ui = {

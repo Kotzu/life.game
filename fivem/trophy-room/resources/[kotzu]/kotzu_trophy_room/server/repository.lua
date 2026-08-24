@@ -89,6 +89,20 @@ function Repo.CountForOwner(owner)
     return n
 end
 
+---Anti-dupe: is this weapon serial already on a LIVE display? (cache holds
+---only non-deleted rows, so a retrieved weapon's serial is free to re-place.)
+function Repo.SerialInUse(itemName, serial)
+    if serial == nil then return false end
+    for _, d in pairs(cache) do
+        if d.item and d.item.name == itemName and type(d.item.metadata) == 'table' then
+            local m = d.item.metadata
+            local s = m.serial or m.serie or m.uniqueId or m.id
+            if s == serial then return true end
+        end
+    end
+    return false
+end
+
 ---@return string|nil uid
 function Repo.Create(d)
     local uid = uuid()

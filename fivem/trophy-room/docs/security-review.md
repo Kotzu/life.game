@@ -32,6 +32,8 @@ Model: every client event/RPC is attacker-controlled (brief §18).
 | Harness abuse on live | `Config.DevCommands=false` disables all `/kmq:*`; server harness additionally requires admin ace | both harness files |
 | Try-on stuck outfit | restore on timeout/cancel/death/resource-stop + KVP crash recovery | `preview.lua` |
 
+See `docs/anti-dupe-analysis.md` for the full enumerated weapon/clothing dupe-vector matrix (W1–W12, clothing) and their defenses, verified by fxsim S7/S8/S9/S14/S15.
+
 ## Residual risks / notes for the operator
 
 1. **`failed_item_lost` lock state** (place: item removed, display insert failed, AND

@@ -68,5 +68,15 @@
   PASS S13 out-of-range speed rejected
 [kotzu_trophy] place rejected for QBX00001: BAD_INPUT unknown case style
   PASS S13 unknown case style rejected
+== S14 anti-dupe: weapon serial uniqueness across displays ==
+  PASS S14 first place ok
+  PASS S14 second place (same serial) refused DUPLICATE
+  PASS S14 only one live display holds the serial
+  PASS S14 dupe attempt audited
+  PASS S14 retrieve frees the serial
+  PASS S14 re-place after retrieve allowed
+  PASS S14 per-player inflight lock exists
+== S15 clothing has no economy dupe (outfit RPCs never touch inventory) ==
+  PASS S15 inventory unchanged by outfit RPCs
 
-RESULT: 43 passed, 0 failed
+RESULT: 51 passed, 0 failed

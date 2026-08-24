@@ -19,6 +19,23 @@ local C = KTR.Const
 
 local function inv() return KTR.Bridge.Get('inventory') end
 
+-- Synchronous per-citizen critical-section lock. FiveM Lua is cooperative:
+-- every MySQL.await / inventory-bridge call YIELDS, so two concurrent weapon
+-- requests from the same player can interleave between FindItem and RemoveItem
+-- (the classic dupe window). Setting inflight[key]=true happens with NO yield
+-- before it, so this check-and-set is atomic and serializes a player's weapon
+-- operations. Combined with Repo.SerialInUse (checked inside the section), the
+-- second request runs only after the first commits and is then refused.
+local inflight = {}
+local function acquire(key)
+    if inflight[key] then return false end
+    inflight[key] = true
+    return true
+end
+local function release(key) inflight[key] = nil end
+-- test seam (used by fxsim to assert the guard exists)
+Tx._inflight = inflight
+
 local function lockInsert(key, action, actor, itemName, itemMeta)
     -- INSERT .. IGNORE via affected rows: 0 means the key already exists
     local affected = MySQL.update.await(
@@ -54,9 +71,17 @@ function Tx.PlaceWeapon(src, d, idKey)
     if not bridge or not bridge.Functional() then
         if KTR.Config.Weapons.RequireInventoryBridge then return nil, C.Err.TX_FAILED end
     end
-    local id = KTRS.Perms.Identity(src)
+    local id = KTRS.Perms.Identity(src) -- synchronous (no yield)
     if not id then return nil, C.Err.NOT_ALLOWED end
 
+    -- serialize this player's weapon ops before the first yield (anti-dupe)
+    if not acquire(id.citizenid) then return nil, C.Err.RATE_LIMITED end
+    local uid, err = Tx._placeWeaponLocked(src, d, idKey, id, bridge)
+    release(id.citizenid)
+    return uid, err
+end
+
+function Tx._placeWeaponLocked(src, d, idKey, id, bridge)
     if not lockInsert(idKey, 'place', id.citizenid, d.item.name, d.item.metadata) then
         -- replay: return stored outcome instead of re-executing
         local lock = lockGet(idKey)
@@ -82,6 +107,18 @@ function Tx.PlaceWeapon(src, d, idKey)
         return nil, C.Err.BAD_INPUT
     end
     d.item.metadata = meta -- authoritative copy, never client's
+
+    -- anti-dupe: this exact serial must not already be on a live display.
+    -- Checked inside the per-player critical section, so a serialized second
+    -- request sees the first request's committed display and is refused —
+    -- closing the FindItem/RemoveItem race even if the inventory bridge would
+    -- have allowed a double remove.
+    if KTRS.Repo.SerialInUse(item.name, uniqueId) then
+        lockState(idKey, 'failed')
+        KTRS.Repo.Audit(nil, id.citizenid, 'weapon_dupe_blocked',
+            { item = item.name, uniqueId = uniqueId, key = idKey })
+        return nil, C.Err.DUPLICATE
+    end
 
     -- 2. remove item, then record that fact BEFORE inserting the display
     if not bridge.RemoveItem(src, item.name, item.slot, item.metadata) then
@@ -114,9 +151,18 @@ function Tx.RetrieveWeapon(src, uid, idKey)
     if not validKey(idKey) then return false, C.Err.BAD_INPUT end
     local bridge = inv()
     if not bridge or not bridge.Functional() then return false, C.Err.TX_FAILED end
-    local id = KTRS.Perms.Identity(src)
+    local id = KTRS.Perms.Identity(src) -- synchronous (no yield)
     if not id then return false, C.Err.NOT_ALLOWED end
 
+    -- serialize per player; the soft-delete-as-lock is the primary guard, this
+    -- also prevents a doubled AddItem if the same player spams retrieve
+    if not acquire(id.citizenid) then return false, C.Err.RATE_LIMITED end
+    local ok, err, display = Tx._retrieveWeaponLocked(src, uid, idKey, id, bridge)
+    release(id.citizenid)
+    return ok, err, display
+end
+
+function Tx._retrieveWeaponLocked(src, uid, idKey, id, bridge)
     local display = KTRS.Repo.Get(uid)
     if not display or not display.item then return false, C.Err.NOT_FOUND end
     local caps = KTRS.Perms.Capabilities(src, display)
