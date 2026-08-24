@@ -210,3 +210,34 @@ pending — see `docs/validation-matrix.md`).
   to its defense and test; linked from the security review.
 - fxsim S14 (serial uniqueness, re-place after retrieve, lock present) + S15
   (outfit RPCs never touch inventory) — **51/51 checks pass** on real MariaDB.
+
+## [1.2.2-dev] — 2026-08-23
+
+### Security — third code-review on the anti-dupe code (4 findings, all fixed)
+- **Lock lockout (HIGH)**: an error inside the critical section skipped
+  `release()`, locking that citizen out of weapon ops until a process restart.
+  Added `withLock` (pcall-wrapped, always releases) + `playerDropped` cleanup.
+- **Serial squatting (HIGH)**: a free `rare_item`/`achievement` display carrying
+  a crafted `item.metadata.serial` could mark a victim's serial "in use" and
+  lock the real owner out (serials are broadcast to nearby clients, so they are
+  discoverable). Now `SerialInUse` scans only `weapon_*` displays AND
+  serial-like fields are stripped from non-weapon placements.
+- **Cross-citizen serial race (MEDIUM)**: the serial check sat inside the
+  per-citizen section only, so two different citizens could both pass it. Added
+  a synchronous `claimSerial` reservation (no yield between check and claim),
+  released on every failure path.
+- **Vacuous S15 test (LOW)**: the clothing-dupe proof short-circuited before
+  reaching outfit logic. Rewritten against a live mannequin display + populated
+  `player_outfits` row, asserting byte-identical inventory.
+- Docs corrected: W2 rewritten, W13/W14 added, rate-limit buckets fixed.
+- fxsim: S15 rewritten, S16 (squatting) + S17 (lock release on error) added —
+  **62/62 checks pass** on real MariaDB.
+
+### Changed — demo mannequins rebuilt on freemode proportions
+- `docs/design/room-demo-scene.js`: mannequins now follow the mp_m/f_freemode_01
+  skeleton metrics (1.87 m / 1.75 m, 7.5-head figure, clavicle/elbow/wrist/knee
+  heights, male 1.45 shoulder-to-hip vs female hourglass), with tapered limbs,
+  articulated elbows, mannequin hands (palm + fused fingers + thumb), jaw and
+  nose-ridge silhouette, still faceless. Scene now shows 3 male + 1 female
+  mannequin; the info card names the source model.
+- Browser test updated and re-run: **16/16 pass** in headless Chromium.

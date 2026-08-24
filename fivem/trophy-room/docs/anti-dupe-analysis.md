@@ -27,7 +27,7 @@ transaction path (`Tx.PlaceWeapon`/`RetrieveWeapon`), not `Repo.Create`/`Delete`
 | # | Vector | Defense | Test |
 |---|---|---|---|
 | W1 | **Concurrent place of the same physical weapon** (two `displays:place`, different idempotency keys, interleaving between `FindItem` and `RemoveItem`) | **Synchronous per-citizen critical-section lock** acquired before the first yield (`acquire(citizenid)`), serializing a player's weapon ops; the second runs only after the first commits | S14 (lock present) + S7 |
-| W2 | Same weapon lands on two live displays (any residual race, restart edge, logic slip) | **`Repo.SerialInUse`** checked inside the critical section — a serial already on a live display refuses the second place with `DUPLICATE` (+ audit `weapon_dupe_blocked`) | S14 |
+| W2 | Same weapon on two live displays (residual race, incl. **two different citizens** racing one serial) | **`Repo.SerialInUse` + synchronous `claimSerial` reservation** inside the critical section (no yield between check and claim), released on failure, superseded by the persisted row on success. Scan is restricted to `weapon_*` displays. | S14, S16 |
 | W3 | Replay of a place request | idempotency lock (`kotzu_tx_locks`, INSERT-IGNORE gate): a replay returns the stored outcome, never re-executes | S7 |
 | W4 | Concurrent retrieve of one display (owner + admin/co-owner) | **soft-delete-as-lock**: atomic `UPDATE … WHERE deleted_at IS NULL` affected-rows; only one caller flips it, so `AddItem` runs once | S7 |
 | W5 | Spam retrieve by one player | per-citizen lock + soft-delete guard | S7 |
@@ -37,7 +37,9 @@ transaction path (`Tx.PlaceWeapon`/`RetrieveWeapon`), not `Repo.Create`/`Delete`
 | W9 | Client spoofs cheaper/other item via metadata | client metadata is only a narrowing **filter**; the FOUND item's metadata is authoritative; a serial is required or `BAD_INPUT` | S8-style |
 | W10 | Delete a weapon display to bypass retrieval transaction | `displays:delete` refuses `weapon_*` types → must use `weapons:retrieve` | S-delete |
 | W11 | Crash mid-transaction | ordered state machine + startup `RecoverStranded` (item-removed → recovery credit; row-deleted → restore) | S9 |
-| W12 | Idempotency-key collision/garbage | `validKey` (8–64, `[%w-_]`); rate limit `weapon_tx` 6/min | — |
+| W12 | Idempotency-key collision/garbage | `validKey` (8–64, `[%w-_]`); rate limits: `place` 10/min for placement, `weapon_tx` 6/min for retrieval | — |
+| W13 | **Serial squatting**: a free decorative display (`rare_item`/`achievement`) carrying a crafted `item.metadata.serial` marks a victim's serial "in use", locking the real owner out | serial-like fields are **stripped** from non-weapon placements, and `SerialInUse` only scans `weapon_*` displays | S16 |
+| W14 | **Lock lockout**: an error inside the critical section (DB error from `.await`, throwing inventory export) skips `release()`, leaving the citizen permanently `RATE_LIMITED` | `withLock` pcall-wraps the section and always releases; `playerDropped` also clears; serial claims released on every failure path | S17 |
 
 ## Residual risk & hardening notes
 
@@ -51,5 +53,7 @@ transaction path (`Tx.PlaceWeapon`/`RetrieveWeapon`), not `Repo.Create`/`Delete`
 - All dupe attempts and compensations are written to `kotzu_display_audit`;
   `/kmq:validate_db` surfaces cache/DB/lock inconsistencies and stale locks.
 
-Verified headlessly: `tools/fxsim` scenarios **S7, S8, S9, S14, S15** — 51/51
-checks pass on real MariaDB.
+Verified headlessly: `tools/fxsim` scenarios **S7, S8, S9, S14, S15, S16, S17** —
+62/62 checks pass on real MariaDB. S15 exercises the outfit paths against a live
+mannequin + populated `player_outfits` row (byte-identical inventory asserted),
+not a short-circuit.

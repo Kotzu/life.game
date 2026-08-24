@@ -121,10 +121,17 @@ RPC.Register('displays:place', function(src, args)
 
     local uid
     if d.displayType:find('^weapon_') then
+        -- (weapon payloads are validated + re-read from inventory in the tx)
         local wUid, wErr = KTRS.Tx.PlaceWeapon(src, d, args.idKey)
         if not wUid then return nil, wErr end
         uid = wUid
     else
+        -- Decorative displays never carry inventory identity: strip anything
+        -- serial-like so a crafted payload can't squat a real weapon serial.
+        if type(d.item) == 'table' and type(d.item.metadata) == 'table' then
+            local md = d.item.metadata
+            md.serial, md.serie, md.uniqueId, md.id = nil, nil, nil, nil
+        end
         uid = KTRS.Repo.Create(d)
         if not uid then return nil, C.Err.INTERNAL end
         KTRS.Repo.Audit(uid, id.citizenid, 'placed', { type = d.displayType })

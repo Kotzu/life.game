@@ -33,8 +33,48 @@ local function acquire(key)
     return true
 end
 local function release(key) inflight[key] = nil end
--- test seam (used by fxsim to assert the guard exists)
+
+---Run fn inside the per-citizen critical section, ALWAYS releasing the lock —
+---even if fn raises (a DB error from .await, a throwing inventory export…).
+---Without this the citizen would be locked out of weapon ops until restart.
+local function withLock(citizenid, fn, ...)
+    if not acquire(citizenid) then return nil, C.Err.RATE_LIMITED end
+    local packed = table.pack(pcall(fn, ...))
+    release(citizenid)
+    if not packed[1] then
+        print(('[kotzu_trophy] transaction error for %s: %s')
+            :format(citizenid, tostring(packed[2])))
+        return nil, C.Err.TX_FAILED
+    end
+    return table.unpack(packed, 2, packed.n)
+end
+
+-- Cross-player serial reservations. The per-citizen lock does NOT serialize two
+-- DIFFERENT citizens racing the same serial (possible if a serial already
+-- exists twice in the economy). Claiming here is synchronous — no yield between
+-- the check and the set — so exactly one request proceeds past it; the claim is
+-- released on failure and superseded by the persisted display on success.
+local serialClaims = {}
+local function serialKey(itemName, serial) return itemName .. '|' .. tostring(serial) end
+local function claimSerial(itemName, serial)
+    local k = serialKey(itemName, serial)
+    if serialClaims[k] then return false end
+    serialClaims[k] = true
+    return true
+end
+local function unclaimSerial(itemName, serial)
+    serialClaims[serialKey(itemName, serial)] = nil
+end
+
+-- test seams (fxsim asserts the guards exist / are not leaked)
 Tx._inflight = inflight
+Tx._serialClaims = serialClaims
+
+---Safety net: a disconnect must never leave a citizen locked out.
+AddEventHandler('playerDropped', function()
+    local id = KTRS.Perms and KTRS.Perms.Identity and KTRS.Perms.Identity(source)
+    if id and id.citizenid then release(id.citizenid) end
+end)
 
 local function lockInsert(key, action, actor, itemName, itemMeta)
     -- INSERT .. IGNORE via affected rows: 0 means the key already exists
@@ -75,10 +115,7 @@ function Tx.PlaceWeapon(src, d, idKey)
     if not id then return nil, C.Err.NOT_ALLOWED end
 
     -- serialize this player's weapon ops before the first yield (anti-dupe)
-    if not acquire(id.citizenid) then return nil, C.Err.RATE_LIMITED end
-    local uid, err = Tx._placeWeaponLocked(src, d, idKey, id, bridge)
-    release(id.citizenid)
-    return uid, err
+    return withLock(id.citizenid, Tx._placeWeaponLocked, src, d, idKey, id, bridge)
 end
 
 function Tx._placeWeaponLocked(src, d, idKey, id, bridge)
@@ -113,7 +150,10 @@ function Tx._placeWeaponLocked(src, d, idKey, id, bridge)
     -- request sees the first request's committed display and is refused —
     -- closing the FindItem/RemoveItem race even if the inventory bridge would
     -- have allowed a double remove.
-    if KTRS.Repo.SerialInUse(item.name, uniqueId) then
+    -- Both checks are synchronous (no yield between them and the claim), so a
+    -- second request — same citizen or a different one — is refused here.
+    if KTRS.Repo.SerialInUse(item.name, uniqueId)
+        or not claimSerial(item.name, uniqueId) then
         lockState(idKey, 'failed')
         KTRS.Repo.Audit(nil, id.citizenid, 'weapon_dupe_blocked',
             { item = item.name, uniqueId = uniqueId, key = idKey })
@@ -122,6 +162,7 @@ function Tx._placeWeaponLocked(src, d, idKey, id, bridge)
 
     -- 2. remove item, then record that fact BEFORE inserting the display
     if not bridge.RemoveItem(src, item.name, item.slot, item.metadata) then
+        unclaimSerial(item.name, uniqueId)
         lockState(idKey, 'failed')
         return nil, C.Err.TX_FAILED
     end
@@ -131,6 +172,7 @@ function Tx._placeWeaponLocked(src, d, idKey, id, bridge)
     local uid = KTRS.Repo.Create(d)
     if not uid then
         -- compensation: give the item back
+        unclaimSerial(item.name, uniqueId)
         local returned = bridge.AddItem(src, item.name, item.metadata)
         lockState(idKey, returned and 'failed' or 'failed_item_lost')
         KTRS.Repo.Audit(nil, id.citizenid, 'weapon_place_failed',
@@ -138,6 +180,8 @@ function Tx._placeWeaponLocked(src, d, idKey, id, bridge)
         return nil, C.Err.TX_FAILED
     end
 
+    -- the persisted display is now the authority for this serial
+    unclaimSerial(item.name, uniqueId)
     lockState(idKey, 'done', uid)
     KTRS.Repo.Audit(uid, id.citizenid, 'weapon_placed',
         { item = item.name, uniqueId = uniqueId, key = idKey })
@@ -156,9 +200,9 @@ function Tx.RetrieveWeapon(src, uid, idKey)
 
     -- serialize per player; the soft-delete-as-lock is the primary guard, this
     -- also prevents a doubled AddItem if the same player spams retrieve
-    if not acquire(id.citizenid) then return false, C.Err.RATE_LIMITED end
-    local ok, err, display = Tx._retrieveWeaponLocked(src, uid, idKey, id, bridge)
-    release(id.citizenid)
+    local ok, err, display = withLock(id.citizenid, Tx._retrieveWeaponLocked,
+        src, uid, idKey, id, bridge)
+    if ok == nil then return false, err or C.Err.TX_FAILED end
     return ok, err, display
 end
 

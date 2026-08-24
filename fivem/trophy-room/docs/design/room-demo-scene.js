@@ -112,73 +112,166 @@ function capsule(r, len, mat) {
   m.castShadow = true; return m;
 }
 
+// Proportions follow the GTA V freemode MALE skeleton (mp_m_freemode_01):
+// ~1.87 m total height, head top ~1.87, eye line ~1.75, chin ~1.66,
+// shoulder (SKEL_L/R_Clavicle) ~1.52, elbow ~1.16, wrist ~0.90,
+// hip (SKEL_Pelvis) ~1.00, knee ~0.52, ankle ~0.11 — a 7.5-head figure with
+// the broader male shoulder-to-hip ratio (~1.45). Female variant narrows the
+// shoulders, raises the waist and shortens the torso slightly.
+const FREEMODE = {
+  male: {
+    height: 1.87, headR: 0.105, headY: 1.79, chinY: 1.66, neckY: 1.60,
+    shoulderY: 1.52, shoulderX: 0.205, chestY: 1.40, chestR: 0.175,
+    waistY: 1.12, waistR: 0.145, hipY: 1.00, hipR: 0.165,
+    upperArm: 0.31, foreArm: 0.27, thigh: 0.46, shin: 0.42, ankleY: 0.11,
+    legX: 0.095, footL: 0.29,
+  },
+  female: {
+    height: 1.75, headR: 0.098, headY: 1.68, chinY: 1.56, neckY: 1.51,
+    shoulderY: 1.43, shoulderX: 0.172, chestY: 1.32, chestR: 0.155,
+    waistY: 1.07, waistR: 0.122, hipY: 0.96, hipR: 0.168,
+    upperArm: 0.28, foreArm: 0.25, thigh: 0.44, shin: 0.40, ankleY: 0.10,
+    legX: 0.085, footL: 0.26,
+  },
+};
+
 function buildMannequin(outfit) {
-  // outfit: { torso, legs, cap, belt } materials/flags — original geometry only
+  // Stylized retail mannequin on freemode proportions — original geometry.
+  const S = FREEMODE[outfit.sex === 'female' ? 'female' : 'male'];
   const g = new T.Group();
   const torsoMat = outfit.torso || plastic;
   const legMat = outfit.legs || plastic;
 
-  const hips = new T.Mesh(new T.SphereGeometry(0.155, 20, 14), legMat);
-  hips.scale.set(1, 0.72, 0.82); hips.position.y = 0.92; hips.castShadow = true; g.add(hips);
+  // --- pelvis / hips
+  const hips = new T.Mesh(new T.SphereGeometry(S.hipR, 22, 16), legMat);
+  hips.scale.set(1, 0.68, 0.8); hips.position.y = S.hipY;
+  hips.castShadow = true; g.add(hips);
 
+  // --- legs: thigh + shin taper like a real mannequin
   for (const side of [-1, 1]) {
-    const leg = capsule(0.075, 0.62, legMat);
-    leg.position.set(side * 0.095, 0.5, 0); g.add(leg);
-    const foot = new T.Mesh(new T.BoxGeometry(0.11, 0.07, 0.26), legMat);
-    foot.position.set(side * 0.095, 0.05, 0.05); foot.castShadow = true; g.add(foot);
+    const thigh = new T.Mesh(
+      new T.CylinderGeometry(S.hipR * 0.52, S.hipR * 0.40, S.thigh, 16), legMat);
+    thigh.position.set(side * S.legX, S.hipY - S.thigh / 2, 0);
+    thigh.castShadow = true; g.add(thigh);
+
+    const knee = new T.Mesh(new T.SphereGeometry(S.hipR * 0.38, 14, 10), legMat);
+    knee.position.set(side * S.legX, S.hipY - S.thigh, 0); g.add(knee);
+
+    const shin = new T.Mesh(
+      new T.CylinderGeometry(S.hipR * 0.38, S.hipR * 0.26, S.shin, 16), legMat);
+    shin.position.set(side * S.legX, S.hipY - S.thigh - S.shin / 2, 0);
+    shin.castShadow = true; g.add(shin);
+
+    const foot = new T.Mesh(new T.BoxGeometry(S.hipR * 0.62, 0.075, S.footL), legMat);
+    foot.position.set(side * S.legX, 0.037, S.footL * 0.22);
+    foot.castShadow = true; g.add(foot);
   }
 
-  const torso = new T.Mesh(new T.CylinderGeometry(0.16, 0.135, 0.52, 18), torsoMat);
-  torso.position.y = 1.28; torso.castShadow = true; g.add(torso);
-  const chest = new T.Mesh(new T.SphereGeometry(0.165, 20, 14), torsoMat);
-  chest.scale.set(1, 0.78, 0.8); chest.position.y = 1.5; chest.castShadow = true; g.add(chest);
+  // --- torso: waist -> chest taper (male V-shape, female hourglass)
+  const waist = new T.Mesh(
+    new T.CylinderGeometry(S.chestR * 0.86, S.waistR, S.chestY - S.waistY, 20), torsoMat);
+  waist.position.y = (S.chestY + S.waistY) / 2; waist.castShadow = true; g.add(waist);
 
-  if (outfit.shirtV) { // white shirt V under a jacket
-    const v = new T.Mesh(new T.CylinderGeometry(0.06, 0.1, 0.3, 3), shirtMat);
-    v.position.set(0, 1.44, 0.128); v.rotation.x = 0.12; g.add(v);
+  const belly = new T.Mesh(
+    new T.CylinderGeometry(S.waistR, S.hipR * 0.92, S.waistY - S.hipY + 0.06, 20), torsoMat);
+  belly.position.y = (S.waistY + S.hipY) / 2; belly.castShadow = true; g.add(belly);
+
+  const chest = new T.Mesh(new T.SphereGeometry(S.chestR, 22, 16), torsoMat);
+  chest.scale.set(1.0, 0.82, 0.72);
+  chest.position.y = S.chestY + 0.06; chest.castShadow = true; g.add(chest);
+
+  const shoulders = new T.Mesh(
+    new T.CylinderGeometry(S.chestR * 0.98, S.chestR * 0.98, 0.09, 20), torsoMat);
+  shoulders.scale.set(1.0, 1, 0.66);
+  shoulders.position.y = S.shoulderY; shoulders.castShadow = true; g.add(shoulders);
+  for (const side of [-1, 1]) {
+    const cap = new T.Mesh(new T.SphereGeometry(0.062, 14, 12), torsoMat);
+    cap.position.set(side * S.shoulderX, S.shoulderY - 0.01, 0);
+    cap.castShadow = true; g.add(cap);
+  }
+
+  if (outfit.shirtV) {
+    const v = new T.Mesh(new T.CylinderGeometry(0.055, 0.095, 0.26, 3), shirtMat);
+    v.position.set(0, S.chestY + 0.09, S.chestR * 0.72); v.rotation.x = 0.1; g.add(v);
   }
   if (outfit.belt) {
-    const belt = new T.Mesh(new T.TorusGeometry(0.15, 0.028, 8, 22), beltMat);
-    belt.rotation.x = Math.PI / 2; belt.position.y = 1.02; g.add(belt);
-    for (const a of [0.6, -0.6, 2.4]) { // pouches
-      const p = new T.Mesh(new T.BoxGeometry(0.07, 0.09, 0.05), beltMat);
-      p.position.set(Math.sin(a) * 0.16, 1.0, Math.cos(a) * 0.16); g.add(p);
+    const belt = new T.Mesh(new T.TorusGeometry(S.waistR * 1.02, 0.026, 8, 24), beltMat);
+    belt.rotation.x = Math.PI / 2; belt.position.y = S.waistY - 0.02;
+    belt.scale.set(1, 1, 0.86); g.add(belt);
+    for (const a of [0.7, -0.7, 2.5]) {
+      const pouch = new T.Mesh(new T.BoxGeometry(0.065, 0.085, 0.045), beltMat);
+      pouch.position.set(Math.sin(a) * S.waistR, S.waistY - 0.06, Math.cos(a) * S.waistR * 0.85);
+      pouch.rotation.y = a; g.add(pouch);
     }
   }
 
-  const neck = new T.Mesh(new T.CylinderGeometry(0.05, 0.06, 0.09, 14), plastic);
-  neck.position.y = 1.66; g.add(neck);
-  const head = new T.Mesh(new T.SphereGeometry(0.115, 22, 18), plastic);
-  head.scale.set(0.88, 1.12, 0.95); head.position.y = 1.8; head.castShadow = true; g.add(head);
+  // --- neck + faceless head (elongated cranium, nose ridge, no features)
+  const neck = new T.Mesh(
+    new T.CylinderGeometry(0.049, 0.058, S.chinY - S.neckY + 0.07, 16), plastic);
+  neck.position.y = (S.chinY + S.neckY) / 2 + 0.01; neck.castShadow = true; g.add(neck);
 
-  if (outfit.cap) { // service cap: crown + brim
-    const crown = new T.Mesh(new T.CylinderGeometry(0.115, 0.125, 0.07, 18), navyMat);
-    crown.position.y = 1.9; g.add(crown);
-    const top = new T.Mesh(new T.SphereGeometry(0.115, 18, 10), navyMat);
-    top.scale.set(1.05, 0.4, 1.05); top.position.y = 1.93; g.add(top);
-    const brim = new T.Mesh(new T.CylinderGeometry(0.11, 0.11, 0.015, 18), beltMat);
-    brim.scale.set(1, 1, 1.25); brim.position.set(0, 1.87, 0.06); g.add(brim);
+  const head = new T.Mesh(new T.SphereGeometry(S.headR, 26, 20), plastic);
+  head.scale.set(0.86, 1.18, 0.98); head.position.y = S.headY;
+  head.castShadow = true; g.add(head);
+
+  const jaw = new T.Mesh(new T.SphereGeometry(S.headR * 0.72, 18, 14), plastic);
+  jaw.scale.set(0.92, 0.78, 1.02);
+  jaw.position.set(0, S.chinY + S.headR * 0.42, S.headR * 0.12);
+  jaw.castShadow = true; g.add(jaw);
+
+  // simplified nose ridge — silhouette only, no eyes/mouth (spec §5)
+  const nose = new T.Mesh(new T.ConeGeometry(0.022, 0.075, 10), plastic);
+  nose.rotation.x = Math.PI * 0.52;
+  nose.position.set(0, S.headY - 0.012, S.headR * 0.93); g.add(nose);
+
+  if (outfit.cap) {
+    const crown = new T.Mesh(
+      new T.CylinderGeometry(S.headR * 1.06, S.headR * 1.14, 0.075, 20), navyMat);
+    crown.position.y = S.headY + 0.075; crown.castShadow = true; g.add(crown);
+    const top = new T.Mesh(new T.SphereGeometry(S.headR * 1.06, 18, 10), navyMat);
+    top.scale.set(1.02, 0.38, 1.02); top.position.y = S.headY + 0.108; g.add(top);
+    const brim = new T.Mesh(new T.CylinderGeometry(S.headR, S.headR, 0.014, 18), beltMat);
+    brim.scale.set(1, 1, 1.3);
+    brim.position.set(0, S.headY + 0.042, S.headR * 0.62); g.add(brim);
   }
 
-  // arms with poses
+  // --- arms hung from the clavicle, with poses
   function arm(side, pose) {
     const shoulder = new T.Group();
-    shoulder.position.set(side * 0.205, 1.56, 0);
-    const upper = capsule(0.05, 0.24, torsoMat); upper.position.y = -0.15; shoulder.add(upper);
-    const elbow = new T.Group(); elbow.position.y = -0.3; shoulder.add(elbow);
-    const fore = capsule(0.042, 0.2, outfit.plasticHands ? plastic : torsoMat);
-    fore.position.y = -0.13; elbow.add(fore);
-    const hand = new T.Mesh(new T.SphereGeometry(0.05, 12, 10), plastic);
-    hand.scale.set(0.8, 1.15, 0.55); hand.position.y = -0.27; elbow.add(hand);
+    shoulder.position.set(side * S.shoulderX, S.shoulderY - 0.015, 0);
+
+    const upper = new T.Mesh(
+      new T.CylinderGeometry(0.049, 0.042, S.upperArm, 14), torsoMat);
+    upper.position.y = -S.upperArm / 2; upper.castShadow = true; shoulder.add(upper);
+
+    const elbow = new T.Group(); elbow.position.y = -S.upperArm; shoulder.add(elbow);
+    const elbowBall = new T.Mesh(new T.SphereGeometry(0.043, 12, 10), torsoMat);
+    elbow.add(elbowBall);
+
+    const fore = new T.Mesh(new T.CylinderGeometry(0.042, 0.033, S.foreArm, 14),
+      outfit.plasticHands ? plastic : torsoMat);
+    fore.position.y = -S.foreArm / 2; fore.castShadow = true; elbow.add(fore);
+
+    // mannequin hand: flat palm + fused fingers (spec: fingers, no detail)
+    const hand = new T.Group(); hand.position.y = -S.foreArm - 0.03;
+    const palm = new T.Mesh(new T.BoxGeometry(0.062, 0.10, 0.028), plastic);
+    palm.castShadow = true; hand.add(palm);
+    const fingers = new T.Mesh(new T.BoxGeometry(0.058, 0.075, 0.024), plastic);
+    fingers.position.y = -0.084; fingers.rotation.x = 0.12; hand.add(fingers);
+    const thumb = new T.Mesh(new T.BoxGeometry(0.022, 0.052, 0.022), plastic);
+    thumb.position.set(side * -0.036, -0.028, 0.004); thumb.rotation.z = side * 0.42;
+    hand.add(thumb);
+    elbow.add(hand);
 
     if (pose === 'attention') {
-      shoulder.rotation.z = side * 0.1;
+      shoulder.rotation.z = side * 0.085;
+      elbow.rotation.x = -0.08;
     } else if (pose === 'crossed') {
-      shoulder.rotation.z = side * 0.55; shoulder.rotation.x = 0.35;
-      elbow.rotation.x = -1.9; elbow.rotation.z = side * -0.7;
+      shoulder.rotation.z = side * 0.52; shoulder.rotation.x = 0.42;
+      elbow.rotation.x = -2.0; elbow.rotation.z = side * -0.62;
     } else if (pose === 'back') {
-      shoulder.rotation.x = 0.5; shoulder.rotation.z = side * 0.18;
-      elbow.rotation.x = -1.15;
+      shoulder.rotation.x = 0.46; shoulder.rotation.z = side * 0.16;
+      elbow.rotation.x = -1.22; elbow.rotation.y = side * -0.35;
     }
     return shoulder;
   }
@@ -222,12 +315,21 @@ function spot(x, z, color, intensity) {
 }
 
 /* the three mannequins (front row, matching Config.DemoLayout) */
-addMannequinDisplay(-1.9, -1.2, 0.15, { torso: navyMat, legs: navyMat, cap: true, belt: true, pose: 'attention', plasticHands: true, shirtV: false },
-  { label: 'Uniformă patrulare', pose: 'Drepți (militar)', outfit: 'Police Uniform', tip: 'mannequin' });
-addMannequinDisplay(0, -1.45, 0, { torso: suitMat, legs: suitMat, shirtV: true, pose: 'back', plasticHands: true },
-  { label: 'Costum negru', pose: 'Mâini la spate', outfit: 'Black Suit', tip: 'mannequin' });
-addMannequinDisplay(1.9, -1.2, -0.15, { pose: 'crossed' },
-  { label: 'Manechin gol', pose: 'Brațe încrucișate', outfit: '— (plastic de bază)', tip: 'mannequin' });
+addMannequinDisplay(-2.6, -1.2, 0.18, { sex: 'male', torso: navyMat, legs: navyMat,
+    cap: true, belt: true, pose: 'attention', plasticHands: true },
+  { label: 'Uniformă patrulare', pose: 'Drepți (militar)', outfit: 'Police Uniform',
+    tip: 'mannequin', sex: 'mp_m_freemode_01' });
+addMannequinDisplay(-0.85, -1.45, 0.06, { sex: 'male', torso: suitMat, legs: suitMat,
+    shirtV: true, pose: 'back', plasticHands: true },
+  { label: 'Costum negru', pose: 'Mâini la spate', outfit: 'Black Suit',
+    tip: 'mannequin', sex: 'mp_m_freemode_01' });
+addMannequinDisplay(0.85, -1.45, -0.06, { sex: 'female', torso: suitMat, legs: suitMat,
+    pose: 'crossed', plasticHands: true },
+  { label: 'Ținută ceremonie', pose: 'Brațe încrucișate', outfit: 'Ceremonial Dress',
+    tip: 'mannequin', sex: 'mp_f_freemode_01' });
+addMannequinDisplay(2.6, -1.2, -0.18, { sex: 'male', pose: 'crossed' },
+  { label: 'Manechin gol', pose: 'Brațe încrucișate', outfit: '— (plastic de bază)',
+    tip: 'mannequin', sex: 'mp_m_freemode_01' });
 
 /* ------------------------------------------------- weapon wall (right) */
 (function weaponWall() {
@@ -454,6 +556,11 @@ function select(d) {
   card.querySelector('.card-title').textContent = d.info.label;
   card.querySelector('.card-pose').textContent = d.info.pose;
   card.querySelector('.card-outfit').textContent = d.info.outfit;
+  const modelRow = card.querySelector('.card-model-row');
+  if (modelRow) {
+    modelRow.style.display = d.info.sex ? 'block' : 'none';
+    card.querySelector('.card-model').textContent = d.info.sex || '';
+  }
   syncRotCtl(d);
   card.classList.add('show');
   chip.classList.add('show');

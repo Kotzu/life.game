@@ -373,12 +373,84 @@ check('S14 re-place after retrieve allowed', okC == true, tostring(okC))
 check('S14 per-player inflight lock exists', type(KTRS.Tx._inflight) == 'table')
 
 print('== S15 clothing has no economy dupe (outfit RPCs never touch inventory) ==')
--- capturing/try-on is cosmetic: prove the outfit RPCs return data only and the
--- inventory is untouched by an outfit round-trip.
-local invBefore = #(mockItems[5] or {})
-rpc(5, 'outfit:savedList', {})
-rpc(5, 'outfit:forTryOn', { uid = dupUid }) -- dupUid now deleted -> NOT_FOUND, still no item change
-check('S15 inventory unchanged by outfit RPCs', #(mockItems[5] or {}) == invBefore)
+-- Non-vacuous: exercise the outfit paths against a LIVE mannequin display with
+-- a real outfit, plus a populated player_outfits row, then assert inventory is
+-- byte-identical. (An earlier version of this test passed trivially because the
+-- RPCs bailed out before reaching any outfit logic.)
+MySQL.update.await(
+    "INSERT INTO player_outfits (citizenid, outfitname, model, components, props) VALUES (?, ?, ?, ?, ?)",
+    { 'QBX00005', 'gala', 'mp_m_freemode_01',
+      '[{"component_id":11,"drawable":22,"texture":1}]', '[]' })
+local liveOutfit = {
+    schema = C.OUTFIT_SCHEMA, gender = 'male', model = 'mp_m_freemode_01',
+    components = { ['11'] = { collection = '', drawable = 5, texture = 0, palette = 0 } },
+    props = {},
+}
+local okM, resM = rpc(5, 'displays:place', { display = {
+    displayType = C.DisplayType.MANNEQUIN, scopeType = C.ScopeType.WORLD,
+    transform = { x = 7.2, y = 7.2, z = 7.0, heading = 0.0 },
+    gender = 'male', poseId = 'neutral',
+} })
+check('S15 mannequin display placed (no outfit: manifest v0)', okM == true, tostring(resM))
+local manUid = okM and resM.uid or nil
+
+local function invSnapshot(src)
+    local out = {}
+    for _, it in ipairs(mockItems[src] or {}) do
+        out[#out + 1] = it.name .. ':' .. tostring(it.metadata and it.metadata.serial)
+    end
+    table.sort(out)
+    return table.concat(out, ',')
+end
+local before = invSnapshot(5)
+local okList, listRes = rpc(5, 'outfit:savedList', {})
+check('S15 savedList reached real outfit logic', okList == true
+    and listRes.outfits ~= nil and #listRes.outfits >= 1, json.encode(listRes or {}))
+local outfitId = okList and listRes.outfits and listRes.outfits[1] and listRes.outfits[1].id
+local okGet, getRes = rpc(5, 'outfit:savedGet', { id = outfitId })
+check('S15 savedGet returned outfit payload', okGet == true
+    and getRes.components ~= nil, json.encode(getRes or {}))
+rpc(5, 'outfit:forTryOn', { uid = manUid })
+rpc(5, 'displays:update', { uid = manUid, patch = { outfit = liveOutfit } })
+check('S15 inventory byte-identical after full outfit round-trip',
+    invSnapshot(5) == before, before .. ' -> ' .. invSnapshot(5))
+check('S15 no inventory audit rows from outfit paths', MySQL.scalar.await(
+    "SELECT COUNT(*) FROM kotzu_display_audit WHERE action LIKE 'weapon_%' AND uid = ?",
+    { manUid }) == 0)
+
+print('== S16 serial squatting via decorative display is blocked ==')
+local okSquat, resSquat = rpc(5, 'displays:place', { display = {
+    displayType = C.DisplayType.RARE_ITEM, scopeType = C.ScopeType.WORLD,
+    transform = { x = 7.4, y = 7.4, z = 7.0, heading = 0.0 },
+    item = { name = 'weapon_pistol50', metadata = { serial = 'SQUAT-1' } },
+} })
+check('S16 decorative display placed', okSquat == true, tostring(resSquat))
+check('S16 crafted serial stripped from decorative display',
+    KTRS.Repo.SerialInUse('weapon_pistol50', 'SQUAT-1') == false)
+-- and the real owner can still place that weapon
+mockItems[6] = { { name = 'weapon_pistol50', slot = 1,
+                   metadata = { serial = 'SQUAT-1' }, count = 1 } }
+SIM.AddPlayer(6, { license = 'license:victim6' })
+local okVictim = rpc(6, 'displays:place', { display = {
+    displayType = C.DisplayType.WEAPON_STAND, scopeType = C.ScopeType.WORLD,
+    transform = { x = 8.0, y = 8.0, z = 7.0, heading = 0.0 },
+    item = { name = 'weapon_pistol50', metadata = {} },
+}, idKey = 'squat_victim_1' })
+check('S16 real owner not locked out by squatter', okVictim == true, tostring(okVictim))
+
+print('== S17 lock is released even when a transaction errors ==')
+local savedFind = KTR.Bridge.Get('inventory').FindItem
+KTR.Bridge.Get('inventory').FindItem = function() error('simulated DB/bridge failure') end
+local okErr, errErr = rpc(5, 'displays:place', { display = dispA, idKey = 'errtest_1' })
+check('S17 erroring tx returns TX_FAILED', okErr == false and errErr == C.Err.TX_FAILED,
+    tostring(errErr))
+KTR.Bridge.Get('inventory').FindItem = savedFind
+check('S17 inflight lock released after error',
+    KTRS.Tx._inflight['QBX00005'] == nil)
+check('S17 no serial claim leaked', next(KTRS.Tx._serialClaims) == nil)
+local okAfter = rpc(5, 'weapons:retrieve', { uid = nil, idKey = 'errtest_2' })
+check('S17 player can still transact after the error',
+    okAfter == false, 'not RATE_LIMITED-locked (NOT_FOUND/BAD_INPUT expected)')
 
 print('')
 print(('RESULT: %d passed, %d failed'):format(passes, #failures))

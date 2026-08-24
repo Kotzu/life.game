@@ -94,7 +94,11 @@ end
 function Repo.SerialInUse(itemName, serial)
     if serial == nil then return false end
     for _, d in pairs(cache) do
-        if d.item and d.item.name == itemName and type(d.item.metadata) == 'table' then
+        -- ONLY weapon displays own serials. Without this, a free decorative
+        -- display (rare_item/achievement) carrying a crafted item payload could
+        -- squat someone else's serial and lock the real owner out.
+        if d.displayType:find('^weapon_')
+            and d.item and d.item.name == itemName and type(d.item.metadata) == 'table' then
             local m = d.item.metadata
             local s = m.serial or m.serie or m.uniqueId or m.id
             if s == serial then return true end

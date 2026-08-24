@@ -34,8 +34,8 @@ const { chromium } = require('playwright-core');
       displays: window.__ktrDemo.displays.length,
       rotatable: window.__ktrDemo.displays.filter(d => d.rotate).length,
     }));
-    check(`[${reducedMotion}] 3 rotatable cases of 7 displays`,
-      info.displays === 7 && info.rotatable === 3, JSON.stringify(info));
+    check(`[${reducedMotion}] 4 mannequins + 3 cases + wall = 8 displays, 3 rotatable`,
+      info.displays === 8 && info.rotatable === 3, JSON.stringify(info));
 
     // core assertion: items rotate 360° — angle advances over time
     const idx = await page.evaluate(() =>
