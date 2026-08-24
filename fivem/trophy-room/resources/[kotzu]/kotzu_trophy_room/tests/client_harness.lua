@@ -208,6 +208,26 @@ RegisterCommand('kmq:demo_layout', function()
     say(('demo layout: %d placed, %d skipped (weapon displays need a real item — use the wizard)'):format(placed, skipped))
 end, false)
 
+-- Measure whether a weapon fits a rotating case (T17 helper). Loads the model,
+-- computes its swept radius and compares with each configured case style.
+RegisterCommand('kmq:case_fit', function(_, args)
+    local name = (args[1] or 'weapon_pistol'):lower()
+    local hash = joaat(name)
+    if not IsModelInCdimage(hash) then say('unknown model ' .. name) return end
+    RequestModel(hash)
+    local deadline = GetGameTimer() + 5000
+    while not HasModelLoaded(hash) do
+        if GetGameTimer() > deadline then say('model load timeout') return end
+        Wait(25)
+    end
+    for styleId, style in pairs(KTR.Config.Weapons.CaseStyles) do
+        local fits, radius, clearance = KTRC.Renderers.FitsRotating(hash, style)
+        say(('%s in %s case: radius %.3fm vs clearance %.3fm -> %s')
+            :format(name, styleId, radius, clearance, fits and 'ROTATES' or 'STATIC'))
+    end
+    SetModelAsNoLongerNeeded(hash)
+end, false)
+
 RegisterCommand('kmq:probe_clothing', function()
     local cb = KTR.Bridge.Get('clothing')
     if cb and cb.Describe then

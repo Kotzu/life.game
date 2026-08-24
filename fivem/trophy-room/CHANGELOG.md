@@ -241,3 +241,20 @@ pending — see `docs/validation-matrix.md`).
   nose-ridge silhouette, still faceless. Scene now shows 3 male + 1 female
   mannequin; the info card names the source model.
 - Browser test updated and re-run: **16/16 pass** in headless Chromium.
+
+## [1.2.3-dev] — 2026-08-23
+
+### Fixed — rotating items could clip through the case glass
+- A spinning item sweeps a circle whose radius is its largest horizontal
+  bounding-box corner distance; a wide item in a shallow counter case swept far
+  past the pane. In game, `client/renderers.lua fitsRotating()` now measures the
+  weapon via `GetModelDimensions` and compares it against the case style's
+  `innerRadius` (new per-style config + `RotationClearanceMargin`): an item that
+  would clip is displayed **static** instead, with the reason surfaced on
+  inspect ("too large to rotate in this case").
+- New `/kmq:case_fit <weapon>` prints radius vs clearance for every case style.
+- Demo: same rule implemented (`sweptRadiusXZ` + per-style `CASE_GEOM`), items
+  are auto-scaled to fit; the twin-pistol counter display became a single
+  commemorative pistol (two side-by-side pistols swept ~0.50 m in a case with
+  0.26 m clearance). Browser test asserts every rotating item's radius stays
+  within its glass — **18/18 pass**.

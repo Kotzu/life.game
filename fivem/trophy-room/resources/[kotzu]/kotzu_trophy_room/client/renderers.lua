@@ -129,6 +129,32 @@ local function caseStyleFor(display)
     return styles[display.caseStyle] or styles[KTR.Config.Weapons.DefaultCaseStyle]
 end
 
+---Would this weapon clip the glass while rotating?
+---A spinning object sweeps a circle whose radius is the largest horizontal
+---distance from its origin to a bounding-box corner. If that exceeds the case's
+---usable inner radius, we keep the item static rather than let it pass through
+---the pane (a long rifle in a shallow counter case is the classic case).
+---@return boolean fits, number radius, number clearance
+local function fitsRotating(weaponHash, style)
+    local clearance = (style and style.innerRadius or 0.26)
+        - (KTR.Config.Weapons.RotationClearanceMargin or 0.03)
+    local okDim, minDim, maxDim = pcall(GetModelDimensions, weaponHash)
+    if not okDim or not minDim or not maxDim then
+        return true, 0.0, clearance -- unknown size: don't block the feature
+    end
+    local corners = {
+        { minDim.x, minDim.y }, { minDim.x, maxDim.y },
+        { maxDim.x, minDim.y }, { maxDim.x, maxDim.y },
+    }
+    local radius = 0.0
+    for _, c in ipairs(corners) do
+        local r = math.sqrt(c[1] * c[1] + c[2] * c[2])
+        if r > radius then radius = r end
+    end
+    return radius <= clearance, radius, clearance
+end
+R.FitsRotating = fitsRotating
+
 local function weaponRenderer(kind)
     return {
         spawn = function(display, t)
@@ -165,10 +191,27 @@ local function weaponRenderer(kind)
 
             -- showcase auto-rotate (cases and stands; never wall mounts)
             local rotate = display.settings and display.settings.rotate
+            local state = {}
             if kind ~= 'wall' and rotate and rotate.enabled then
-                KTRC.Rotator.Add(weapon, rotate.speed)
+                local fits, radius, clearance = true, 0.0, 0.0
+                if kind == 'case' then
+                    fits, radius, clearance = fitsRotating(joaat(display.item.name),
+                        caseStyleFor(display))
+                end
+                if fits then
+                    KTRC.Rotator.Add(weapon, rotate.speed)
+                else
+                    -- too big to spin inside this case: show it static rather
+                    -- than let the model pass through the glass
+                    state.rotationSkipped = ('item radius %.2fm > case clearance %.2fm')
+                        :format(radius, clearance)
+                    if KTR.Config.Debug then
+                        print(('[kotzu_trophy] %s: rotation disabled — %s')
+                            :format(display.uid, state.rotationSkipped))
+                    end
+                end
             end
-            return { entities = entities, weapon = weapon, state = {} }
+            return { entities = entities, weapon = weapon, state = state }
         end,
         despawn = function(handle)
             if handle.weapon then KTRC.Rotator.Remove(handle.weapon) end

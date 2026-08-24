@@ -387,40 +387,67 @@ function makeTrophyCup() {
   return cup;
 }
 
+// A rotating item sweeps a CIRCLE of radius max(hypot(x, z)) over its corners.
+// The glass encloses it only if that radius fits the SMALLEST inner half-extent
+// (the depth on a shallow counter case). Same rule the in-game renderer applies
+// via GetModelDimensions — see client/renderers.lua fitsRotating().
+function sweptRadiusXZ(obj) {
+  const box = new T.Box3().setFromObject(obj);
+  const corners = [
+    [box.min.x, box.min.z], [box.min.x, box.max.z],
+    [box.max.x, box.min.z], [box.max.x, box.max.z],
+  ];
+  return Math.max(...corners.map(([x, z]) => Math.hypot(x, z)));
+}
+
+const CASE_GEOM = {
+  vertical:   { glass: [0.62, 1.05, 0.62], glassY: 1.38, pedestal: [0.7, 0.85, 0.7] },
+  cube:       { glass: [0.62, 0.62, 0.62], glassY: 0.86, pedestal: [0.75, 0.55, 0.75] },
+  horizontal: { glass: [1.6, 0.42, 0.6],  glassY: 1.01, pedestal: [1.7, 0.8, 0.7] },
+};
+const GLASS_MARGIN = 0.04; // keep the item off the pane
+
 function makeCase(opts) {
-  // opts: x, z, style: 'cube'|'vertical'|'horizontal', item, itemY, info
+  // opts: x, z, style, item, itemY, ry, info, rotate
+  const G = CASE_GEOM[opts.style];
   const g = new T.Group();
-  let glassGeom, glassY;
-  if (opts.style === 'vertical') {
-    const ped = new T.Mesh(new T.BoxGeometry(0.7, 0.85, 0.7), plinthMat);
-    ped.position.y = 0.425; ped.castShadow = true; g.add(ped);
-    glassGeom = new T.BoxGeometry(0.62, 1.05, 0.62); glassY = 1.38;
-  } else if (opts.style === 'cube') {
-    const ped = new T.Mesh(new T.BoxGeometry(0.75, 0.55, 0.75), plinthMat);
-    ped.position.y = 0.275; ped.castShadow = true; g.add(ped);
-    glassGeom = new T.BoxGeometry(0.62, 0.62, 0.62); glassY = 0.86;
-  } else { // horizontal counter (Ammu-Nation style)
-    const body = new T.Mesh(new T.BoxGeometry(1.7, 0.8, 0.7), plinthMat);
-    body.position.y = 0.4; body.castShadow = true; g.add(body);
-    glassGeom = new T.BoxGeometry(1.6, 0.42, 0.6); glassY = 1.01;
-  }
+
+  const ped = new T.Mesh(new T.BoxGeometry(...G.pedestal), plinthMat);
+  ped.position.y = G.pedestal[1] / 2; ped.castShadow = true; g.add(ped);
+
+  const glassGeom = new T.BoxGeometry(...G.glass);
   const glass = new T.Mesh(glassGeom, glassMat);
-  glass.position.y = glassY; g.add(glass);
+  glass.position.y = G.glassY; g.add(glass);
   const edges = new T.LineSegments(new T.EdgesGeometry(glassGeom),
     new T.LineBasicMaterial({ color: GOLD }));
-  edges.position.y = glassY; g.add(edges);
+  edges.position.y = G.glassY; g.add(edges);
 
   const itemGroup = new T.Group();
   itemGroup.position.y = opts.itemY;
   itemGroup.add(opts.item);
+
+  // clearance = smallest inner half-extent in the XZ plane, minus margin
+  const clearance = Math.min(G.glass[0], G.glass[2]) / 2 - GLASS_MARGIN;
+  const radius = sweptRadiusXZ(opts.item);
+  let fitScale = 1;
+  if (radius > clearance) {
+    // scale the item down so its rotation stays inside the glass instead of
+    // clipping through the pane (previously the twin pistols swept ~0.50 in a
+    // case with only 0.26 of clearance)
+    fitScale = clearance / radius;
+    itemGroup.scale.setScalar(fitScale);
+  }
   g.add(itemGroup);
 
   g.position.set(opts.x, 0, opts.z);
   if (opts.ry) g.rotation.y = opts.ry;
   scene.add(g);
   spot(opts.x, opts.z, 0xffe6c0, 0.6);
-  displays.push({ group: g, info: opts.info,
-                  rotate: { enabled: true, speed: 12, item: itemGroup } });
+  displays.push({
+    group: g, info: opts.info,
+    rotate: { enabled: true, speed: 12, item: itemGroup },
+    fit: { clearance, radius: radius * fitScale, scaled: fitScale < 1 },
+  });
 }
 
 const p1 = makePistol(); p1.rotation.z = 0.1;
@@ -430,12 +457,12 @@ makeCase({ x: -ROOM_W / 2 + 1.3, z: 0.6, style: 'vertical', item: p1, itemY: 1.3
 makeCase({ x: -ROOM_W / 2 + 1.5, z: 2.6, style: 'cube', item: makeTrophyCup(), itemY: 0.62,
   info: { label: 'Cupa serverului', pose: 'Vitrină cub', outfit: 'Sezonul 2026', tip: 'weapon_case' } });
 
-const pair = new T.Group();
-const pa = makePistol(); pa.scale.setScalar(0.9); pa.position.x = -0.35; pair.add(pa);
-const pb = makePistol(); pb.scale.setScalar(0.9); pb.position.x = 0.35;
-pb.rotation.y = Math.PI; pair.add(pb);
-makeCase({ x: ROOM_W / 2 - 1.6, z: 2.4, style: 'horizontal', item: pair, itemY: 0.95, ry: -0.35,
-  info: { label: 'Pistoale gemene', pose: 'Tejghea Ammu-Nation', outfit: 'Serial #KTZ-0002/0003', tip: 'weapon_case' } });
+// Shallow counter case: a single pistol rotates well within the depth.
+// (Two side-by-side pistols swept far past the glass — the fit check would
+// shrink them to ~55%, so the display reads better with one.)
+const p3 = makePistol(); p3.rotation.z = 0.08;
+makeCase({ x: ROOM_W / 2 - 1.6, z: 2.4, style: 'horizontal', item: p3, itemY: 0.95, ry: -0.35,
+  info: { label: 'Pistol comemorativ', pose: 'Tejghea Ammu-Nation', outfit: 'Serial #KTZ-0002', tip: 'weapon_case' } });
 
 /* ambient fill */
 scene.add(new T.AmbientLight(0x272220, 1.6));
@@ -618,4 +645,7 @@ window.__ktrDemo = {
   select,
   itemAngle: (i) => displays[i] && displays[i].rotate
     ? displays[i].rotate.item.rotation.y : null,
+  fits: () => displays.filter(d => d.fit)
+    .map(d => ({ label: d.info.label, radius: +d.fit.radius.toFixed(3),
+                 clearance: +d.fit.clearance.toFixed(3), ok: d.fit.radius <= d.fit.clearance + 1e-6 })),
 };

@@ -24,6 +24,9 @@ local function inspect(display, handle)
     if handle and handle.state and handle.state.outfitError then
         lines[#lines + 1] = KTR.ErrText(handle.state.outfitError)
     end
+    if handle and handle.state and handle.state.rotationSkipped then
+        lines[#lines + 1] = KTR.L('rotate_too_big')
+    end
     if display.item then
         lines[#lines + 1] = ('item: %s'):format(display.item.name)
         local md = display.item.metadata or {}

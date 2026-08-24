@@ -94,12 +94,20 @@ KTR.Config = {
         --   ch_prop_ch_case_01a  = casino-heist museum case (tall/vertical)
         --   ch_prop_ch_case_sm_01x = small square case (cube)
         -- itemZ = vertical offset of the displayed item above the case origin.
+        -- innerRadius = usable half-extent inside the glass (metres). A rotating
+        -- item sweeps a circle; if its own swept radius exceeds this, rotation
+        -- would clip the item through the pane, so the client keeps it static
+        -- (see client/renderers.lua fitsRotating). Measure per prop in game
+        -- with /kmq:case_fit and adjust if your props differ.
         DefaultCaseStyle = 'vertical',
         CaseStyles = {
-            cube       = { model = 'ch_prop_ch_case_sm_01x', itemZ = 0.55, label = 'Cube case' },
-            vertical   = { model = 'ch_prop_ch_case_01a',    itemZ = 1.05, label = 'Vertical case' },
-            horizontal = { model = 'w_am_case',              itemZ = 0.95, label = 'Counter case' },
+            cube       = { model = 'ch_prop_ch_case_sm_01x', itemZ = 0.55, innerRadius = 0.26, label = 'Cube case' },
+            vertical   = { model = 'ch_prop_ch_case_01a',    itemZ = 1.05, innerRadius = 0.28, label = 'Vertical case' },
+            horizontal = { model = 'w_am_case',              itemZ = 0.95, innerRadius = 0.24, label = 'Counter case' },
         },
+        -- Long weapons simply do not fit a rotating display; they are shown
+        -- static instead of clipping. Applies to cases only (stands are open).
+        RotationClearanceMargin = 0.03,
     },
 
     -- ------------------------------------------------------- display motion

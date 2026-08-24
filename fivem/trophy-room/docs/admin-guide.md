@@ -25,6 +25,7 @@ Config switches: `Interaction.AllowVisitorTryOn`, `TryOnSeconds`, `AllowVisitorE
 | `/kmq:refresh` `/kmq:debug` `/kmq:sim_reconnect` | client | streaming diagnostics |
 | `/kmq:probe_clothing` | client | rcore capability map |
 | `/kmq:demo_layout` | client | populate the current room with Config.DemoLayout |
+| `/kmq:case_fit <weapon>` | client | measure a weapon's rotation radius vs each case style's clearance |
 | `/kmq:testshell a|b` `/kmq:leaveshell` | server | test shells + routing buckets |
 | `/kmq:validate_db` | server | DB/cache/lock consistency |
 | `/kmq:weapon_tx_test` | server | duplication/rollback test suite |

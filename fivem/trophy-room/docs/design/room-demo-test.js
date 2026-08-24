@@ -47,6 +47,13 @@ const { chromium } = require('playwright-core');
     check(`[${reducedMotion}] case item rotates continuously`,
       degAdvanced > 3, degAdvanced.toFixed(1) + '° in 2s (headless ~4fps + dt clamp; full speed at 60fps)');
 
+    // every rotating item must stay inside its glass (no clipping)
+    const fits = await page.evaluate(() => window.__ktrDemo.fits());
+    const bad = fits.filter(f => !f.ok);
+    check(`[${reducedMotion}] all rotating items fit inside their glass`,
+      fits.length === 3 && bad.length === 0,
+      fits.map(f => `${f.label}: r=${f.radius} <= ${f.clearance}`).join(' | '));
+
     // select the cube case programmatically -> card + controls appear
     await page.evaluate(i => window.__ktrDemo.select(window.__ktrDemo.displays[i]), idx);
     await page.waitForTimeout(400);
