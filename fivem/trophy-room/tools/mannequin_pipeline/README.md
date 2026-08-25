@@ -75,3 +75,24 @@ from imported freemode meshes per the modeling spec in
 `docs/../../docs/mannequin-modeling-spec.md`. Blender **source** files are saved under
 `blender_src/` (committable, original work); exports go to the resource `stream/`
 folder (git-ignored binaries, present only on the workstation and the server).
+
+## Testing
+
+`python -m pytest` (run from this directory) covers the pipeline logic. The
+`blender/` job scripts run *inside* Blender, so `tests/test_blender_logic.py`
+installs a minimal fake `bpy` + Sollumz stand-in (`tests/fake_bpy.py`) and then
+imports and executes the **real** functions from `blender/material_mannequin.py`
+and `blender/convert_garment.py`. This exercises the decision logic for real:
+
+- skin-vs-garment material classification (`looks_like_skin`, including job hints),
+- the `replaced` / `kept` / `unknown` slot branches and the shared-plastic cache,
+- output naming (`target_name`, male/female + local-index override),
+- and `main()` end-to-end for every result branch it can produce — `failed`
+  (import error, no meshes, export error), `ambiguous` (unknown material;
+  garment classified but no skin matched), and `ok` (with export invoked and the
+  root object renamed), plus the Sollumz `create_shader` path.
+
+What the fake **cannot** validate — and still requires real Blender + Sollumz on
+a workstation — is actual geometry, vertex weights/skeleton preservation, and a
+real `.ydd` export. Those are checked by the workstation acceptance runbook, not
+CI.
