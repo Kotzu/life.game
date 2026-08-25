@@ -33,6 +33,49 @@ function B.Get(kind)
     return nil
 end
 
+--[[
+    Export probing done RIGHT.
+
+    In FiveM, INDEXING a missing export does not raise — `exports.res.name`
+    always returns a callable; the error ("No such export … in resource …")
+    only happens when you CALL it. So a probe that merely indexes reports every
+    candidate as present and then fails at use time. These helpers call the
+    export and classify the failure instead.
+]]
+
+---@return boolean ok, any resultOrError, boolean missing
+function B.TryExport(resource, exportName, ...)
+    local args = table.pack(...)
+    local ok, res = pcall(function()
+        return exports[resource][exportName](nil, table.unpack(args, 1, args.n))
+    end)
+    if ok then return true, res, false end
+    local msg = tostring(res)
+    local missing = msg:find('No such export') ~= nil
+        or msg:find('attempt to call a nil value') ~= nil
+    return false, res, missing
+end
+
+---Resolve the first candidate export that actually exists, caching the winner.
+---`probeArgs` are passed to the call used for probing (use read-only getters).
+---@return string|nil exportName
+function B.ResolveExport(cache, key, resource, candidates, probeArgs)
+    if cache[key] ~= nil then
+        return cache[key] or nil
+    end
+    for _, name in ipairs(candidates) do
+        local ok, _, missing = B.TryExport(resource, name,
+            table.unpack(probeArgs or {}))
+        if ok or not missing then
+            -- exists (it either returned, or failed for its own reasons)
+            cache[key] = name
+            return name
+        end
+    end
+    cache[key] = false
+    return nil
+end
+
 ---Find a specific registered impl by name (regardless of detection winner).
 function B.Find(kind, name)
     for _, impl in ipairs(B._impls[kind] or {}) do

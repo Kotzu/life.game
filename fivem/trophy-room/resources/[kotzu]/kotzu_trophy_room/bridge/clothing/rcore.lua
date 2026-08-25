@@ -22,36 +22,31 @@ local PROBES = {
     getOutfitById      = { 'getOutfit', 'getPlayerOutfit' },
 }
 
-local caps = nil -- resolved capability map: capName -> exportName|false
+local caps = {}  -- capName -> exportName | false (false = confirmed missing)
+
+---Resolve a capability by CALLING candidate exports (see Bridge.TryExport:
+---indexing a missing export never raises in FiveM, only calling it does).
+local function resolveCap(capName)
+    return KTR.Bridge.ResolveExport(caps, capName, 'rcore_clothing',
+        PROBES[capName] or {})
+end
 
 local function probe()
-    caps = {}
-    for capName, candidates in pairs(PROBES) do
-        caps[capName] = false
-        for _, exportName in ipairs(candidates) do
-            local ok = pcall(function()
-                -- probing with a harmless call; export missing raises
-                local _ = exports.rcore_clothing[exportName]
-                return true
-            end)
-            if ok then
-                caps[capName] = exportName
-                break
-            end
-        end
-    end
+    for capName in pairs(PROBES) do resolveCap(capName) end
     print(('[kotzu_trophy] rcore_clothing capabilities: %s'):format(json.encode(caps)))
     return caps
 end
 
 local function callCap(capName, ...)
-    if not caps then probe() end
-    local exportName = caps[capName]
-    if not exportName then return nil, 'capability not available in installed rcore build' end
-    local ok, res = pcall(function(...)
-        return exports.rcore_clothing[exportName](nil, ...)
-    end, ...)
-    if not ok then return nil, tostring(res) end
+    local exportName = resolveCap(capName)
+    if not exportName then
+        return nil, 'capability not available in installed rcore build'
+    end
+    local ok, res, missing = KTR.Bridge.TryExport('rcore_clothing', exportName, ...)
+    if not ok then
+        if missing then caps[capName] = false end
+        return nil, tostring(res)
+    end
     return res
 end
 

@@ -13,7 +13,39 @@
   `ox_target` or `qb-target`, `ox_inventory` or `qb-inventory` (required for
   weapon displays)
 
-### Qbox stack (recommended)
+### Your stack (Qbox + Quasar + rcore) — kotzu server
+
+```
+ensure oxmysql
+ensure ox_lib
+ensure qbx_core
+ensure qs-inventory
+ensure qs-housing
+ensure rcore_clothing
+ensure ox_target            # or qb-target
+ensure kotzu_mannequin_assets
+ensure kotzu_trophy_room
+```
+
+**Quasar note.** qs-inventory and qs-housing are closed-source, so their bridges
+resolve every export **at runtime** from a candidate list instead of assuming a
+version-specific API — and inventory mutations are verified by **counting items
+before/after**, never by trusting a return value (some qs builds return `nil` on
+success, which would otherwise be read as failure and lose the item).
+Run `/kmq:bridges` after starting: it prints which export names resolved. If a
+capability shows as unresolved, add your build's export name to the candidate
+list at the top of `bridge/inventory/quasar.lua` — nothing else needs to change.
+
+**qs-housing integration.** The bridge auto-attaches if qs-housing emits any of
+the candidate enter/exit events. If your build doesn't, add the two documented
+lines to your housing script (see the header of `bridge/housing/quasar.lua`) —
+that path always works and is the supported one.
+
+**rcore_clothing.** Capabilities are probed by actually calling the exports (in
+FiveM, indexing a missing export never fails — only calling it does), so
+`/kmq:probe_clothing` reports the truth about your installed build.
+
+### Generic Qbox stack
 
 ```
 ensure oxmysql

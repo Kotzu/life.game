@@ -185,7 +185,11 @@ exports = setmetatable({}, {
             if ext and ext[fnName] then
                 return function(_, ...) return ext[fnName](...) end
             end
-            return function() error(('export %s.%s not available in sim'):format(res, fnName)) end
+            -- emulate FiveM's real error text so bridge probing behaves the
+            -- same in the simulator as it does in game
+            return function()
+                error(('No such export %s in resource %s'):format(fnName, res))
+            end
         end })
     end,
 })

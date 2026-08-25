@@ -286,3 +286,29 @@ pending — see `docs/validation-matrix.md`).
 
 - fxsim: S18 (DB uniqueness incl. a raw duplicate-INSERT rejection) and S19
   (rate-limit budget) added — **69/69 checks pass** on real MariaDB.
+
+## [1.4.0-dev] — 2026-08-23
+
+### Fixed — export probing was fundamentally broken (affects rcore_clothing)
+- In FiveM, **indexing** a missing export never raises — only **calling** it
+  does. The rcore capability probe only indexed, so it reported every candidate
+  as available and then failed at use time. New `Bridge.TryExport` /
+  `Bridge.ResolveExport` call the export and classify "No such export",
+  resolving lazily and caching the winner. `/kmq:probe_clothing` now reports the
+  truth about the installed rcore build.
+- fxsim's export faking now emulates FiveM's real error text, so probing
+  behaves identically in the simulator and in game.
+
+### Added — Quasar stack support (qs-inventory, qs-housing)
+- `bridge/inventory/quasar.lua`: runtime-resolved exports (candidate lists),
+  reads per-slot `info`/`metadata`, and — critically — **verifies mutations by
+  counting matching items before/after** instead of trusting a return value.
+  Some qs builds return `nil` on success; trusting that would have lost items on
+  place and duplicated them on retrieve. Priority 30 (above ox/qb).
+- `bridge/housing/quasar.lua`: three-level integration — auto-attach to
+  candidate enter/exit events, runtime-resolved property exports, and the
+  always-works manual `EnterRoom/ExitRoom` hook documented in the file header.
+- Installation guide gained a section for the real kotzu stack
+  (Qbox + qs-inventory + qs-housing + rcore_clothing).
+- fxsim S20 (qs bridge against a nil-returning fake inventory) + S21 (missing
+  vs present export detection) — **80/80 checks pass** on real MariaDB.

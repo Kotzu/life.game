@@ -88,7 +88,7 @@
   PASS S16 crafted serial stripped from decorative display
   PASS S16 real owner not locked out by squatter
 == S17 lock is released even when a transaction errors ==
-[kotzu_trophy] transaction error for QBX00005: run.lua:443: simulated DB/bridge failure
+[kotzu_trophy] transaction error for QBX00005: run.lua:444: simulated DB/bridge failure
   PASS S17 erroring tx returns TX_FAILED
   PASS S17 inflight lock released after error
   PASS S17 no serial claim leaked
@@ -102,5 +102,19 @@
   PASS S18 serial re-placeable after retrieval
 == S19 weapon placements consume the weapon_tx budget ==
   PASS S19 weapon placement hits weapon_tx limit before the place limit
+== S20 qs-inventory bridge (runtime export resolution, nil-return safe) ==
+[kotzu_trophy] bridge inventory -> qs-inventory
+  PASS S20 qs-inventory bridge selected
+  PASS S20 exports resolved at runtime
+  PASS S20 FindItem reads `info` as metadata
+  PASS S20 RemoveItem verified by count (not by nil return)
+  PASS S20 item actually gone
+  PASS S20 removing a missing item reports failure
+  PASS S20 AddItem verified by count
+  PASS S20 item back exactly once
+== S21 missing exports are detected, not assumed present ==
+  PASS S21 TryExport reports a missing export as missing
+  PASS S21 ResolveExport returns nil when no candidate exists
+  PASS S21 ResolveExport picks the candidate that exists
 
-RESULT: 69 passed, 0 failed
+RESULT: 80 passed, 0 failed

@@ -46,8 +46,9 @@ SIM.LoadScripts('kotzu_trophy_room', ROOT .. '/kotzu_trophy_room', {
     -- server scripts (oxmysql replaced by mysql_shim)
     'bridge/framework/qbox.lua',
     'bridge/framework/qbcore.lua', 'bridge/framework/standalone.lua',
-    'bridge/inventory/qb.lua', 'bridge/inventory/ox.lua', 'bridge/inventory/fallback.lua',
-    'bridge/housing/generic.lua',
+    'bridge/inventory/qb.lua', 'bridge/inventory/ox.lua',
+    'bridge/inventory/quasar.lua', 'bridge/inventory/fallback.lua',
+    'bridge/housing/generic.lua', 'bridge/housing/quasar.lua',
     'server/repository.lua', 'server/permissions.lua', 'server/validation.lua',
     'server/ratelimit.lua', 'server/transactions.lua', 'server/migrations.lua',
     'server/main.lua', 'tests/server_harness.lua',
@@ -511,6 +512,80 @@ end
 check('S19 weapon placement hits weapon_tx limit before the place limit',
     weaponLimited, ('weapon_tx=%d place=%d'):format(
         KTR.Config.RateLimit.weapon_tx, KTR.Config.RateLimit.place))
+
+print('== S20 qs-inventory bridge (runtime export resolution, nil-return safe) ==')
+-- Emulate a qs-inventory build that: exposes GetInventory/AddItem/RemoveItem,
+-- names per-slot data `info` (qb heritage), and returns NIL on success — the
+-- shape that would cause item loss if the bridge trusted return values.
+local qsInv = {
+    [20] = { { name = 'weapon_pistol', slot = 1, info = { serial = 'QS-1' }, amount = 1 } },
+}
+SIM.RegisterResource('qs-inventory', '.')
+SIM.RegisterExternalExports('qs-inventory', {
+    GetInventory = function(src) return qsInv[src] or {} end,
+    RemoveItem = function(src, item, count, slot)
+        local list = qsInv[src] or {}
+        for i, it in ipairs(list) do
+            if it.name == item and (slot == nil or it.slot == slot) then
+                table.remove(list, i)
+                return nil -- success reported as nil, like some qs builds
+            end
+        end
+        return nil -- also nil on failure: only counting can tell them apart
+    end,
+    AddItem = function(src, item, count, slot, metadata)
+        qsInv[src] = qsInv[src] or {}
+        table.insert(qsInv[src], { name = item, slot = #qsInv[src] + 5,
+                                   info = metadata or {}, amount = 1 })
+        return nil
+    end,
+})
+-- remove the S7 mock bridge so the qs bridge can win by its own priority
+for i = #KTR.Bridge._impls.inventory, 1, -1 do
+    if KTR.Bridge._impls.inventory[i].__name == 'mock' then
+        table.remove(KTR.Bridge._impls.inventory, i)
+    end
+end
+KTR.Bridge._resolved.inventory = nil
+local qsBridge = KTR.Bridge.Get('inventory')
+check('S20 qs-inventory bridge selected', qsBridge ~= nil and qsBridge.__name == 'qs-inventory',
+    qsBridge and qsBridge.__name or 'none')
+check('S20 exports resolved at runtime', qsBridge.Functional() == true,
+    json.encode(qsBridge.Describe and qsBridge.Describe().resolvedExports or {}))
+local found = qsBridge.FindItem(20, 'weapon_pistol', nil)
+check('S20 FindItem reads `info` as metadata',
+    found ~= nil and found.metadata.serial == 'QS-1' and found.slot == 1,
+    json.encode(found or {}))
+check('S20 RemoveItem verified by count (not by nil return)',
+    qsBridge.RemoveItem(20, 'weapon_pistol', 1, { serial = 'QS-1' }) == true)
+check('S20 item actually gone', qsBridge.FindItem(20, 'weapon_pistol', nil) == nil)
+check('S20 removing a missing item reports failure',
+    qsBridge.RemoveItem(20, 'weapon_pistol', 1, nil) == false)
+check('S20 AddItem verified by count', qsBridge.AddItem(20, 'weapon_pistol',
+    { serial = 'QS-1' }) == true)
+check('S20 item back exactly once', (function()
+    local n = 0
+    for _, it in ipairs(qsInv[20] or {}) do
+        if it.name == 'weapon_pistol' then n = n + 1 end
+    end
+    return n == 1
+end)())
+
+print('== S21 missing exports are detected, not assumed present ==')
+SIM.RegisterResource('rcore_clothing', '.')
+SIM.RegisterExternalExports('rcore_clothing', {}) -- resource exists, no exports
+local okMissing, _, isMissing = KTR.Bridge.TryExport('rcore_clothing', 'getPlayerOutfits')
+check('S21 TryExport reports a missing export as missing',
+    okMissing == false and isMissing == true)
+local cacheProbe = {}
+check('S21 ResolveExport returns nil when no candidate exists',
+    KTR.Bridge.ResolveExport(cacheProbe, 'x', 'rcore_clothing',
+        { 'nope1', 'nope2' }) == nil)
+SIM.RegisterExternalExports('rcore_clothing', { getOutfits = function() return {} end })
+local cacheProbe2 = {}
+check('S21 ResolveExport picks the candidate that exists',
+    KTR.Bridge.ResolveExport(cacheProbe2, 'y', 'rcore_clothing',
+        { 'nope1', 'getOutfits', 'nope2' }) == 'getOutfits')
 
 print('')
 print(('RESULT: %d passed, %d failed'):format(passes, #failures))
