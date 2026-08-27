@@ -1,0 +1,360 @@
+{
+  "items": [
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.0288238525390625,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\jbib_011_u.ydd.xml",
+        "textures": [
+          "mp_f_freemode_01^jbib_diff_011_a_uni",
+          "mp_f_freemode_01^jbib_diff_011_b_uni",
+          "mp_f_freemode_01^jbib_diff_011_c_uni",
+          "mp_f_freemode_01^jbib_diff_011_d_uni",
+          "mp_f_freemode_01^jbib_diff_011_e_uni",
+          "mp_f_freemode_01^jbib_diff_011_f_uni",
+          "mp_f_freemode_01^jbib_diff_011_g_uni",
+          "mp_f_freemode_01^jbib_diff_011_h_uni",
+          "mp_f_freemode_01^jbib_diff_011_i_uni",
+          "mp_f_freemode_01^jbib_diff_011_j_uni",
+          "mp_f_freemode_01^jbib_diff_011_k_uni",
+          "mp_f_freemode_01^jbib_diff_011_l_uni",
+          "mp_f_freemode_01^jbib_diff_011_m_uni",
+          "mp_f_freemode_01^jbib_diff_011_n_uni",
+          "mp_f_freemode_01^jbib_diff_011_o_uni",
+          "mp_f_freemode_01^jbib_diff_011_p_uni"
+        ]
+      },
+      "key": "female:comp11::11",
+      "reason": "skin-pixel ratio 0.029 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.0911712646484375,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\jbib_005_u.ydd.xml",
+        "textures": [
+          "mp_f_freemode_01^jbib_diff_005_a_uni",
+          "mp_f_freemode_01^jbib_diff_005_b_uni",
+          "mp_f_freemode_01^jbib_diff_005_c_uni",
+          "mp_f_freemode_01^jbib_diff_005_d_uni",
+          "mp_f_freemode_01^jbib_diff_005_e_uni",
+          "mp_f_freemode_01^jbib_diff_005_f_uni",
+          "mp_f_freemode_01^jbib_diff_005_g_uni",
+          "mp_f_freemode_01^jbib_diff_005_h_uni",
+          "mp_f_freemode_01^jbib_diff_005_i_uni",
+          "mp_f_freemode_01^jbib_diff_005_j_uni",
+          "mp_f_freemode_01^jbib_diff_005_k_uni",
+          "mp_f_freemode_01^jbib_diff_005_l_uni",
+          "mp_f_freemode_01^jbib_diff_005_m_uni",
+          "mp_f_freemode_01^jbib_diff_005_n_uni",
+          "mp_f_freemode_01^jbib_diff_005_o_uni",
+          "mp_f_freemode_01^jbib_diff_005_p_uni"
+        ]
+      },
+      "key": "female:comp11::5",
+      "reason": "skin-pixel ratio 0.091 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.0789794921875,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\jbib_007_u.ydd.xml",
+        "textures": [
+          "mp_f_freemode_01^jbib_diff_007_a_uni",
+          "mp_f_freemode_01^jbib_diff_007_b_uni",
+          "mp_f_freemode_01^jbib_diff_007_c_uni",
+          "mp_f_freemode_01^jbib_diff_007_d_uni",
+          "mp_f_freemode_01^jbib_diff_007_e_uni",
+          "mp_f_freemode_01^jbib_diff_007_f_uni",
+          "mp_f_freemode_01^jbib_diff_007_g_uni",
+          "mp_f_freemode_01^jbib_diff_007_h_uni",
+          "mp_f_freemode_01^jbib_diff_007_i_uni",
+          "mp_f_freemode_01^jbib_diff_007_j_uni",
+          "mp_f_freemode_01^jbib_diff_007_k_uni",
+          "mp_f_freemode_01^jbib_diff_007_l_uni",
+          "mp_f_freemode_01^jbib_diff_007_m_uni",
+          "mp_f_freemode_01^jbib_diff_007_n_uni",
+          "mp_f_freemode_01^jbib_diff_007_o_uni",
+          "mp_f_freemode_01^jbib_diff_007_p_uni"
+        ]
+      },
+      "key": "female:comp11::7",
+      "reason": "skin-pixel ratio 0.079 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.037109375,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\berd_006_u.ydd.xml",
+        "textures": [
+          "mp_f_freemode_01^berd_diff_006_a_uni",
+          "mp_f_freemode_01^berd_diff_006_b_uni",
+          "mp_f_freemode_01^berd_diff_006_c_uni",
+          "mp_f_freemode_01^berd_diff_006_d_uni"
+        ]
+      },
+      "key": "female:comp1::6",
+      "reason": "skin-pixel ratio 0.037 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.116058349609375,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\lowr_006_r.ydd.xml",
+        "textures": [
+          "mp_f_freemode_01^lowr_diff_006_a_whi",
+          "mp_f_freemode_01^lowr_diff_006_b_whi",
+          "mp_f_freemode_01^lowr_diff_006_c_whi",
+          "mp_f_freemode_01^lowr_diff_006_d_whi",
+          "mp_f_freemode_01^lowr_diff_006_e_whi",
+          "mp_f_freemode_01^lowr_diff_006_f_whi",
+          "mp_f_freemode_01^lowr_diff_006_g_whi",
+          "mp_f_freemode_01^lowr_diff_006_h_whi",
+          "mp_f_freemode_01^lowr_diff_006_i_whi",
+          "mp_f_freemode_01^lowr_diff_006_j_whi",
+          "mp_f_freemode_01^lowr_diff_006_k_whi",
+          "mp_f_freemode_01^lowr_diff_006_l_whi",
+          "mp_f_freemode_01^lowr_diff_006_m_whi",
+          "mp_f_freemode_01^lowr_diff_006_n_whi",
+          "mp_f_freemode_01^lowr_diff_006_o_whi",
+          "mp_f_freemode_01^lowr_diff_006_p_whi"
+        ]
+      },
+      "key": "female:comp4::6",
+      "reason": "skin-pixel ratio 0.116 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.1192474365234375,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\feet_004_u.ydd.xml",
+        "textures": [
+          "mp_f_freemode_01^feet_diff_004_a_uni",
+          "mp_f_freemode_01^feet_diff_004_b_uni",
+          "mp_f_freemode_01^feet_diff_004_c_uni",
+          "mp_f_freemode_01^feet_diff_004_d_uni",
+          "mp_f_freemode_01^feet_diff_004_e_uni",
+          "mp_f_freemode_01^feet_diff_004_f_uni",
+          "mp_f_freemode_01^feet_diff_004_g_uni",
+          "mp_f_freemode_01^feet_diff_004_h_uni",
+          "mp_f_freemode_01^feet_diff_004_i_uni",
+          "mp_f_freemode_01^feet_diff_004_j_uni",
+          "mp_f_freemode_01^feet_diff_004_k_uni",
+          "mp_f_freemode_01^feet_diff_004_l_uni",
+          "mp_f_freemode_01^feet_diff_004_m_uni",
+          "mp_f_freemode_01^feet_diff_004_n_uni",
+          "mp_f_freemode_01^feet_diff_004_o_uni",
+          "mp_f_freemode_01^feet_diff_004_p_uni"
+        ]
+      },
+      "key": "female:comp6::4",
+      "reason": "skin-pixel ratio 0.119 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.0288238525390625,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\accs_011_u.ydd.xml",
+        "textures": [
+          "mp_f_freemode_01^accs_diff_011_a_uni",
+          "mp_f_freemode_01^accs_diff_011_b_uni",
+          "mp_f_freemode_01^accs_diff_011_c_uni",
+          "mp_f_freemode_01^accs_diff_011_d_uni",
+          "mp_f_freemode_01^accs_diff_011_e_uni",
+          "mp_f_freemode_01^accs_diff_011_f_uni",
+          "mp_f_freemode_01^accs_diff_011_g_uni",
+          "mp_f_freemode_01^accs_diff_011_h_uni",
+          "mp_f_freemode_01^accs_diff_011_i_uni",
+          "mp_f_freemode_01^accs_diff_011_j_uni",
+          "mp_f_freemode_01^accs_diff_011_k_uni",
+          "mp_f_freemode_01^accs_diff_011_l_uni",
+          "mp_f_freemode_01^accs_diff_011_m_uni",
+          "mp_f_freemode_01^accs_diff_011_n_uni",
+          "mp_f_freemode_01^accs_diff_011_o_uni",
+          "mp_f_freemode_01^accs_diff_011_p_uni"
+        ]
+      },
+      "key": "female:comp8::11",
+      "reason": "skin-pixel ratio 0.029 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.091522216796875,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\accs_005_u.ydd.xml",
+        "textures": [
+          "mp_f_freemode_01^accs_diff_005_a_uni",
+          "mp_f_freemode_01^accs_diff_005_b_uni",
+          "mp_f_freemode_01^accs_diff_005_c_uni",
+          "mp_f_freemode_01^accs_diff_005_d_uni",
+          "mp_f_freemode_01^accs_diff_005_e_uni",
+          "mp_f_freemode_01^accs_diff_005_f_uni",
+          "mp_f_freemode_01^accs_diff_005_g_uni",
+          "mp_f_freemode_01^accs_diff_005_h_uni",
+          "mp_f_freemode_01^accs_diff_005_i_uni",
+          "mp_f_freemode_01^accs_diff_005_j_uni",
+          "mp_f_freemode_01^accs_diff_005_k_uni",
+          "mp_f_freemode_01^accs_diff_005_l_uni",
+          "mp_f_freemode_01^accs_diff_005_m_uni",
+          "mp_f_freemode_01^accs_diff_005_n_uni",
+          "mp_f_freemode_01^accs_diff_005_o_uni",
+          "mp_f_freemode_01^accs_diff_005_p_uni"
+        ]
+      },
+      "key": "female:comp8::5",
+      "reason": "skin-pixel ratio 0.092 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.0612945556640625,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\jbib_008_u.ydd.xml",
+        "textures": [
+          "mp_m_freemode_01^jbib_diff_008_a_uni",
+          "mp_m_freemode_01^jbib_diff_008_b_uni",
+          "mp_m_freemode_01^jbib_diff_008_c_uni",
+          "mp_m_freemode_01^jbib_diff_008_d_uni",
+          "mp_m_freemode_01^jbib_diff_008_e_uni",
+          "mp_m_freemode_01^jbib_diff_008_f_uni",
+          "mp_m_freemode_01^jbib_diff_008_g_uni",
+          "mp_m_freemode_01^jbib_diff_008_h_uni",
+          "mp_m_freemode_01^jbib_diff_008_i_uni",
+          "mp_m_freemode_01^jbib_diff_008_j_uni",
+          "mp_m_freemode_01^jbib_diff_008_k_uni",
+          "mp_m_freemode_01^jbib_diff_008_l_uni",
+          "mp_m_freemode_01^jbib_diff_008_m_uni",
+          "mp_m_freemode_01^jbib_diff_008_n_uni",
+          "mp_m_freemode_01^jbib_diff_008_o_uni",
+          "mp_m_freemode_01^jbib_diff_008_p_uni"
+        ]
+      },
+      "key": "male:comp11::8",
+      "reason": "skin-pixel ratio 0.061 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.037109375,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\berd_006_u.ydd.xml",
+        "textures": [
+          "mp_m_freemode_01^berd_diff_006_a_uni",
+          "mp_m_freemode_01^berd_diff_006_b_uni",
+          "mp_m_freemode_01^berd_diff_006_c_uni",
+          "mp_m_freemode_01^berd_diff_006_d_uni"
+        ]
+      },
+      "key": "male:comp1::6",
+      "reason": "skin-pixel ratio 0.037 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.105255126953125,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\lowr_010_r.ydd.xml",
+        "textures": [
+          "mp_m_freemode_01^lowr_diff_010_a_whi",
+          "mp_m_freemode_01^lowr_diff_010_b_whi",
+          "mp_m_freemode_01^lowr_diff_010_c_whi",
+          "mp_m_freemode_01^lowr_diff_010_d_whi",
+          "mp_m_freemode_01^lowr_diff_010_e_whi",
+          "mp_m_freemode_01^lowr_diff_010_f_whi",
+          "mp_m_freemode_01^lowr_diff_010_g_whi",
+          "mp_m_freemode_01^lowr_diff_010_h_whi",
+          "mp_m_freemode_01^lowr_diff_010_i_whi",
+          "mp_m_freemode_01^lowr_diff_010_j_whi",
+          "mp_m_freemode_01^lowr_diff_010_k_whi",
+          "mp_m_freemode_01^lowr_diff_010_l_whi",
+          "mp_m_freemode_01^lowr_diff_010_m_whi",
+          "mp_m_freemode_01^lowr_diff_010_n_whi",
+          "mp_m_freemode_01^lowr_diff_010_o_whi",
+          "mp_m_freemode_01^lowr_diff_010_p_whi"
+        ]
+      },
+      "key": "male:comp4::10",
+      "reason": "skin-pixel ratio 0.105 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.098907470703125,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\lowr_013_r.ydd.xml",
+        "textures": [
+          "mp_m_freemode_01^lowr_diff_013_a_whi",
+          "mp_m_freemode_01^lowr_diff_013_b_whi",
+          "mp_m_freemode_01^lowr_diff_013_c_whi",
+          "mp_m_freemode_01^lowr_diff_013_d_whi",
+          "mp_m_freemode_01^lowr_diff_013_e_whi",
+          "mp_m_freemode_01^lowr_diff_013_f_whi",
+          "mp_m_freemode_01^lowr_diff_013_g_whi",
+          "mp_m_freemode_01^lowr_diff_013_h_whi",
+          "mp_m_freemode_01^lowr_diff_013_i_whi",
+          "mp_m_freemode_01^lowr_diff_013_j_whi",
+          "mp_m_freemode_01^lowr_diff_013_k_whi",
+          "mp_m_freemode_01^lowr_diff_013_l_whi",
+          "mp_m_freemode_01^lowr_diff_013_m_whi",
+          "mp_m_freemode_01^lowr_diff_013_n_whi",
+          "mp_m_freemode_01^lowr_diff_013_o_whi",
+          "mp_m_freemode_01^lowr_diff_013_p_whi"
+        ]
+      },
+      "key": "male:comp4::13",
+      "reason": "skin-pixel ratio 0.099 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.054473876953125,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\feet_002_u.ydd.xml",
+        "textures": [
+          "mp_m_freemode_01^feet_diff_002_a_uni",
+          "mp_m_freemode_01^feet_diff_002_b_uni",
+          "mp_m_freemode_01^feet_diff_002_c_uni",
+          "mp_m_freemode_01^feet_diff_002_d_uni",
+          "mp_m_freemode_01^feet_diff_002_e_uni",
+          "mp_m_freemode_01^feet_diff_002_f_uni",
+          "mp_m_freemode_01^feet_diff_002_g_uni",
+          "mp_m_freemode_01^feet_diff_002_h_uni",
+          "mp_m_freemode_01^feet_diff_002_i_uni",
+          "mp_m_freemode_01^feet_diff_002_j_uni",
+          "mp_m_freemode_01^feet_diff_002_k_uni",
+          "mp_m_freemode_01^feet_diff_002_l_uni",
+          "mp_m_freemode_01^feet_diff_002_m_uni",
+          "mp_m_freemode_01^feet_diff_002_n_uni",
+          "mp_m_freemode_01^feet_diff_002_o_uni",
+          "mp_m_freemode_01^feet_diff_002_p_uni"
+        ]
+      },
+      "key": "male:comp6::2",
+      "reason": "skin-pixel ratio 0.054 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    },
+    {
+      "evidence": {
+        "skin_pixel_ratio": 0.0612945556640625,
+        "source": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\accs_008_u.ydd.xml",
+        "textures": [
+          "mp_m_freemode_01^accs_diff_008_a_uni",
+          "mp_m_freemode_01^accs_diff_008_b_uni",
+          "mp_m_freemode_01^accs_diff_008_c_uni",
+          "mp_m_freemode_01^accs_diff_008_d_uni",
+          "mp_m_freemode_01^accs_diff_008_e_uni",
+          "mp_m_freemode_01^accs_diff_008_f_uni",
+          "mp_m_freemode_01^accs_diff_008_g_uni",
+          "mp_m_freemode_01^accs_diff_008_h_uni",
+          "mp_m_freemode_01^accs_diff_008_i_uni",
+          "mp_m_freemode_01^accs_diff_008_j_uni",
+          "mp_m_freemode_01^accs_diff_008_k_uni",
+          "mp_m_freemode_01^accs_diff_008_l_uni",
+          "mp_m_freemode_01^accs_diff_008_m_uni",
+          "mp_m_freemode_01^accs_diff_008_n_uni",
+          "mp_m_freemode_01^accs_diff_008_o_uni",
+          "mp_m_freemode_01^accs_diff_008_p_uni"
+        ]
+      },
+      "key": "male:comp8::8",
+      "reason": "skin-pixel ratio 0.061 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "resolution": null
+    }
+  ],
+  "schema": "kotzu_manual_review/1",
+  "unresolved": 14
+}
