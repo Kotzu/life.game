@@ -8,56 +8,82 @@ shader metadata the pipeline needs to round-trip valid `.ydd` files.
 
 ## Setup (once)
 
-1. Install [CodeWalker](https://github.com/dexyfex/CodeWalker) (GitHub releases).
+1. Install CodeWalker — official channels only: the
+   [GTA5-Mods page](https://www.gta5-mods.com/tools/codewalker-gtav-interactive-3d-map)
+   by dexyfex, or the CodeWalker Discord `#releases` channel. (The GitHub repo
+   is source-only, no binaries.)
 2. Open **RPF Explorer**, point it at your GTA V folder, let it index.
 3. In RPF Explorer options enable **XML export** for meta/model formats.
 
+## How the names actually work (read this first)
+
+The in-game streaming name `mp_m_freemode_01^jbib_000_u` is **virtual**:
+`folder^file`. The `^` character never appears on disk. Inside the RPFs there
+is a **folder** per ped/collection, holding plainly-named files:
+
+```
+mp_m_freemode_01/            jbib_000_u.ydd, uppr_000_u.ydd, head_000_r.ydd, ...
+mp_m_freemode_01_p/          p_head_000.ydd, ...                 (base props)
+mp_m_freemode_01_mp_heist3/  jbib_000_u.ydd, ...                 (one DLC pack)
+```
+
+So searching for `mp_m_freemode_01^head` finds nothing — search for the
+**folder names** instead (searching `mp_m_freemode_01` lists them all: the two
+base folders plus every DLC collection folder).
+
+**The scanner derives each file's identity from its parent folder name**, so
+when you export, always export INTO a local folder with the SAME name as the
+RPF folder it came from. Layout the pipeline expects:
+
+```
+extracted/
+  base_male/
+    mp_m_freemode_01/        <- all files from that RPF folder
+    mp_m_freemode_01_p/
+  base_female/
+    mp_f_freemode_01/
+    mp_f_freemode_01_p/
+  _png/
+    mp_m_freemode_01/        <- PNG texture dumps, per source folder
+    ...
+```
+
 ## What to export
 
-Use RPF Explorer's **search box** (top right) — searching by filename pattern is
-more reliable than memorizing RPF paths across game versions. For each pattern
-below: search → select all results → right-click → **Export XML** into the
-target folder. Textures: also right-click → **Export XML** (produces `.ytd.xml`)
-AND **Export → PNG** (into `extracted/_png/`) so the skin-pixel classifier can run.
+Per folder: open it in RPF Explorer (search for its name, or browse — base
+components live under `x64v.rpf\models\cdimages\streamedpeds_mp.rpf\`, props
+under `streamedpedprops.rpf\`, but trust the search, not the path), then
+**select all files inside → right-click → Export XML** into the matching local
+folder above.
 
-### 1. Base male body + clothing (target: `extracted/base_male/`)
+### 1. Base male (target: `extracted/base_male/`)
 
-| Search pattern | What it is |
+| RPF folder | Contents |
 |---|---|
-| `mp_m_freemode_01^head` | head drawables (mannequin head source) |
-| `mp_m_freemode_01^hair` | hair (scalp derivation source) |
-| `mp_m_freemode_01^uppr` | torso/arm skin variants (plastic twins) |
-| `mp_m_freemode_01^lowr` | legs (incl. designated bare-body drawable) |
-| `mp_m_freemode_01^hand` | hands |
-| `mp_m_freemode_01^feet` | feet/shoes |
-| `mp_m_freemode_01^teef` | teeth (exported hidden) |
-| `mp_m_freemode_01^jbib` | tops |
-| `mp_m_freemode_01^accs` | undershirts/accessories |
-| `mp_m_freemode_01^task` | vests/tasks |
-| `mp_m_freemode_01^decl` | decals |
-| `mp_m_freemode_01^berd` | masks |
-| `mp_m_freemode_01^p_` | props (hats/glasses/etc.) |
-
-The main hits live in `x64v.rpf\models\cdimages\streamedpeds_players.rpf\`
-(and `streamedpedprops.rpf` for props) — but trust the search, not the path.
+| `mp_m_freemode_01` | all components: head/hair/uppr/lowr/hand/feet/teef/jbib/accs/task/decl/berd + their `.ytd` textures |
+| `mp_m_freemode_01_p` | all props (hats/glasses/etc.) |
 
 ### 2. Base female (target: `extracted/base_female/`)
 
-Same 13 patterns with `mp_f_freemode_01^…`.
+Same two folders with `mp_f_freemode_01` / `mp_f_freemode_01_p`.
 
 ### 3. DLC clothing (optional now, per-pack later)
 
-Patterns `mp_m_freemode_01_<dlc>^…` / `mp_f_freemode_01_<dlc>^…` (e.g.
-`mp_m_freemode_01_mp_heist3^`). Start WITHOUT these: get the base game to 100%
-coverage first, then add DLC packs incrementally (`scan` only processes new
-files, and manifest indexes never shift).
+Folders `mp_m_freemode_01_<dlc>` / `mp_m_freemode_01_p_<dlc>` (e.g.
+`mp_m_freemode_01_mp_heist3`) and the `mp_f_…` twins — searching
+`mp_m_freemode_01` shows the full list (hundreds of folders across the DLC
+rpfs). Start WITHOUT these: get the base game to 100% coverage first, then add
+DLC packs incrementally, each into its own same-named folder (`scan` only
+processes new files, and manifest indexes never shift).
 
-### 4. Texture PNG dumps (target: `extracted/_png/`)
+### 4. Texture PNG dumps (target: `extracted/_png/<rpf-folder-name>/`)
 
-For every `.ytd` exported above, also export its textures as PNG. CodeWalker:
-open the `.ytd` → select all textures → **Save All** as PNG. Without PNGs the
-classifier can't run skin-pixel analysis and sends those garments to manual
-review instead (safe, but slower for you).
+For every `.ytd` exported above, also dump its textures as PNG. CodeWalker:
+open the `.ytd` → select all textures → **Save All** as PNG, into a `_png/`
+subfolder named after the source RPF folder (plain texture names repeat across
+DLC packs, the subfolder keeps them apart). Without PNGs the classifier can't
+run skin-pixel analysis and sends those garments to manual review instead
+(safe, but slower for you).
 
 ## Sanity check before running the pipeline
 
@@ -83,4 +109,6 @@ guessing about whether the export was complete.
 ## Reminder
 
 `extracted/` and `_png/` are git-ignored — these files never leave your machine
-except when deployed to your own server's `stream/` after conversion.
+except when deployed to your own server's `stream/` after conversion. The JSON
+reports under `build/` (scan/crosscheck/classification) are metadata-only and
+safe to commit for remote review.

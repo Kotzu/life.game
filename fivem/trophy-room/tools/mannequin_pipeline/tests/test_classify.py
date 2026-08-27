@@ -66,6 +66,26 @@ def test_skin_pixel_ratio_detects_skin(tmp_path):
     assert r is not None and r > 0.9
 
 
+@pytest.mark.skipif(not classify_mod.HAVE_PIL, reason="Pillow not installed")
+def test_png_lookup_accepts_plain_and_per_folder_names(tmp_path):
+    """CodeWalker 'Save All' writes plain texture names; the record stores the
+    canonical '^' stem. Lookup must bridge the two, preferring the
+    per-source-folder subdir over a flat plain name."""
+    from PIL import Image
+    blue = Image.new("RGBA", (16, 16), (20, 40, 200, 255))  # clearly not skin
+    r = rec(11, "jbib", texs=["mp_m_freemode_01^jbib_diff_000_a_uni"])
+
+    sub = tmp_path / "mp_m_freemode_01"
+    sub.mkdir()
+    blue.save(sub / "jbib_diff_000_a_uni.png")
+    assert classify_record(r, CFG, tmp_path).category == "skin_free"
+
+    flat = tmp_path / "flat"
+    flat.mkdir()
+    blue.save(flat / "jbib_diff_000_a_uni.png")
+    assert classify_record(r, CFG, flat).category == "skin_free"
+
+
 def test_classify_end_to_end_writes_queue(tmp_path, monkeypatch):
     build = tmp_path / "build"
     catalog = {

@@ -30,6 +30,16 @@ SKIN_FREE_COMPONENTS = {9, 10}
 # CodeWalker drawable naming:
 #   mp_m_freemode_01^uppr_000_u.ydd            (base collection)
 #   mp_m_freemode_01_mp_heist3^jbib_004_u.ydd  (DLC collection 'mp_heist3')
+# RPF folder naming (what CodeWalker actually exports FROM — the `^` form is
+# the game's virtual streaming name `folder^file` and never appears on disk):
+#   mp_m_freemode_01               (base components)
+#   mp_m_freemode_01_p             (base props)
+#   mp_m_freemode_01_mp_heist3     (DLC components, collection 'mp_heist3')
+#   mp_m_freemode_01_p_mp_heist3   (DLC props)
+FOLDER_RE = re.compile(
+    r"^(?P<model>mp_[mf]_freemode_01)(?P<prop>_p)?(?:_(?P<collection>[a-z0-9_]+))?$"
+)
+
 DRAWABLE_RE = re.compile(
     r"^(?P<model>mp_[mf]_freemode_01)(?:_(?P<collection>[a-z0-9_]+?))?"
     r"\^(?P<slug>head|berd|hair|uppr|lowr|hand|feet|teef|accs|task|decl|jbib|p_[a-z]+)"
@@ -74,6 +84,28 @@ class Classification:
     @property
     def effective(self) -> str:
         return self.resolution or self.category
+
+
+def folder_prefix(folder: str) -> Optional[str]:
+    """Canonical '<model>[_<collection>]' prefix from an RPF folder name, or
+    None if the folder isn't a freemode ped folder. The '_p' prop marker is
+    dropped — prop-ness comes from the drawable slug ('p_head' ...)."""
+    m = FOLDER_RE.match(folder.lower())
+    if not m:
+        return None
+    coll = m.group("collection")
+    return m.group("model") + (f"_{coll}" if coll else "")
+
+
+def canonical_stems(stem: str, folder: Optional[str] = None):
+    """Candidate canonical stems for an exported file: the stem itself if it
+    already carries the streaming-name form, else '<folder-prefix>^<stem>'
+    reconstructed from the parent folder CodeWalker exported it from."""
+    yield stem
+    if "^" not in stem and folder:
+        pre = folder_prefix(folder)
+        if pre:
+            yield f"{pre}^{stem}"
 
 
 def parse_drawable_name(stem: str, gender_hint: Optional[str] = None):

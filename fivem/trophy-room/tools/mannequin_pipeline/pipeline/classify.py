@@ -88,9 +88,19 @@ def _classify_by_texture(key: str, rec: dict, cfg: dict, png_dir: Path) -> Class
     lo, hi = cfg.get("ambiguous_band", [0.015, 0.12])
     ratios = []
     missing = []
+    # plain in-ytd names repeat across collections, so a per-source-folder
+    # subdir (e.g. _png/mp_m_freemode_01_mp_heist3/) disambiguates them
+    subdir = rec["model"] + (f"_{rec['collection']}" if rec.get("collection") else "")
     for tex in rec.get("texture_names", []):
-        png = png_dir / f"{tex}.png"
-        r = skin_pixel_ratio(png)
+        # PNG dumps may be named by the full streaming name or by the plain
+        # in-ytd texture name (CodeWalker "Save All" uses the latter) — try
+        # the canonical name, then the per-folder plain name, then flat plain.
+        plain = tex.split("^", 1)[-1]
+        r = None
+        for cand in dict.fromkeys((tex, f"{subdir}/{plain}", plain)):
+            r = skin_pixel_ratio(png_dir / f"{cand}.png")
+            if r is not None:
+                break
         if r is None:
             missing.append(tex)
         else:
