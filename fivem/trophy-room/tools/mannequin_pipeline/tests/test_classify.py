@@ -86,6 +86,31 @@ def test_png_lookup_accepts_plain_and_per_folder_names(tmp_path):
     assert classify_record(r, CFG, flat).category == "skin_free"
 
 
+@pytest.mark.skipif(not classify_mod.HAVE_PIL, reason="Pillow not installed")
+def test_dds_next_to_source_replaces_png_dump(tmp_path):
+    """CodeWalker Export XML drops textures as .dds beside the .ytd.xml —
+    classification must work from those alone (no _png dump), both as
+    <stem>.dds and as a <stem>/ folder of dds files."""
+    from PIL import Image
+    blue = Image.new("RGBA", (16, 16), (20, 40, 200, 255))
+    src = tmp_path / "extracted" / "mp_m_freemode_01"
+    src.mkdir(parents=True)
+    r = rec(11, "jbib", texs=["mp_m_freemode_01^jbib_diff_000_a_uni"])
+    r["source_path"] = str(src / "jbib_000_u.ydd.xml")
+    empty_png_dir = tmp_path / "nopng"
+
+    blue.save(src / "jbib_diff_000_a_uni.dds")
+    assert classify_record(r, CFG, empty_png_dir).category == "skin_free"
+
+    (src / "jbib_diff_000_a_uni.dds").unlink()
+    sub = src / "jbib_diff_000_a_uni"
+    sub.mkdir()
+    skin = Image.new("RGBA", (16, 16), (224, 172, 138, 255))
+    blue.save(sub / "layer_a.dds")
+    skin.save(sub / "layer_b.dds")  # worst layer wins -> convert
+    assert classify_record(r, CFG, empty_png_dir).category == "convert"
+
+
 def test_classify_end_to_end_writes_queue(tmp_path, monkeypatch):
     build = tmp_path / "build"
     catalog = {

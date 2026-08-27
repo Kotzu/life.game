@@ -76,14 +76,16 @@ rpfs). Start WITHOUT these: get the base game to 100% coverage first, then add
 DLC packs incrementally, each into its own same-named folder (`scan` only
 processes new files, and manifest indexes never shift).
 
-### 4. Texture PNG dumps (target: `extracted/_png/<rpf-folder-name>/`)
+### 4. Textures for the skin-pixel classifier
 
-For every `.ytd` exported above, also dump its textures as PNG. CodeWalker:
-open the `.ytd` → select all textures → **Save All** as PNG, into a `_png/`
-subfolder named after the source RPF folder (plain texture names repeat across
-DLC packs, the subfolder keeps them apart). Without PNGs the classifier can't
-run skin-pixel analysis and sends those garments to manual review instead
-(safe, but slower for you).
+**Usually nothing to do**: CodeWalker's Export XML also writes each `.ytd`'s
+textures as `.dds` next to the exported `.ytd.xml`, and the classifier reads
+those directly (Pillow decodes DDS). Only if your CodeWalker build does NOT
+emit the `.dds` files, fall back to manual PNG dumps: open each `.ytd` →
+select all textures → **Save All** as PNG into
+`extracted/_png/<rpf-folder-name>/` (plain texture names repeat across DLC
+packs, the subfolder keeps them apart). Without either, affected garments go
+to manual review instead (safe, but slower for you).
 
 ## Sanity check before running the pipeline
 

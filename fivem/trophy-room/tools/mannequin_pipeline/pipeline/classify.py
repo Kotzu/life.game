@@ -30,7 +30,10 @@ def skin_pixel_ratio(png_path: Path) -> Optional[float]:
     """Fraction of non-transparent pixels that fall in the skin chroma box."""
     if not HAVE_PIL or not png_path.exists():
         return None
-    img = Image.open(png_path).convert("RGBA")
+    try:
+        img = Image.open(png_path).convert("RGBA")
+    except Exception:  # unreadable/exotic compression -> treat as not analyzable
+        return None
     small = img.resize((min(img.width, 256), min(img.height, 256)))
     ycc = small.convert("RGB").convert("YCbCr")
     alpha = small.getchannel("A")
@@ -91,6 +94,10 @@ def _classify_by_texture(key: str, rec: dict, cfg: dict, png_dir: Path) -> Class
     # plain in-ytd names repeat across collections, so a per-source-folder
     # subdir (e.g. _png/mp_m_freemode_01_mp_heist3/) disambiguates them
     subdir = rec["model"] + (f"_{rec['collection']}" if rec.get("collection") else "")
+    # CodeWalker's Export XML also drops the textures as .dds next to the
+    # exported .ytd.xml (either <stem>.dds or a <stem>/ folder of .dds), so a
+    # separate PNG dump is not required — look there too.
+    srcdir = Path(rec["source_path"]).parent if rec.get("source_path") else None
     for tex in rec.get("texture_names", []):
         # PNG dumps may be named by the full streaming name or by the plain
         # in-ytd texture name (CodeWalker "Save All" uses the latter) — try
@@ -101,6 +108,15 @@ def _classify_by_texture(key: str, rec: dict, cfg: dict, png_dir: Path) -> Class
             r = skin_pixel_ratio(png_dir / f"{cand}.png")
             if r is not None:
                 break
+        if r is None and srcdir is not None:
+            r = skin_pixel_ratio(srcdir / f"{plain}.dds")
+        if r is None and srcdir is not None and (srcdir / plain).is_dir():
+            # worst (highest) ratio across the dictionary's textures — the
+            # conservative choice: any skin-looking layer flags the garment
+            sub = [skin_pixel_ratio(p) for p in sorted((srcdir / plain).glob("*.dds"))]
+            sub = [x for x in sub if x is not None]
+            if sub:
+                r = max(sub)
         if r is None:
             missing.append(tex)
         else:
