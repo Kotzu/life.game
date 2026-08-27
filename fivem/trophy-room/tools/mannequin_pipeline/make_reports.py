@@ -154,6 +154,8 @@ def push_reports() -> None:
         print("  nothing new to commit (reports unchanged)")
         return
     run(["git", "commit", "-m", "pipeline: scan+crosscheck+classify reports from workstation"])
+    # bring in any commits pushed remotely in the meantime, else push is rejected
+    run(["git", "pull", "--no-rebase", "--no-edit"])
     for attempt in range(4):
         if run(["git", "push", "-u", "origin", BRANCH]).returncode == 0:
             print("\nDONE — reports pushed. Tell Claude to analyze them.")
