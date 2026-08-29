@@ -1,7 +1,7 @@
 {
   "counts": {
-    "drawables": 452,
-    "skipped": 58
+    "drawables": 477,
+    "skipped": 167
   },
   "drawables": {
     "female:comp0::0": {
@@ -1264,6 +1264,68 @@
         "mp_f_freemode_01^jbib_diff_009_p_uni"
       ]
     },
+    "female:comp11:female_freemode_beach:0": {
+      "collection": "female_freemode_beach",
+      "component_id": 11,
+      "component_slug": "jbib",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\jbib_000_u.ydd.xml",
+      "texture_count": 7,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_000_a_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_000_b_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_000_c_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_000_d_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_000_e_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_000_f_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_000_g_uni"
+      ]
+    },
+    "female:comp11:female_freemode_beach:1": {
+      "collection": "female_freemode_beach",
+      "component_id": 11,
+      "component_slug": "jbib",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\jbib_001_u.ydd.xml",
+      "texture_count": 1,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_001_a_uni"
+      ]
+    },
+    "female:comp11:female_freemode_beach:2": {
+      "collection": "female_freemode_beach",
+      "component_id": 11,
+      "component_slug": "jbib",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 2,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\jbib_002_u.ydd.xml",
+      "texture_count": 12,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_a_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_b_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_c_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_d_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_e_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_f_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_g_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_h_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_i_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_j_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_k_uni",
+        "mp_f_freemode_01_female_freemode_beach^jbib_diff_002_l_uni"
+      ]
+    },
     "female:comp1::0": {
       "collection": "",
       "component_id": 1,
@@ -1716,6 +1778,44 @@
         "mp_f_freemode_01^hair_diff_009_d_uni",
         "mp_f_freemode_01^hair_diff_009_e_uni",
         "mp_f_freemode_01^hair_diff_009_f_uni"
+      ]
+    },
+    "female:comp2:female_freemode_beach:0": {
+      "collection": "female_freemode_beach",
+      "component_id": 2,
+      "component_slug": "hair",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\hair_000_u.ydd.xml",
+      "texture_count": 5,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_000_a_uni",
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_000_b_uni",
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_000_c_uni",
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_000_d_uni",
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_000_e_uni"
+      ]
+    },
+    "female:comp2:female_freemode_beach:1": {
+      "collection": "female_freemode_beach",
+      "component_id": 2,
+      "component_slug": "hair",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\hair_001_u.ydd.xml",
+      "texture_count": 5,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_001_a_uni",
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_001_b_uni",
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_001_c_uni",
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_001_d_uni",
+        "mp_f_freemode_01_female_freemode_beach^hair_diff_001_e_uni"
       ]
     },
     "female:comp3::0": {
@@ -2438,6 +2538,58 @@
         "mp_f_freemode_01^lowr_diff_009_p_whi"
       ]
     },
+    "female:comp4:female_freemode_beach:0": {
+      "collection": "female_freemode_beach",
+      "component_id": 4,
+      "component_slug": "lowr",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "r",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\lowr_000_r.ydd.xml",
+      "texture_count": 12,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_a_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_b_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_c_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_d_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_e_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_f_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_g_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_h_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_i_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_j_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_k_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_000_l_whi"
+      ]
+    },
+    "female:comp4:female_freemode_beach:1": {
+      "collection": "female_freemode_beach",
+      "component_id": 4,
+      "component_slug": "lowr",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "r",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\lowr_001_r.ydd.xml",
+      "texture_count": 12,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_a_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_b_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_c_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_d_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_e_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_f_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_g_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_h_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_i_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_j_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_k_whi",
+        "mp_f_freemode_01_female_freemode_beach^lowr_diff_001_l_whi"
+      ]
+    },
     "female:comp5::0": {
       "collection": "",
       "component_id": 5,
@@ -3053,6 +3205,32 @@
         "mp_f_freemode_01^feet_diff_009_p_uni"
       ]
     },
+    "female:comp6:female_freemode_beach:0": {
+      "collection": "female_freemode_beach",
+      "component_id": 6,
+      "component_slug": "feet",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "r",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\feet_000_r.ydd.xml",
+      "texture_count": 12,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_a_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_b_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_c_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_d_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_e_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_f_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_g_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_h_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_i_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_j_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_k_whi",
+        "mp_f_freemode_01_female_freemode_beach^feet_diff_000_l_whi"
+      ]
+    },
     "female:comp7::0": {
       "collection": "",
       "component_id": 7,
@@ -3246,6 +3424,42 @@
         "mp_f_freemode_01^teef_diff_009_d_uni",
         "mp_f_freemode_01^teef_diff_009_e_uni",
         "mp_f_freemode_01^teef_diff_009_f_uni"
+      ]
+    },
+    "female:comp7:female_freemode_beach:0": {
+      "collection": "female_freemode_beach",
+      "component_id": 7,
+      "component_slug": "teef",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\teef_000_u.ydd.xml",
+      "texture_count": 4,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^teef_diff_000_a_uni",
+        "mp_f_freemode_01_female_freemode_beach^teef_diff_000_b_uni",
+        "mp_f_freemode_01_female_freemode_beach^teef_diff_000_c_uni",
+        "mp_f_freemode_01_female_freemode_beach^teef_diff_000_d_uni"
+      ]
+    },
+    "female:comp7:female_freemode_beach:1": {
+      "collection": "female_freemode_beach",
+      "component_id": 7,
+      "component_slug": "teef",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\teef_001_u.ydd.xml",
+      "texture_count": 4,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^teef_diff_001_a_uni",
+        "mp_f_freemode_01_female_freemode_beach^teef_diff_001_b_uni",
+        "mp_f_freemode_01_female_freemode_beach^teef_diff_001_c_uni",
+        "mp_f_freemode_01_female_freemode_beach^teef_diff_001_d_uni"
       ]
     },
     "female:comp8::0": {
@@ -3606,6 +3820,53 @@
       "texture_count": 1,
       "texture_names": [
         "mp_f_freemode_01^accs_diff_009_a_uni"
+      ]
+    },
+    "female:comp8:female_freemode_beach:0": {
+      "collection": "female_freemode_beach",
+      "component_id": 8,
+      "component_slug": "accs",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\accs_000_u.ydd.xml",
+      "texture_count": 7,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_000_a_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_000_b_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_000_c_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_000_d_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_000_e_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_000_f_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_000_g_uni"
+      ]
+    },
+    "female:comp8:female_freemode_beach:1": {
+      "collection": "female_freemode_beach",
+      "component_id": 8,
+      "component_slug": "accs",
+      "gender": "female",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_f_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\accs_001_u.ydd.xml",
+      "texture_count": 12,
+      "texture_names": [
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_a_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_b_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_c_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_d_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_e_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_f_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_g_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_h_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_i_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_j_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_k_uni",
+        "mp_f_freemode_01_female_freemode_beach^accs_diff_001_l_uni"
       ]
     },
     "female:comp9::0": {
@@ -5828,6 +6089,43 @@
         "mp_m_freemode_01^jbib_diff_009_p_uni"
       ]
     },
+    "male:comp11:male_freemode_beach:0": {
+      "collection": "male_freemode_beach",
+      "component_id": 11,
+      "component_slug": "jbib",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\jbib_000_u.ydd.xml",
+      "texture_count": 3,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_000_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_000_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_000_c_uni"
+      ]
+    },
+    "male:comp11:male_freemode_beach:1": {
+      "collection": "male_freemode_beach",
+      "component_id": 11,
+      "component_slug": "jbib",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\jbib_001_u.ydd.xml",
+      "texture_count": 6,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_001_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_001_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_001_c_uni",
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_001_d_uni",
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_001_e_uni",
+        "mp_m_freemode_01_male_freemode_beach^jbib_diff_001_f_uni"
+      ]
+    },
     "male:comp1::0": {
       "collection": "",
       "component_id": 1,
@@ -6279,6 +6577,44 @@
         "mp_m_freemode_01^hair_diff_009_e_uni",
         "mp_m_freemode_01^hair_diff_009_f_uni",
         "mp_m_freemode_01^hair_diff_009_g_uni"
+      ]
+    },
+    "male:comp2:male_freemode_beach:0": {
+      "collection": "male_freemode_beach",
+      "component_id": 2,
+      "component_slug": "hair",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\hair_000_u.ydd.xml",
+      "texture_count": 5,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_000_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_000_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_000_c_uni",
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_000_d_uni",
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_000_e_uni"
+      ]
+    },
+    "male:comp2:male_freemode_beach:1": {
+      "collection": "male_freemode_beach",
+      "component_id": 2,
+      "component_slug": "hair",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\hair_001_u.ydd.xml",
+      "texture_count": 5,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_001_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_001_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_001_c_uni",
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_001_d_uni",
+        "mp_m_freemode_01_male_freemode_beach^hair_diff_001_e_uni"
       ]
     },
     "male:comp3::0": {
@@ -7001,6 +7337,83 @@
         "mp_m_freemode_01^lowr_diff_009_p_whi"
       ]
     },
+    "male:comp4:male_freemode_beach:0": {
+      "collection": "male_freemode_beach",
+      "component_id": 4,
+      "component_slug": "lowr",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "r",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\lowr_000_r.ydd.xml",
+      "texture_count": 12,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_a_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_b_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_c_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_d_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_e_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_f_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_g_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_h_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_i_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_j_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_k_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_000_l_whi"
+      ]
+    },
+    "male:comp4:male_freemode_beach:1": {
+      "collection": "male_freemode_beach",
+      "component_id": 4,
+      "component_slug": "lowr",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "r",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\lowr_001_r.ydd.xml",
+      "texture_count": 11,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_a_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_b_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_c_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_d_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_e_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_f_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_g_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_h_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_i_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_j_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_001_k_whi"
+      ]
+    },
+    "male:comp4:male_freemode_beach:2": {
+      "collection": "male_freemode_beach",
+      "component_id": 4,
+      "component_slug": "lowr",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 2,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "r",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\lowr_002_r.ydd.xml",
+      "texture_count": 12,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_a_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_b_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_c_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_d_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_e_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_f_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_g_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_h_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_i_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_j_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_k_whi",
+        "mp_m_freemode_01_male_freemode_beach^lowr_diff_002_l_whi"
+      ]
+    },
     "male:comp5::0": {
       "collection": "",
       "component_id": 5,
@@ -7616,6 +8029,32 @@
         "mp_m_freemode_01^feet_diff_009_p_uni"
       ]
     },
+    "male:comp6:male_freemode_beach:0": {
+      "collection": "male_freemode_beach",
+      "component_id": 6,
+      "component_slug": "feet",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "r",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\feet_000_r.ydd.xml",
+      "texture_count": 12,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_a_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_b_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_c_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_d_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_e_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_f_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_g_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_h_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_i_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_j_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_k_whi",
+        "mp_m_freemode_01_male_freemode_beach^feet_diff_000_l_whi"
+      ]
+    },
     "male:comp7::0": {
       "collection": "",
       "component_id": 7,
@@ -7930,6 +8369,40 @@
       "texture_count": 1,
       "texture_names": [
         "mp_m_freemode_01^teef_diff_009_a_uni"
+      ]
+    },
+    "male:comp7:male_freemode_beach:0": {
+      "collection": "male_freemode_beach",
+      "component_id": 7,
+      "component_slug": "teef",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\teef_000_u.ydd.xml",
+      "texture_count": 3,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^teef_diff_000_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^teef_diff_000_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^teef_diff_000_c_uni"
+      ]
+    },
+    "male:comp7:male_freemode_beach:1": {
+      "collection": "male_freemode_beach",
+      "component_id": 7,
+      "component_slug": "teef",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\teef_001_u.ydd.xml",
+      "texture_count": 3,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^teef_diff_001_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^teef_diff_001_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^teef_diff_001_c_uni"
       ]
     },
     "male:comp8::0": {
@@ -8395,6 +8868,60 @@
         "mp_m_freemode_01^accs_diff_009_n_uni",
         "mp_m_freemode_01^accs_diff_009_o_uni",
         "mp_m_freemode_01^accs_diff_009_p_uni"
+      ]
+    },
+    "male:comp8:male_freemode_beach:0": {
+      "collection": "male_freemode_beach",
+      "component_id": 8,
+      "component_slug": "accs",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 0,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\accs_000_u.ydd.xml",
+      "texture_count": 3,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_000_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_000_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_000_c_uni"
+      ]
+    },
+    "male:comp8:male_freemode_beach:1": {
+      "collection": "male_freemode_beach",
+      "component_id": 8,
+      "component_slug": "accs",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 1,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\accs_001_u.ydd.xml",
+      "texture_count": 6,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_001_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_001_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_001_c_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_001_d_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_001_e_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_001_f_uni"
+      ]
+    },
+    "male:comp8:male_freemode_beach:2": {
+      "collection": "male_freemode_beach",
+      "component_id": 8,
+      "component_slug": "accs",
+      "gender": "male",
+      "is_prop": false,
+      "local_drawable": 2,
+      "model": "mp_m_freemode_01",
+      "race_suffix": "u",
+      "source_path": "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\accs_002_u.ydd.xml",
+      "texture_count": 3,
+      "texture_names": [
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_002_a_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_002_b_uni",
+        "mp_m_freemode_01_male_freemode_beach^accs_diff_002_c_uni"
       ]
     },
     "male:comp9::0": {
@@ -9421,6 +9948,107 @@
   },
   "schema": "kotzu_scan_catalog/1",
   "skipped": [
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_000_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_001_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_002_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_000_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_000_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_000_c_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_001_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_001_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_001_c_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_001_d_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_001_e_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_001_f_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_002_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_002_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\accs_diff_002_c_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_000_r.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_a_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_b_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_c_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_d_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_e_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_f_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_g_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_h_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_i_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_j_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_k_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\feet_diff_000_l_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_000_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_000_u_1.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_000_u_2.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_001_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_001_u_1.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_001_u_2.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_000_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_000_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_000_c_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_000_d_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_000_e_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_001_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_001_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_001_c_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_001_d_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\hair_diff_001_e_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_000_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_001_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_000_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_000_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_000_c_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_001_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_001_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_001_c_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_001_d_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_001_e_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\jbib_diff_001_f_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_000_r.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_001_r.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_002_r.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_a_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_b_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_c_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_d_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_e_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_f_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_g_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_h_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_i_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_j_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_k_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_000_l_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_a_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_b_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_c_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_d_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_e_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_f_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_g_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_h_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_i_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_j_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_001_k_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_a_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_b_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_c_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_d_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_e_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_f_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_g_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_h_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_i_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_j_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_k_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\lowr_diff_002_l_whi.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\teef_000_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\teef_001_u.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\teef_diff_000_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\teef_diff_000_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\teef_diff_000_c_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\teef_diff_001_a_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\teef_diff_001_b_uni.ytd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\male_bare_feet\\teef_diff_001_c_uni.ytd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\hair_001_u_1.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\hair_001_u_2.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\hair_002_u_1.ydd.xml",
@@ -9451,6 +10079,10 @@
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\hair_014_u_2.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\hair_015_u_1.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01\\mp_f_freemode_01\\hair_015_u_2.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\hair_000_u_1.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\hair_000_u_2.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\hair_001_u_1.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_f_freemode_01_female_freemode_beach\\hair_001_u_2.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\hair_000_u_1.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\hair_001_u_1.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\hair_002_u_1.ydd.xml",
@@ -9478,6 +10110,10 @@
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\hair_014_u_1.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\hair_014_u_2.ydd.xml",
     "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\hair_015_u_1.ydd.xml",
-    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\hair_015_u_2.ydd.xml"
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01\\mp_m_freemode_01\\hair_015_u_2.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\hair_000_u_1.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\hair_000_u_2.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\hair_001_u_1.ydd.xml",
+    "D:\\Downloads\\1cfcd8-CodeWalker30_dev46\\CodeWalker30_dev46\\_Manequin\\mp_m_freemode_01_male_freemode_beach\\hair_001_u_2.ydd.xml"
   ]
 }

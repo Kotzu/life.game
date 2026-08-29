@@ -97,6 +97,10 @@
     "sheets/female_lowr_014.png",
     "sheets/female_lowr_015.png",
     "sheets/female_lowr_015.png",
+    "sheets/female_lowr_016.png",
+    "sheets/female_lowr_016.png",
+    "sheets/female_lowr_017.png",
+    "sheets/female_lowr_017.png",
     "sheets/female_lowr_000.png",
     "sheets/female_lowr_000.png",
     "sheets/female_lowr_001.png",
@@ -129,6 +133,10 @@
     "sheets/female_lowr_014.png",
     "sheets/female_lowr_015.png",
     "sheets/female_lowr_015.png",
+    "sheets/female_lowr_016.png",
+    "sheets/female_lowr_016.png",
+    "sheets/female_lowr_017.png",
+    "sheets/female_lowr_017.png",
     "sheets/female_feet_000.png",
     "sheets/female_feet_000.png",
     "sheets/female_feet_001.png",
@@ -161,6 +169,8 @@
     "sheets/female_feet_014.png",
     "sheets/female_feet_015.png",
     "sheets/female_feet_015.png",
+    "sheets/female_feet_016.png",
+    "sheets/female_feet_016.png",
     "sheets/female_feet_000.png",
     "sheets/female_feet_000.png",
     "sheets/female_feet_001.png",
@@ -193,6 +203,8 @@
     "sheets/female_feet_014.png",
     "sheets/female_feet_015.png",
     "sheets/female_feet_015.png",
+    "sheets/female_feet_016.png",
+    "sheets/female_feet_016.png",
     "sheets/female_jbib_000.png",
     "sheets/female_jbib_000.png",
     "sheets/female_jbib_001.png",
@@ -225,6 +237,10 @@
     "sheets/female_jbib_014.png",
     "sheets/female_jbib_015.png",
     "sheets/female_jbib_015.png",
+    "sheets/female_jbib_016.png",
+    "sheets/female_jbib_016.png",
+    "sheets/female_jbib_017.png",
+    "sheets/female_jbib_017.png",
     "sheets/female_jbib_000.png",
     "sheets/female_jbib_000.png",
     "sheets/female_jbib_001.png",
@@ -257,6 +273,10 @@
     "sheets/female_jbib_014.png",
     "sheets/female_jbib_015.png",
     "sheets/female_jbib_015.png",
+    "sheets/female_jbib_016.png",
+    "sheets/female_jbib_016.png",
+    "sheets/female_jbib_017.png",
+    "sheets/female_jbib_017.png",
     "sheets/female_accs_000.png",
     "sheets/female_accs_000.png",
     "sheets/female_accs_001.png",
@@ -289,6 +309,10 @@
     "sheets/female_accs_014.png",
     "sheets/female_accs_015.png",
     "sheets/female_accs_015.png",
+    "sheets/female_accs_016.png",
+    "sheets/female_accs_016.png",
+    "sheets/female_accs_017.png",
+    "sheets/female_accs_017.png",
     "sheets/female_accs_000.png",
     "sheets/female_accs_000.png",
     "sheets/female_accs_001.png",
@@ -320,7 +344,11 @@
     "sheets/female_accs_014.png",
     "sheets/female_accs_014.png",
     "sheets/female_accs_015.png",
-    "sheets/female_accs_015.png"
+    "sheets/female_accs_015.png",
+    "sheets/female_accs_016.png",
+    "sheets/female_accs_016.png",
+    "sheets/female_accs_017.png",
+    "sheets/female_accs_017.png"
   ],
   "imported": [
     "mp_f_freemode_01_mannequin^head_000_u.ydd",
@@ -344,7 +372,7 @@
     ],
     "objects": [
       {
-        "name": "accs_015_u",
+        "name": "accs_001_u",
         "type": "EMPTY",
         "loc": [
           0.0,
@@ -355,7 +383,7 @@
         "verts": null
       },
       {
-        "name": "accs_015_u.model",
+        "name": "accs_001_u.model",
         "type": "MESH",
         "loc": [
           0.0,
@@ -399,7 +427,7 @@
         "verts": null
       },
       {
-        "name": "mp_f_freemode_01_mannequin^accs_015_u",
+        "name": "mp_f_freemode_01_mannequin^accs_017_u",
         "type": "EMPTY",
         "loc": [
           0.0,

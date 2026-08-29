@@ -1,0 +1,51 @@
+{
+  "female": {
+    "comp11": {
+      "female_freemode_beach:0": 16,
+      "female_freemode_beach:2": 17
+    },
+    "comp2": {
+      "female_freemode_beach:0": 16,
+      "female_freemode_beach:1": 17
+    },
+    "comp4": {
+      "female_freemode_beach:0": 16,
+      "female_freemode_beach:1": 17
+    },
+    "comp6": {
+      "female_freemode_beach:0": 16
+    },
+    "comp7": {
+      "female_freemode_beach:0": 16,
+      "female_freemode_beach:1": 17
+    },
+    "comp8": {
+      "female_freemode_beach:0": 16,
+      "female_freemode_beach:1": 17
+    }
+  },
+  "male": {
+    "comp11": {
+      "male_freemode_beach:1": 16
+    },
+    "comp2": {
+      "male_freemode_beach:0": 16,
+      "male_freemode_beach:1": 17
+    },
+    "comp4": {
+      "male_freemode_beach:0": 16,
+      "male_freemode_beach:1": 17,
+      "male_freemode_beach:2": 18
+    },
+    "comp6": {
+      "male_freemode_beach:0": 16
+    },
+    "comp7": {
+      "male_freemode_beach:0": 16,
+      "male_freemode_beach:1": 17
+    },
+    "comp8": {
+      "male_freemode_beach:1": 16
+    }
+  }
+}
