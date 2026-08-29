@@ -12,5 +12,299 @@
     "mp_m_freemode_01_mannequin^hand_000_u.ydd",
     "mp_m_freemode_01_mannequin^feet_000_u.ydd"
   ],
-  "errors": []
+  "errors": [],
+  "diagnostics": {
+    "bbox_lo": [
+      -1.0,
+      -1.0,
+      -1.002
+    ],
+    "bbox_hi": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "objects": [
+      {
+        "name": "cam",
+        "type": "CAMERA",
+        "loc": [
+          2.99,
+          -4.26,
+          0.16
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "Cube",
+        "type": "MESH",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "fill",
+        "type": "LIGHT",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_38AED724",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_38AED724.model",
+        "type": "MESH",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_3FBBEF0A",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_3FBBEF0A.model",
+        "type": "MESH",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_57AFF7FB",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_57AFF7FB.model",
+        "type": "MESH",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_976FBF04",
+        "type": "ARMATURE",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_B911AB60",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "hash_B911AB60.model",
+        "type": "MESH",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "key",
+        "type": "LIGHT",
+        "loc": [
+          1.6,
+          -1.8,
+          1.2
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "mp_m_freemode_01_mannequin^feet_000_u",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "mp_m_freemode_01_mannequin^hair_000_u",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "mp_m_freemode_01_mannequin^hand_000_u",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "mp_m_freemode_01_mannequin^head_000_u",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "mp_m_freemode_01_mannequin^lowr_000_u",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "mp_m_freemode_01_mannequin^uppr_000_u",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "SKEL_ROOT",
+        "type": "MESH",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  }
 }
