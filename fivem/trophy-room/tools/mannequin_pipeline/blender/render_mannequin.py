@@ -114,6 +114,38 @@ def rig_camera(yaw_deg: float):
     bpy.context.scene.world = world
 
 
+def force_visible() -> None:
+    """Sollumz can leave imported models hidden (LOD system / hidden
+    collections) — a hidden object renders nothing while still reporting a
+    bounding box. Un-hide everything for the preview."""
+    for obj in bpy.data.objects:
+        try:
+            obj.hide_render = False
+            obj.hide_viewport = False
+            obj.hide_set(False)
+        except Exception:  # noqa: BLE001
+            pass
+    for coll in bpy.data.collections:
+        try:
+            coll.hide_render = False
+            coll.hide_viewport = False
+        except Exception:  # noqa: BLE001
+            pass
+
+    def walk(lc):
+        try:
+            lc.exclude = False
+            lc.hide_viewport = False
+        except Exception:  # noqa: BLE001
+            pass
+        for child in lc.children:
+            walk(child)
+    try:
+        walk(bpy.context.view_layer.layer_collection)
+    except Exception:  # noqa: BLE001
+        pass
+
+
 def clear_default_scene() -> None:
     """Remove Blender's startup objects (Cube, Light, Camera) — the 2m default
     cube at the origin otherwise swallows the mannequin and the render."""
@@ -143,6 +175,7 @@ def main() -> None:
             imported.append(p.name)
         except Exception as e:  # noqa: BLE001
             import_errors.append(f"{p.name}: {e}")
+    force_visible()
     if not any(o.type == "MESH" for o in bpy.data.objects):
         write_result(args.result, {
             "status": "failed",
@@ -183,9 +216,17 @@ def main() -> None:
             "objects": [
                 {"name": o.name, "type": o.type,
                  "loc": [round(v, 2) for v in o.location],
-                 "scale": [round(v, 2) for v in o.scale]}
+                 "hide_render": getattr(o, "hide_render", None),
+                 "verts": (len(o.data.vertices)
+                           if o.type == "MESH" and getattr(o, "data", None)
+                           is not None else None)}
                 for o in bpy.data.objects
             ][:60],
+            "collections": [
+                {"name": c.name,
+                 "hide_render": getattr(c, "hide_render", None)}
+                for c in bpy.data.collections
+            ][:20],
         },
     })
 
