@@ -40,12 +40,29 @@ def _job_hash(rec: dict) -> str:
     return hashlib.sha256(ident.encode()).hexdigest()[:16]
 
 
+def _alloc_mannequin_local(alloc: dict, rec: dict) -> int:
+    """Stable mannequin-collection index for a converted piece. Base-game
+    pieces keep their source index (0..15); DLC-collection pieces get unique
+    indexes allocated from 16 upward, persisted so they never shift."""
+    if not rec["collection"]:
+        return rec["local_drawable"]
+    kind = "prop" if rec["is_prop"] else "comp"
+    slot = alloc.setdefault(rec["gender"], {}).setdefault(
+        f"{kind}{rec['component_id']}", {})
+    key = f"{rec['collection']}:{rec['local_drawable']}"
+    if key not in slot:
+        slot[key] = max([15] + list(slot.values())) + 1
+    return slot[key]
+
+
 def build_jobs(build_dir: Path, cfg: dict) -> list[dict]:
     catalog = load_json(build_dir / "scan_catalog.json")
     classification = load_json(build_dir / "classification.json")
     if not catalog or not classification:
         raise SystemExit("run `scan` and `classify` first")
     state = load_json(build_dir / "conversion_state.json", {"done": {}}) or {"done": {}}
+    alloc_path = build_dir / "manifest_alloc.json"
+    alloc = load_json(alloc_path, {}) or {}
 
     jobs = []
     for key, rec in catalog["drawables"].items():
@@ -68,6 +85,7 @@ def build_jobs(build_dir: Path, cfg: dict) -> list[dict]:
             "component_slug": rec["component_slug"],
             "collection": rec["collection"],
             "local_drawable": rec["local_drawable"],
+            "mannequin_local": _alloc_mannequin_local(alloc, rec),
             "textures": rec["texture_names"],
             # a garment classified 'convert' carries its own diffuse stem as a
             # skin hint, so Blender replaces its materials even when their
@@ -79,6 +97,7 @@ def build_jobs(build_dir: Path, cfg: dict) -> list[dict]:
             "collection_name": cfg.get("collection_name", "mannequin"),
             "out_dir": str(Path(cfg["assets_resource_dir"]) / "stream"),
         })
+    save_json(alloc_path, alloc)
     return jobs
 
 

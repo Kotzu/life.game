@@ -38,7 +38,7 @@ RENAMES = {
 
 REPORTS = ["build/scan_catalog.json", "build/crosscheck_report.json",
            "build/classification.json", "manual_review_queue.json",
-           "build/conversion_state.json"]
+           "build/conversion_state.json", "build/manifest_alloc.json"]
 
 
 def step(msg: str) -> None:

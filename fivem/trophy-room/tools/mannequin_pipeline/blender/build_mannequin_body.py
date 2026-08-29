@@ -167,6 +167,10 @@ def main() -> None:
             # male briefs piece: melt the waistband/cuff geometry into the
             # body so the bare mannequin reads as smooth hips, not underwear
             smoothed += smooth_z_band(obj, 0.66, 1.0)
+        if comp == 6 and job.get("gender") == "male":
+            # no barefoot male drawable exists — soften the low-profile shoe
+            # into an abstract mannequin foot (details melt, sole stays)
+            smoothed += smooth_z_band(obj, 0.0, 1.0, iterations=20)
         if comp == 2:  # hair source: replace with scalp derived from geometry
             pass  # scalp derives from the head job below
 
@@ -177,7 +181,7 @@ def main() -> None:
             bpy.data.objects.remove(o, do_unlink=True)
         mesh_objs = [scalp]
 
-    new_name = target_name(job)
+    new_name = target_name(job, job.get("mannequin_local"))
     for obj in bpy.data.objects:
         if obj.parent is None:
             obj.name = new_name

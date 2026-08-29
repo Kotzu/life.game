@@ -158,7 +158,7 @@ def main() -> None:
         })
         return
 
-    new_name = target_name(job)
+    new_name = target_name(job, job.get("mannequin_local"))
     for obj in bpy.data.objects:
         if obj.parent is None and obj.type in ("ARMATURE", "EMPTY", "MESH"):
             obj.name = new_name

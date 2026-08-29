@@ -64,10 +64,11 @@ KTR.Const = {
     -- lowest-profile shoe, reads as a stylized mannequin foot), female 14 =
     -- bare feet. Components not listed fall back to source index 0.
     MannequinBase = {
-        -- male: briefs band smoothed into the body at conversion; feet 13 is
-        -- the empty drawable (no base-game barefoot male exists — the leg
-        -- piece ends cleanly at the ankle)
-        male   = { [3] = 15, [4] = 14, [6] = 13 },
+        -- male: briefs band smoothed into the body at conversion; feet 2 is
+        -- the low-profile shoe smoothed into an abstract mannequin foot (no
+        -- base-game barefoot male drawable exists) so the figure has a sole
+        -- to stand on
+        male   = { [3] = 15, [4] = 14, [6] = 2 },
         female = { [3] = 15, [4] = 15, [6] = 14 },
     },
     AllComponents = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },

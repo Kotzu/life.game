@@ -31,7 +31,7 @@ PIECE_SLUGS = ("head", "hair", "uppr", "lowr", "hand", "feet")
 # bare feet. Male barefoot candidates (feet 2/4/6/13) pending identification.
 PREFERRED_IDX = {
     "male": {"uppr": ("015", "000"), "lowr": ("014", "000"),
-             "feet": ("013", "002", "000")},
+             "feet": ("016", "002", "013", "000")},
     "female": {"uppr": ("015", "000"), "lowr": ("015", "000"),
                "feet": ("014", "000")},
 }
@@ -164,6 +164,34 @@ def force_visible() -> None:
         pass
 
 
+def lower_arms(angle_deg: float = 58.0) -> list[str]:
+    """Rotate every armature's upper-arm bones downward so the preview shows a
+    mannequin A-pose instead of the raw bind T-pose. (In game the pose comes
+    from the configured mannequin animations — this is preview-only.)"""
+    import math as _m
+    from mathutils import Matrix, Vector
+    touched = []
+    for arm in [o for o in bpy.data.objects if o.type == "ARMATURE"]:
+        for pb in arm.pose.bones:
+            n = pb.name.lower()
+            if "upperarm" not in n and "upper_arm" not in n:
+                continue
+            # left arm points +X, right arm -X: rotate each toward the body
+            sign = -1.0 if ("l_" in n or n.endswith("_l") or ".l" in n) else 1.0
+            try:
+                head_world = arm.matrix_world @ pb.matrix @ Vector((0, 0, 0))
+                rot = (Matrix.Translation(head_world)
+                       @ Matrix.Rotation(_m.radians(sign * angle_deg), 4, "Y")
+                       @ Matrix.Translation(-head_world))
+                pb.matrix = (arm.matrix_world.inverted()
+                             @ rot @ arm.matrix_world @ pb.matrix)
+                touched.append(f"{arm.name}:{pb.name}")
+                bpy.context.view_layer.update()
+            except Exception:  # noqa: BLE001
+                continue
+    return touched
+
+
 def clear_default_scene() -> None:
     """Remove Blender's startup objects (Cube, Light, Camera) — the 2m default
     cube at the origin otherwise swallows the mannequin and the render."""
@@ -194,6 +222,7 @@ def main() -> None:
         except Exception as e:  # noqa: BLE001
             import_errors.append(f"{p.name}: {e}")
     force_visible()
+    posed = lower_arms()
     if not any(o.type == "MESH" for o in bpy.data.objects):
         write_result(args.result, {
             "status": "failed",
