@@ -25,6 +25,11 @@ from convert_garment import sollumz_import, write_result  # noqa: E402
 
 PIECE_SLUGS = ("head", "hair", "uppr", "lowr", "hand", "feet")
 
+# preferred drawable index per slug for the BARE mannequin figure:
+# uppr_015 is the bare-chest torso+arms variant (the clothed uppr variants are
+# sleeve-cropped arms only); everything else defaults to index 000 first.
+PREFERRED_IDX = {"uppr": ("015", "014", "000"), }
+
 
 def parse_args():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
@@ -46,9 +51,13 @@ def find_pieces(stream: Path, gender: str) -> list[Path]:
                         and p.name.lower().startswith(model))
     picks = []
     for slug in PIECE_SLUGS:
-        # exported names may be <model>_<coll>^<slug>_000_u.ydd, a sanitized
-        # variant without '^', or the .ydd.xml form — match loosely on slug
-        for marker in (f"^{slug}_000", f"_{slug}_000", f"^{slug}_", f"_{slug}_"):
+        # exported names may be <model>_<coll>^<slug>_NNN_u.ydd, a sanitized
+        # variant without '^', or the .ydd.xml form — match loosely on slug,
+        # trying the slug's preferred indices first (e.g. bare-chest uppr_015)
+        idx_prefs = PREFERRED_IDX.get(slug, ()) + ("000", "")
+        markers = [m for idx in idx_prefs
+                   for m in (f"^{slug}_{idx}", f"_{slug}_{idx}")]
+        for marker in markers:
             cands = [p for p in all_assets if marker in p.name.lower()]
             if cands:
                 # prefer binary .ydd over .ydd.xml when both exist
