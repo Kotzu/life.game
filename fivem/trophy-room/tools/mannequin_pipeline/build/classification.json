@@ -1,8 +1,8 @@
 {
   "counts": {
-    "body_skin": 204,
-    "convert": 136,
-    "skin_free": 112
+    "body_skin": 211,
+    "convert": 149,
+    "skin_free": 117
   },
   "items": {
     "female:comp0::0": {
@@ -481,6 +481,27 @@
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
+    "female:comp11:female_freemode_beach:0": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "skin-dominant texture (worst ratio 0.99 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
+      "resolution": null,
+      "skin_pixel_ratio": 0.993255615234375
+    },
+    "female:comp11:female_freemode_beach:1": {
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.0883331298828125
+    },
+    "female:comp11:female_freemode_beach:2": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "skin-dominant texture (worst ratio 0.78 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
+      "resolution": null,
+      "skin_pixel_ratio": 0.78350830078125
+    },
     "female:comp1::0": {
       "category": "skin_free",
       "effective": "skin_free",
@@ -649,6 +670,20 @@
       "resolution": null,
       "skin_pixel_ratio": null
     },
+    "female:comp2:female_freemode_beach:0": {
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "base skin carrier \u2014 replaced by mannequin body set",
+      "resolution": null,
+      "skin_pixel_ratio": null
+    },
+    "female:comp2:female_freemode_beach:1": {
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "base skin carrier \u2014 replaced by mannequin body set",
+      "resolution": null,
+      "skin_pixel_ratio": null
+    },
     "female:comp3::0": {
       "category": "body_skin",
       "effective": "body_skin",
@@ -762,11 +797,11 @@
       "skin_pixel_ratio": null
     },
     "female:comp4::0": {
-      "category": "body_skin",
-      "effective": "body_skin",
-      "reason": "designated base-body drawable \u2014 mannequin base piece",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
-      "skin_pixel_ratio": null
+      "skin_pixel_ratio": 0.8994140625
     },
     "female:comp4::1": {
       "category": "convert",
@@ -811,11 +846,11 @@
       "skin_pixel_ratio": 0.405487060546875
     },
     "female:comp4::15": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "designated base-body drawable \u2014 mannequin base piece",
       "resolution": null,
-      "skin_pixel_ratio": 0.4746246337890625
+      "skin_pixel_ratio": null
     },
     "female:comp4::2": {
       "category": "convert",
@@ -872,6 +907,20 @@
       "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.8548736572265625
+    },
+    "female:comp4:female_freemode_beach:0": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.9970245361328125
+    },
+    "female:comp4:female_freemode_beach:1": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.926666259765625
     },
     "female:comp5::0": {
       "category": "body_skin",
@@ -937,11 +986,11 @@
       "skin_pixel_ratio": null
     },
     "female:comp6::0": {
-      "category": "body_skin",
-      "effective": "body_skin",
-      "reason": "designated base-body drawable \u2014 mannequin base piece",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
-      "skin_pixel_ratio": null
+      "skin_pixel_ratio": 0.890350341796875
     },
     "female:comp6::1": {
       "category": "convert",
@@ -979,11 +1028,11 @@
       "skin_pixel_ratio": 0.908203125
     },
     "female:comp6::14": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "designated base-body drawable \u2014 mannequin base piece",
       "resolution": null,
-      "skin_pixel_ratio": 0.9808197021484375
+      "skin_pixel_ratio": null
     },
     "female:comp6::15": {
       "category": "convert",
@@ -1047,6 +1096,13 @@
       "reason": "skin-dominant texture (worst ratio 0.98 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
       "resolution": null,
       "skin_pixel_ratio": 0.981475830078125
+    },
+    "female:comp6:female_freemode_beach:0": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.9986419677734375
     },
     "female:comp7::0": {
       "category": "body_skin",
@@ -1112,6 +1168,20 @@
       "skin_pixel_ratio": null
     },
     "female:comp7::9": {
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "base skin carrier \u2014 replaced by mannequin body set",
+      "resolution": null,
+      "skin_pixel_ratio": null
+    },
+    "female:comp7:female_freemode_beach:0": {
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "base skin carrier \u2014 replaced by mannequin body set",
+      "resolution": null,
+      "skin_pixel_ratio": null
+    },
+    "female:comp7:female_freemode_beach:1": {
       "category": "body_skin",
       "effective": "body_skin",
       "reason": "base skin carrier \u2014 replaced by mannequin body set",
@@ -1229,6 +1299,20 @@
       "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
       "skin_pixel_ratio": null
+    },
+    "female:comp8:female_freemode_beach:0": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "skin-dominant texture (worst ratio 0.99 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
+      "resolution": null,
+      "skin_pixel_ratio": 0.993255615234375
+    },
+    "female:comp8:female_freemode_beach:1": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "skin-dominant texture (worst ratio 0.72 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
+      "resolution": null,
+      "skin_pixel_ratio": 0.715240478515625
     },
     "female:comp9::0": {
       "category": "skin_free",
@@ -2035,6 +2119,20 @@
       "resolution": null,
       "skin_pixel_ratio": 0.9267120361328125
     },
+    "male:comp11:male_freemode_beach:0": {
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.0128936767578125
+    },
+    "male:comp11:male_freemode_beach:1": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "skin-dominant texture (worst ratio 0.57 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
+      "resolution": null,
+      "skin_pixel_ratio": 0.5739593505859375
+    },
     "male:comp1::0": {
       "category": "skin_free",
       "effective": "skin_free",
@@ -2203,6 +2301,20 @@
       "resolution": null,
       "skin_pixel_ratio": null
     },
+    "male:comp2:male_freemode_beach:0": {
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "base skin carrier \u2014 replaced by mannequin body set",
+      "resolution": null,
+      "skin_pixel_ratio": null
+    },
+    "male:comp2:male_freemode_beach:1": {
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "base skin carrier \u2014 replaced by mannequin body set",
+      "resolution": null,
+      "skin_pixel_ratio": null
+    },
     "male:comp3::0": {
       "category": "body_skin",
       "effective": "body_skin",
@@ -2316,11 +2428,11 @@
       "skin_pixel_ratio": null
     },
     "male:comp4::0": {
-      "category": "body_skin",
-      "effective": "body_skin",
-      "reason": "designated base-body drawable \u2014 mannequin base piece",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
-      "skin_pixel_ratio": null
+      "skin_pixel_ratio": 0.8971405029296875
     },
     "male:comp4::1": {
       "category": "convert",
@@ -2358,11 +2470,11 @@
       "skin_pixel_ratio": 0.098907470703125
     },
     "male:comp4::14": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "designated base-body drawable \u2014 mannequin base piece",
       "resolution": null,
-      "skin_pixel_ratio": 0.9109344482421875
+      "skin_pixel_ratio": null
     },
     "male:comp4::15": {
       "category": "convert",
@@ -2426,6 +2538,27 @@
       "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.963043212890625
+    },
+    "male:comp4:male_freemode_beach:0": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.900665283203125
+    },
+    "male:comp4:male_freemode_beach:1": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.99652099609375
+    },
+    "male:comp4:male_freemode_beach:2": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.959503173828125
     },
     "male:comp5::0": {
       "category": "body_skin",
@@ -2491,11 +2624,11 @@
       "skin_pixel_ratio": null
     },
     "male:comp6::0": {
-      "category": "body_skin",
-      "effective": "body_skin",
-      "reason": "designated base-body drawable \u2014 mannequin base piece",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
       "resolution": null,
-      "skin_pixel_ratio": null
+      "skin_pixel_ratio": 0.0
     },
     "male:comp6::1": {
       "category": "convert",
@@ -2601,6 +2734,13 @@
       "reason": "skin-dominant texture (worst ratio 0.64 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
       "resolution": null,
       "skin_pixel_ratio": 0.63775634765625
+    },
+    "male:comp6:male_freemode_beach:0": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.8599090576171875
     },
     "male:comp7::0": {
       "category": "body_skin",
@@ -2708,6 +2848,20 @@
       "skin_pixel_ratio": null
     },
     "male:comp7::9": {
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "base skin carrier \u2014 replaced by mannequin body set",
+      "resolution": null,
+      "skin_pixel_ratio": null
+    },
+    "male:comp7:male_freemode_beach:0": {
+      "category": "body_skin",
+      "effective": "body_skin",
+      "reason": "base skin carrier \u2014 replaced by mannequin body set",
+      "resolution": null,
+      "skin_pixel_ratio": null
+    },
+    "male:comp7:male_freemode_beach:1": {
       "category": "body_skin",
       "effective": "body_skin",
       "reason": "base skin carrier \u2014 replaced by mannequin body set",
@@ -2825,6 +2979,27 @@
       "reason": "skin-dominant texture (worst ratio 0.93 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
       "resolution": null,
       "skin_pixel_ratio": 0.9267120361328125
+    },
+    "male:comp8:male_freemode_beach:0": {
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.0128936767578125
+    },
+    "male:comp8:male_freemode_beach:1": {
+      "category": "convert",
+      "effective": "convert",
+      "reason": "skin-dominant texture (worst ratio 0.57 >= 0.35) \u2014 nude/underwear piece, converted fully to mannequin material",
+      "resolution": null,
+      "skin_pixel_ratio": 0.5739593505859375
+    },
+    "male:comp8:male_freemode_beach:2": {
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "resolution": null,
+      "skin_pixel_ratio": 0.0128936767578125
     },
     "male:comp9::0": {
       "category": "skin_free",
