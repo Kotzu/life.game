@@ -305,6 +305,7 @@ def main() -> None:
         "imported": imported,
         "errors": import_errors,
         "diagnostics": {
+            "posed_bones": posed[:16],
             "bbox_lo": [round(v, 3) for v in lo],
             "bbox_hi": [round(v, 3) for v in hi],
             "objects": [

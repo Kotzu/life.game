@@ -164,9 +164,11 @@ def main() -> None:
         if comp == 0:  # head: close facial cavities
             smoothed += smooth_face_region(obj)
         if comp == 4 and job.get("gender") == "male":
-            # male briefs piece: melt the waistband/cuff geometry into the
-            # body so the bare mannequin reads as smooth hips, not underwear
-            smoothed += smooth_z_band(obj, 0.66, 1.0)
+            # male briefs piece: GENTLY soften the waistband/cuff geometry —
+            # heavy smoothing collapses the briefs shell and tears the hip
+            # (seen in preview evidence); keep the top seam (>=0.94) intact
+            # where the piece meets the torso
+            smoothed += smooth_z_band(obj, 0.55, 0.94, iterations=12)
         if comp == 6 and job.get("gender") == "male":
             # no barefoot male drawable exists — soften the low-profile shoe
             # into an abstract mannequin foot (details melt, sole stays)
