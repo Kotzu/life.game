@@ -7,7 +7,7 @@
   "imported": [
     "mp_f_freemode_01_mannequin^head_000_u.ydd",
     "mp_f_freemode_01_mannequin^hair_000_u.ydd",
-    "mp_f_freemode_01_mannequin^uppr_000_u.ydd",
+    "mp_f_freemode_01_mannequin^uppr_015_u.ydd",
     "mp_f_freemode_01_mannequin^lowr_000_u.ydd",
     "mp_f_freemode_01_mannequin^hand_000_u.ydd",
     "mp_f_freemode_01_mannequin^feet_000_u.ydd"
@@ -16,7 +16,7 @@
   "diagnostics": {
     "bbox_lo": [
       -0.588,
-      -0.148,
+      -0.168,
       -1.088
     ],
     "bbox_hi": [
@@ -30,7 +30,7 @@
         "type": "CAMERA",
         "loc": [
           2.84,
-          -4.06,
+          -4.07,
           0.02
         ],
         "hide_render": false,
@@ -68,28 +68,6 @@
         ],
         "hide_render": false,
         "verts": 906
-      },
-      {
-        "name": "hash_57AFF7FB",
-        "type": "EMPTY",
-        "loc": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "hide_render": false,
-        "verts": null
-      },
-      {
-        "name": "hash_57AFF7FB.model",
-        "type": "MESH",
-        "loc": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "hide_render": false,
-        "verts": 3587
       },
       {
         "name": "hash_94038DC8",
@@ -147,11 +125,33 @@
         "verts": 4
       },
       {
+        "name": "hash_D067EE79",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "hide_render": false,
+        "verts": null
+      },
+      {
+        "name": "hash_D067EE79.model",
+        "type": "MESH",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "hide_render": false,
+        "verts": 4084
+      },
+      {
         "name": "key",
         "type": "LIGHT",
         "loc": [
           1.6,
-          -1.81,
+          -1.82,
           1.06
         ],
         "hide_render": false,
@@ -213,7 +213,7 @@
         "verts": null
       },
       {
-        "name": "mp_f_freemode_01_mannequin^uppr_000_u",
+        "name": "mp_f_freemode_01_mannequin^uppr_015_u",
         "type": "EMPTY",
         "loc": [
           0.0,

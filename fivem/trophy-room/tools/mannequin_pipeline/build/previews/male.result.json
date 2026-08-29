@@ -7,7 +7,7 @@
   "imported": [
     "mp_m_freemode_01_mannequin^head_000_u.ydd",
     "mp_m_freemode_01_mannequin^hair_000_u.ydd",
-    "mp_m_freemode_01_mannequin^uppr_000_u.ydd",
+    "mp_m_freemode_01_mannequin^uppr_015_u.ydd",
     "mp_m_freemode_01_mannequin^lowr_000_u.ydd",
     "mp_m_freemode_01_mannequin^hand_000_u.ydd",
     "mp_m_freemode_01_mannequin^feet_000_u.ydd"
@@ -21,7 +21,7 @@
     ],
     "bbox_hi": [
       0.593,
-      0.152,
+      0.154,
       0.816
     ],
     "objects": [
@@ -92,28 +92,6 @@
         "verts": 1546
       },
       {
-        "name": "hash_57AFF7FB",
-        "type": "EMPTY",
-        "loc": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "hide_render": false,
-        "verts": null
-      },
-      {
-        "name": "hash_57AFF7FB.model",
-        "type": "MESH",
-        "loc": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "hide_render": false,
-        "verts": 3363
-      },
-      {
         "name": "hash_976FBF04",
         "type": "ARMATURE",
         "loc": [
@@ -147,11 +125,33 @@
         "verts": 4
       },
       {
+        "name": "hash_D067EE79",
+        "type": "EMPTY",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "hide_render": false,
+        "verts": null
+      },
+      {
+        "name": "hash_D067EE79.model",
+        "type": "MESH",
+        "loc": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "hide_render": false,
+        "verts": 4054
+      },
+      {
         "name": "key",
         "type": "LIGHT",
         "loc": [
           1.6,
-          -1.83,
+          -1.82,
           1.11
         ],
         "hide_render": false,
@@ -213,7 +213,7 @@
         "verts": null
       },
       {
-        "name": "mp_m_freemode_01_mannequin^uppr_000_u",
+        "name": "mp_m_freemode_01_mannequin^uppr_015_u",
         "type": "EMPTY",
         "loc": [
           0.0,
