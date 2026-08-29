@@ -1,8 +1,7 @@
 {
   "counts": {
-    "ambiguous": 14,
     "body_skin": 204,
-    "convert": 100,
+    "convert": 114,
     "skin_free": 134
   },
   "items": {
@@ -393,9 +392,9 @@
     },
     "female:comp11::11": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.029 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.0288238525390625
     },
     "female:comp11::12": {
@@ -449,9 +448,9 @@
     },
     "female:comp11::5": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.091 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.0911712646484375
     },
     "female:comp11::6": {
@@ -463,9 +462,9 @@
     },
     "female:comp11::7": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.079 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.0789794921875
     },
     "female:comp11::8": {
@@ -526,9 +525,9 @@
     },
     "female:comp1::6": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.037 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.037109375
     },
     "female:comp1::7": {
@@ -848,9 +847,9 @@
     },
     "female:comp4::6": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.116 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.116058349609375
     },
     "female:comp4::7": {
@@ -1009,9 +1008,9 @@
     },
     "female:comp6::4": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.119 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.1192474365234375
     },
     "female:comp6::5": {
@@ -1142,9 +1141,9 @@
     },
     "female:comp8::11": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.029 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.0288238525390625
     },
     "female:comp8::12": {
@@ -1198,9 +1197,9 @@
     },
     "female:comp8::5": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.092 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.091522216796875
     },
     "female:comp8::6": {
@@ -2024,9 +2023,9 @@
     },
     "male:comp11::8": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.061 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.0612945556640625
     },
     "male:comp11::9": {
@@ -2080,9 +2079,9 @@
     },
     "male:comp1::6": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.037 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.037109375
     },
     "male:comp1::7": {
@@ -2332,9 +2331,9 @@
     },
     "male:comp4::10": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.105 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.105255126953125
     },
     "male:comp4::11": {
@@ -2353,9 +2352,9 @@
     },
     "male:comp4::13": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.099 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.098907470703125
     },
     "male:comp4::14": {
@@ -2549,9 +2548,9 @@
     },
     "male:comp6::2": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.054 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.054473876953125
     },
     "male:comp6::3": {
@@ -2815,9 +2814,9 @@
     },
     "male:comp8::8": {
       "category": "ambiguous",
-      "effective": "ambiguous",
+      "effective": "convert",
       "reason": "skin-pixel ratio 0.061 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null,
+      "resolution": "convert",
       "skin_pixel_ratio": 0.0612945556640625
     },
     "male:comp8::9": {
