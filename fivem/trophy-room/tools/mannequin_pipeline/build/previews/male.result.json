@@ -1,9 +1,16 @@
 {
-  "status": "failed",
-  "reason": "no converted body pieces found in D:\\life.game\\fivem\\trophy-room\\resources\\[kotzu]\\kotzu_mannequin_assets\\stream",
-  "evidence": {
-    "stream_files": [
-      ".gitkeep"
-    ]
-  }
+  "status": "ok",
+  "renders": [
+    "male_front.png",
+    "male_three_quarter.png"
+  ],
+  "imported": [
+    "mp_m_freemode_01_mannequin^head_000_u.ydd",
+    "mp_m_freemode_01_mannequin^hair_000_u.ydd",
+    "mp_m_freemode_01_mannequin^uppr_000_u.ydd",
+    "mp_m_freemode_01_mannequin^lowr_000_u.ydd",
+    "mp_m_freemode_01_mannequin^hand_000_u.ydd",
+    "mp_m_freemode_01_mannequin^feet_000_u.ydd"
+  ],
+  "errors": []
 }
