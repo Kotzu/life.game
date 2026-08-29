@@ -25,7 +25,8 @@
       },
       "key": "female:comp11::11",
       "reason": "skin-pixel ratio 0.029 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: top with visible embedded skin regions (tank/crop style) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -52,7 +53,8 @@
       },
       "key": "female:comp11::5",
       "reason": "skin-pixel ratio 0.091 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: top with visible embedded skin regions (tank/crop style) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -79,7 +81,8 @@
       },
       "key": "female:comp11::7",
       "reason": "skin-pixel ratio 0.079 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: top with visible embedded skin regions (tank/crop style) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -94,7 +97,8 @@
       },
       "key": "female:comp1::6",
       "reason": "skin-pixel ratio 0.037 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: mask with skin-tone material; conversion is the safe direction -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -121,7 +125,8 @@
       },
       "key": "female:comp4::6",
       "reason": "skin-pixel ratio 0.116 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: race-suffixed _whi textures = embedded per-race skin (shorts/pants showing leg skin) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -148,7 +153,8 @@
       },
       "key": "female:comp6::4",
       "reason": "skin-pixel ratio 0.119 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: mid-band skin ratio on footwear (sandal-style, foot skin visible) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -175,7 +181,8 @@
       },
       "key": "female:comp8::11",
       "reason": "skin-pixel ratio 0.029 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: undershirt layer paired with skin-showing top -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -202,7 +209,8 @@
       },
       "key": "female:comp8::5",
       "reason": "skin-pixel ratio 0.092 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: undershirt layer paired with skin-showing top -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -229,7 +237,8 @@
       },
       "key": "male:comp11::8",
       "reason": "skin-pixel ratio 0.061 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: top with visible embedded skin regions (tank/crop style) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -244,7 +253,8 @@
       },
       "key": "male:comp1::6",
       "reason": "skin-pixel ratio 0.037 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: mask with skin-tone material; conversion is the safe direction -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -271,7 +281,8 @@
       },
       "key": "male:comp4::10",
       "reason": "skin-pixel ratio 0.105 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: race-suffixed _whi textures = embedded per-race skin (shorts/pants showing leg skin) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -298,7 +309,8 @@
       },
       "key": "male:comp4::13",
       "reason": "skin-pixel ratio 0.099 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: race-suffixed _whi textures = embedded per-race skin (shorts/pants showing leg skin) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -325,7 +337,8 @@
       },
       "key": "male:comp6::2",
       "reason": "skin-pixel ratio 0.054 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: mid-band skin ratio on footwear (sandal-style, foot skin visible) -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     },
     {
       "evidence": {
@@ -352,9 +365,10 @@
       },
       "key": "male:comp8::8",
       "reason": "skin-pixel ratio 0.061 inside ambiguity band [0.015,0.12] \u2014 manual review",
-      "resolution": null
+      "resolution": "convert",
+      "resolved_note": "reviewed 2026-08-29: undershirt layer paired with skin-showing top -> convert; a needless convert self-flags in Blender if no skin material matches, a wrong skin_free would ship skin on the mannequin \u2014 convert is the only safe direction"
     }
   ],
   "schema": "kotzu_manual_review/1",
-  "unresolved": 14
+  "unresolved": 0
 }
