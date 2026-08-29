@@ -54,6 +54,20 @@ def swap_all_materials(obj) -> None:
         slot.material = make_mannequin_material(slot.material)
 
 
+def _interior(verts):
+    """Drop vertices on/next to open boundaries — smoothing a free edge
+    collapses the rim (torn briefs, clavicle notch in preview evidence)."""
+    boundary = set()
+    for v in verts:
+        for e in v.link_edges:
+            if e.is_boundary:
+                boundary.add(v)
+                for e2 in v.link_edges:
+                    boundary.add(e2.other_vert(v))
+                break
+    return [v for v in verts if v not in boundary]
+
+
 def smooth_face_region(obj) -> int:
     """Close eye/mouth/nostril cavities by smoothing high-curvature face verts.
 
@@ -70,12 +84,16 @@ def smooth_face_region(obj) -> int:
     if not ys:
         bm.free()
         return 0
-    y_front = min(ys) + (max(ys) - min(ys)) * 0.45  # front 55% of the head
+    # the freemode face points toward -Y (verified: the preview camera sits at
+    # -Y and sees the face) — select the front 55 percent on the -Y side
+    y_cut = min(ys) + (max(ys) - min(ys)) * 0.55
 
     # MANNEQUIN face: smooth the ENTIRE front of the head so eyes, mouth and
     # nostrils melt into the surface (featureless, per the reference look).
     # The cranium/ears/nape stay untouched — they carry the head's shape.
-    front = [v for v in bm.verts if v.co.y >= y_front]
+    # Open-boundary vertices (neck rim) and their ring are excluded: smoothing
+    # a free edge collapses it (seen as the clavicle notch in evidence).
+    front = _interior([v for v in bm.verts if v.co.y <= y_cut])
     for _ in range(SMOOTH_ITERATIONS):
         bmesh.ops.smooth_vert(bm, verts=front, factor=SMOOTH_FACTOR,
                               use_axis_x=True, use_axis_y=True, use_axis_z=True)
@@ -113,8 +131,8 @@ def smooth_z_band(obj, lo_frac: float, hi_frac: float,
         return 0
     zmin, zmax = min(zs), max(zs)
     rng = (zmax - zmin) or 1.0
-    verts = [v for v in bm.verts
-             if lo_frac <= (v.co.z - zmin) / rng <= hi_frac]
+    verts = _interior([v for v in bm.verts
+                       if lo_frac <= (v.co.z - zmin) / rng <= hi_frac])
     for _ in range(iterations):
         bmesh.ops.smooth_vert(bm, verts=verts, factor=SMOOTH_FACTOR,
                               use_axis_x=True, use_axis_y=True,

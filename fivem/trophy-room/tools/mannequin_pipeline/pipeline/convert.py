@@ -43,11 +43,11 @@ def _job_hash(rec: dict) -> str:
         comp, local, gender = (rec["component_id"], rec["local_drawable"],
                                rec["gender"])
         if comp == 0 and local == 0:
-            ident += "|face3"
+            ident += "|face4"
         elif comp == 4 and gender == "male" and local == 14:
-            ident += "|briefs3"
+            ident += "|briefs4"
         elif comp == 6 and gender == "male" and local == 2:
-            ident += "|foot2"
+            ident += "|foot3"
     return hashlib.sha256(ident.encode()).hexdigest()[:16]
 
 

@@ -33,7 +33,7 @@ PREFERRED_IDX = {
     "male": {"uppr": ("015", "000"), "lowr": ("014", "000"),
              "feet": ("016", "002", "013", "000")},
     "female": {"uppr": ("015", "000"), "lowr": ("015", "000"),
-               "feet": ("014", "000")},
+               "feet": ("016", "014", "000")},
 }
 
 
@@ -164,6 +164,26 @@ def force_visible() -> None:
         pass
 
 
+def ensure_armature_modifiers() -> int:
+    """Sollumz imports skinned meshes without an Armature modifier attached —
+    the pose then never deforms anything (arms stayed in T in the evidence).
+    Bind every vertex-grouped mesh to the scene's armature."""
+    arms = [o for o in bpy.data.objects if o.type == "ARMATURE"]
+    if not arms:
+        return 0
+    n = 0
+    for o in bpy.data.objects:
+        if (o.type == "MESH" and o.vertex_groups
+                and not any(m.type == "ARMATURE" for m in o.modifiers)):
+            try:
+                mod = o.modifiers.new("Armature", "ARMATURE")
+                mod.object = arms[0]
+                n += 1
+            except Exception:  # noqa: BLE001
+                pass
+    return n
+
+
 def lower_arms(angle_deg: float = 58.0) -> list[str]:
     """Rotate every armature's upper-arm bones downward so the preview shows a
     mannequin A-pose instead of the raw bind T-pose. (In game the pose comes
@@ -222,6 +242,7 @@ def main() -> None:
         except Exception as e:  # noqa: BLE001
             import_errors.append(f"{p.name}: {e}")
     force_visible()
+    bound = ensure_armature_modifiers()
     posed = lower_arms()
     if not any(o.type == "MESH" for o in bpy.data.objects):
         write_result(args.result, {
@@ -306,6 +327,7 @@ def main() -> None:
         "errors": import_errors,
         "diagnostics": {
             "posed_bones": posed[:16],
+            "armature_modifiers_added": bound,
             "bbox_lo": [round(v, 3) for v in lo],
             "bbox_hi": [round(v, 3) for v in hi],
             "objects": [
