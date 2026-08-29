@@ -37,7 +37,8 @@ RENAMES = {
 }
 
 REPORTS = ["build/scan_catalog.json", "build/crosscheck_report.json",
-           "build/classification.json", "manual_review_queue.json"]
+           "build/classification.json", "manual_review_queue.json",
+           "build/conversion_state.json"]
 
 
 def step(msg: str) -> None:
@@ -113,6 +114,36 @@ def run_pipeline() -> None:
             raise SystemExit(f"pipeline {cmd} failed — fix the error above and rerun")
 
 
+def find_blender() -> None:
+    """Make sure config.json's blender_exe points at a real blender.exe."""
+    step("locating Blender")
+    cfg_path = HERE / "config.json"
+    cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+    exe = Path(cfg.get("blender_exe", ""))
+    if exe.is_file():
+        print("  blender_exe OK:", exe)
+        return
+    candidates = sorted(Path("C:/Program Files/Blender Foundation").glob(
+        "Blender */blender.exe")) if Path("C:/Program Files/Blender Foundation").exists() else []
+    if not candidates:
+        raise SystemExit(
+            "! Blender not found. Install Blender 4.2 LTS (blender.org), or set "
+            "\"blender_exe\" in config.json to your blender.exe path, then rerun.")
+    cfg["blender_exe"] = candidates[-1].as_posix()
+    cfg_path.write_text(json.dumps(cfg, indent=2), encoding="utf-8")
+    print("  blender_exe ->", cfg["blender_exe"])
+
+
+def run_convert() -> None:
+    find_blender()
+    step("pipeline convert (Blender, headless — this takes a while; "
+         "progress prints per item)")
+    run([sys.executable, "-m", "pipeline", "convert"])
+    st = json.loads((HERE / "build/conversion_state.json").read_text(encoding="utf-8"))
+    print(f"\n  converted so far: {len(st.get('done', {}))}  "
+          f"failed: {len(st.get('failed', {}))}")
+
+
 def summarize() -> None:
     step("summary")
     scan = json.loads((HERE / "build/scan_catalog.json").read_text(encoding="utf-8"))
@@ -171,6 +202,8 @@ def main() -> None:
                     help="CodeWalker export folder (default: %(default)s)")
     ap.add_argument("--no-git", action="store_true",
                     help="run everything but skip commit/push")
+    ap.add_argument("--convert", action="store_true",
+                    help="also run the Blender conversion step after classify")
     args = ap.parse_args()
 
     extracted = Path(args.extracted)
@@ -178,6 +211,8 @@ def main() -> None:
     ensure_pillow()
     write_config(extracted)
     run_pipeline()
+    if args.convert:
+        run_convert()
     summarize()
     if not args.no_git:
         push_reports()
