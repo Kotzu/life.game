@@ -188,6 +188,18 @@ def main() -> None:
     scene.render.resolution_x = 900
     scene.render.resolution_y = 1400
     scene.render.image_settings.file_format = "PNG"
+    # Workbench: solid studio shading that IGNORES materials — game shaders
+    # imported by Sollumz evaluate as transparent in EEVEE, hiding the meshes.
+    # For a shape-QA preview we want guaranteed-visible geometry in mannequin
+    # ivory, which is exactly what Workbench single-color mode gives.
+    try:
+        scene.render.engine = "BLENDER_WORKBENCH"
+        scene.display.shading.light = "STUDIO"
+        scene.display.shading.color_type = "SINGLE"
+        scene.display.shading.single_color = (0.906, 0.894, 0.871)
+        scene.display.shading.show_cavity = True
+    except Exception:  # noqa: BLE001 - fall back to whatever engine is active
+        pass
 
     renders = []
     for label, yaw in (("front", 0), ("three_quarter", 35)):
