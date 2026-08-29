@@ -80,12 +80,15 @@ def rig_camera(yaw_deg: float):
     lo, hi = scene_bbox()
     center = Vector(((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2))
     height = max(hi[2] - lo[2], 0.5)
-    dist = height * 1.9
+    # generous distance + wide-ish lens: never end up inside the mesh
+    dist = max(height * 2.6, 3.0)
     yaw = math.radians(yaw_deg)
     loc = center + Vector((math.sin(yaw) * dist, -math.cos(yaw) * dist,
                            height * 0.08))
     cam_data = bpy.data.cameras.new("cam")
-    cam_data.lens = 60
+    cam_data.lens = 40
+    cam_data.clip_start = 0.02
+    cam_data.clip_end = 500.0
     cam = bpy.data.objects.new("cam", cam_data)
     bpy.context.collection.objects.link(cam)
     cam.location = loc
@@ -160,11 +163,22 @@ def main() -> None:
         except Exception as e:  # noqa: BLE001
             import_errors.append(f"render {label}: {e}")
 
+    lo, hi = scene_bbox()
     write_result(args.result, {
         "status": "ok" if renders else "failed",
         "renders": renders,
         "imported": imported,
         "errors": import_errors,
+        "diagnostics": {
+            "bbox_lo": [round(v, 3) for v in lo],
+            "bbox_hi": [round(v, 3) for v in hi],
+            "objects": [
+                {"name": o.name, "type": o.type,
+                 "loc": [round(v, 2) for v in o.location],
+                 "scale": [round(v, 2) for v in o.scale]}
+                for o in bpy.data.objects
+            ][:60],
+        },
     })
 
 

@@ -80,7 +80,13 @@ def sollumz_export(out_dir: str) -> list[str]:
     returning FINISHED with an empty directory is a failure, never success."""
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    before = {f.name for f in out.iterdir()}
+    # recursive: Sollumz writes into generation subfolders (e.g. stream/gen8/);
+    # snapshot (path, mtime, size) so an overwrite of an existing file from a
+    # previous run still counts as written
+    def _files():
+        return {(str(f.relative_to(out)), f.stat().st_mtime_ns, f.stat().st_size)
+                for f in out.rglob("*") if f.is_file()}
+    before = _files()
     _select_all_for_export()
     candidates = (
         # verified against Sollumz 2.9: export_assets(directory, direct_export)
@@ -95,7 +101,7 @@ def sollumz_export(out_dir: str) -> list[str]:
         except Exception as e:  # noqa: BLE001
             errors.append(str(e))
             continue
-        written = sorted(f.name for f in out.iterdir() if f.name not in before)
+        written = sorted({path for path, _, _ in _files() - before})
         if written:
             return written
         errors.append("operator finished but wrote no files")
