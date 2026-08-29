@@ -114,11 +114,19 @@ def rig_camera(yaw_deg: float):
     bpy.context.scene.world = world
 
 
+def clear_default_scene() -> None:
+    """Remove Blender's startup objects (Cube, Light, Camera) — the 2m default
+    cube at the origin otherwise swallows the mannequin and the render."""
+    for obj in list(bpy.data.objects):
+        bpy.data.objects.remove(obj, do_unlink=True)
+
+
 def main() -> None:
     args = parse_args()
     stream = Path(args.stream)
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    clear_default_scene()
 
     pieces = find_pieces(stream, args.gender)
     if not pieces:
