@@ -62,7 +62,15 @@ def normalize_folders(extracted: Path) -> None:
             if target.exists():
                 print(f"  ! both {child.name} and {want} exist — merge manually")
                 continue
-            child.rename(target)
+            try:
+                child.rename(target)
+            except PermissionError:
+                raise SystemExit(
+                    f"\n! Cannot rename '{child.name}' -> '{want}': the folder is "
+                    "locked by another program.\n"
+                    "  Close CodeWalker and any Explorer window open on that "
+                    "folder, then run this script again.\n"
+                    f"  (Or rename it yourself in Explorer to exactly: {want})")
             print(f"  renamed {child.name} -> {want}")
     found = [c.name for c in sorted(extracted.iterdir())
              if c.is_dir() and c.name.lower().startswith(("mp_m_", "mp_f_"))]
@@ -146,6 +154,8 @@ def push_reports() -> None:
         print("  nothing new to commit (reports unchanged)")
         return
     run(["git", "commit", "-m", "pipeline: scan+crosscheck+classify reports from workstation"])
+    # bring in any commits pushed remotely in the meantime, else push is rejected
+    run(["git", "pull", "--no-rebase", "--no-edit"])
     for attempt in range(4):
         if run(["git", "push", "-u", "origin", BRANCH]).returncode == 0:
             print("\nDONE — reports pushed. Tell Claude to analyze them.")
