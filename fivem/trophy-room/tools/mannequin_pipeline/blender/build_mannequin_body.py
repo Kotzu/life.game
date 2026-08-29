@@ -94,7 +94,9 @@ def smooth_face_region(obj) -> int:
     # Open-boundary vertices (neck rim) and their ring are excluded: smoothing
     # a free edge collapses it (seen as the clavicle notch in evidence).
     front = _interior([v for v in bm.verts if v.co.y <= y_cut])
-    for _ in range(SMOOTH_ITERATIONS):
+    # moderate broad pass: soften features while KEEPING the face volume —
+    # a heavy pass collapsed the head (crest/beak artifacts in evidence)
+    for _ in range(12):
         bmesh.ops.smooth_vert(bm, verts=front, factor=SMOOTH_FACTOR,
                               use_axis_x=True, use_axis_y=True, use_axis_z=True)
 
@@ -107,7 +109,7 @@ def smooth_face_region(obj) -> int:
                 region.add(v)
                 break
     verts = list(region)
-    for _ in range(SMOOTH_ITERATIONS):
+    for _ in range(30):
         bmesh.ops.smooth_vert(bm, verts=verts, factor=SMOOTH_FACTOR,
                               use_axis_x=True, use_axis_y=True, use_axis_z=True)
     verts = front

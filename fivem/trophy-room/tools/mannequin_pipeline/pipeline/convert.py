@@ -43,7 +43,7 @@ def _job_hash(rec: dict) -> str:
         comp, local, gender = (rec["component_id"], rec["local_drawable"],
                                rec["gender"])
         if comp == 0 and local == 0:
-            ident += "|face4"
+            ident += "|face5"
         elif comp == 4 and gender == "male" and local == 14:
             ident += "|briefs4"
         elif comp == 6 and gender == "male" and local == 2:
