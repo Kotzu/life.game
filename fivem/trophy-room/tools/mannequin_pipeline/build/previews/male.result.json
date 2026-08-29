@@ -1,4 +1,9 @@
 {
   "status": "failed",
-  "reason": "no converted body pieces found in D:\\life.game\\fivem\\trophy-room\\resources\\[kotzu]\\kotzu_mannequin_assets\\stream"
+  "reason": "no converted body pieces found in D:\\life.game\\fivem\\trophy-room\\resources\\[kotzu]\\kotzu_mannequin_assets\\stream",
+  "evidence": {
+    "stream_files": [
+      ".gitkeep"
+    ]
+  }
 }
