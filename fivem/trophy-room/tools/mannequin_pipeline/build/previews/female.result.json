@@ -33,11 +33,8 @@
           -4.06,
           0.02
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "fill",
@@ -47,11 +44,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "hash_3FBBEF0A",
@@ -61,11 +55,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "hash_3FBBEF0A.model",
@@ -75,11 +66,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": 906
       },
       {
         "name": "hash_57AFF7FB",
@@ -89,11 +77,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "hash_57AFF7FB.model",
@@ -103,11 +88,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": 3587
       },
       {
         "name": "hash_94038DC8",
@@ -117,11 +99,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "hash_94038DC8.model",
@@ -131,11 +110,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": 702
       },
       {
         "name": "hash_976FBF04",
@@ -145,11 +121,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "hash_B911AB60",
@@ -159,11 +132,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "hash_B911AB60.model",
@@ -173,11 +143,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": 4
       },
       {
         "name": "key",
@@ -187,11 +154,8 @@
           -1.81,
           1.06
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "mp_f_freemode_01_mannequin^feet_000_u",
@@ -201,11 +165,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "mp_f_freemode_01_mannequin^hair_000_u",
@@ -215,11 +176,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "mp_f_freemode_01_mannequin^hand_000_u",
@@ -229,11 +187,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "mp_f_freemode_01_mannequin^head_000_u",
@@ -243,11 +198,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "mp_f_freemode_01_mannequin^lowr_000_u",
@@ -257,11 +209,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "mp_f_freemode_01_mannequin^uppr_000_u",
@@ -271,11 +220,8 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": null
       },
       {
         "name": "SKEL_ROOT",
@@ -285,11 +231,14 @@
           0.0,
           0.0
         ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
+        "hide_render": false,
+        "verts": 1535
+      }
+    ],
+    "collections": [
+      {
+        "name": "Collection",
+        "hide_render": false
       }
     ]
   }
