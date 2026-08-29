@@ -72,27 +72,27 @@ def smooth_face_region(obj) -> int:
         return 0
     y_front = min(ys) + (max(ys) - min(ys)) * 0.45  # front 55% of the head
 
+    # MANNEQUIN face: smooth the ENTIRE front of the head so eyes, mouth and
+    # nostrils melt into the surface (featureless, per the reference look).
+    # The cranium/ears/nape stay untouched — they carry the head's shape.
+    front = [v for v in bm.verts if v.co.y >= y_front]
+    for _ in range(SMOOTH_ITERATIONS):
+        bmesh.ops.smooth_vert(bm, verts=front, factor=SMOOTH_FACTOR,
+                              use_axis_x=True, use_axis_y=True, use_axis_z=True)
+
+    # extra pass on cavity rims (deep creases survive broad smoothing)
     region = set()
-    for v in bm.verts:
-        if v.co.y < y_front:
-            continue
-        # cavity rims: sharp local normal variance
+    for v in front:
         for e in v.link_edges:
             o = e.other_vert(v)
             if v.normal.dot(o.normal) < math.cos(math.radians(42)):
                 region.add(v)
                 break
-
-    # grow the region one ring so smoothing feathers out
-    grown = set(region)
-    for v in region:
-        for e in v.link_edges:
-            grown.add(e.other_vert(v))
-
-    verts = list(grown)
+    verts = list(region)
     for _ in range(SMOOTH_ITERATIONS):
         bmesh.ops.smooth_vert(bm, verts=verts, factor=SMOOTH_FACTOR,
                               use_axis_x=True, use_axis_y=True, use_axis_z=True)
+    verts = front
 
     bm.to_mesh(me)
     bm.free()

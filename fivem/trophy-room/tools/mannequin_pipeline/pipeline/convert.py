@@ -37,6 +37,11 @@ CONVERT_REV = 2
 
 def _job_hash(rec: dict) -> str:
     ident = f"{rec['source_path']}|{rec['texture_count']}|r{CONVERT_REV}"
+    # face rev: the base head (the only one the mannequin shows) re-runs when
+    # the featureless-face treatment changes, without re-running everything
+    if rec["component_id"] == 0 and rec["local_drawable"] == 0 \
+            and not rec["collection"]:
+        ident += "|face3"
     return hashlib.sha256(ident.encode()).hexdigest()[:16]
 
 
