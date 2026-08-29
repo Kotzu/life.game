@@ -17,6 +17,17 @@ from .model import load_json, save_json
 
 BLENDER_DIR = Path(__file__).resolve().parent.parent / "blender"
 
+# Sollumz's module name depends on how it was installed: legacy addon zip
+# ('Sollumz'/'sollumz') or a Blender 4.2 extension (bl_ext.<repo>.sollumz).
+# --addons takes a comma list and only warns about unknown names, so enable
+# every candidate; user preferences load too (no --factory-startup), which
+# covers an already-enabled install regardless of its name.
+SOLLUMZ_ADDONS = ",".join((
+    "sollumz", "Sollumz",
+    "bl_ext.user_default.sollumz", "bl_ext.user_default.Sollumz",
+    "bl_ext.blender_org.sollumz",
+))
+
 
 def _job_hash(rec: dict) -> str:
     ident = f"{rec['source_path']}|{rec['texture_count']}"
@@ -65,16 +76,6 @@ def run_jobs(build_dir: Path, cfg: dict, jobs: list[dict],
     state.setdefault("failed", {})
     blender = cfg.get("blender_exe", "blender")
     results = {"ok": 0, "failed": 0, "ambiguous": 0, "dry_run": dry_run}
-    # Sollumz's module name depends on how it was installed: legacy addon zip
-    # ('Sollumz'/'sollumz') or a Blender 4.2 extension (bl_ext.<repo>.sollumz).
-    # --addons takes a comma list and only warns about unknown names, so enable
-    # every candidate; user preferences load too (no --factory-startup), which
-    # covers an already-enabled install regardless of its name.
-    addon_candidates = ",".join((
-        "sollumz", "Sollumz",
-        "bl_ext.user_default.sollumz", "bl_ext.user_default.Sollumz",
-        "bl_ext.blender_org.sollumz",
-    ))
 
     for i, job in enumerate(jobs, 1):
         job_path = build_dir / "jobs" / f"{job['hash']}.json"
@@ -85,7 +86,7 @@ def run_jobs(build_dir: Path, cfg: dict, jobs: list[dict],
         script = BLENDER_DIR / ("build_mannequin_body.py" if job["kind"] == "body"
                                 else "convert_garment.py")
         cmd = [blender, "--background",
-               "--addons", addon_candidates,
+               "--addons", SOLLUMZ_ADDONS,
                "--python", str(script), "--",
                "--job", str(job_path), "--out", str(result_path)]
         try:

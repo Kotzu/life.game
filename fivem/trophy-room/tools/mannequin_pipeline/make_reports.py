@@ -144,6 +144,30 @@ def run_convert() -> None:
           f"failed: {len(st.get('failed', {}))}")
 
 
+def run_preview() -> None:
+    """Render the assembled mannequin (front + 3/4, both genders) to PNGs."""
+    find_blender()
+    sys.path.insert(0, str(HERE))
+    from pipeline.convert import SOLLUMZ_ADDONS
+    cfg = json.loads((HERE / "config.json").read_text(encoding="utf-8"))
+    stream = Path(cfg["assets_resource_dir"]) / "stream"
+    if not stream.is_absolute():
+        stream = (HERE / stream).resolve()
+    out_dir = HERE / "build" / "previews"
+    step("rendering assembled mannequin previews")
+    for gender in ("male", "female"):
+        run([cfg["blender_exe"], "--background",
+             "--addons", SOLLUMZ_ADDONS,
+             "--python", str(HERE / "blender" / "render_mannequin.py"), "--",
+             "--stream", str(stream), "--gender", gender,
+             "--out-dir", str(out_dir),
+             "--result", str(out_dir / f"{gender}.result.json")])
+        res_path = out_dir / f"{gender}.result.json"
+        res = json.loads(res_path.read_text(encoding="utf-8")) if res_path.exists() else {}
+        print(f"  {gender}: {res.get('status', 'no result')} "
+              f"{res.get('renders', res.get('reason', ''))}")
+
+
 def summarize() -> None:
     step("summary")
     scan = json.loads((HERE / "build/scan_catalog.json").read_text(encoding="utf-8"))
@@ -177,7 +201,12 @@ def push_reports() -> None:
         print(f"  ! current branch is '{br}', expected '{BRANCH}' — "
               f"run: git checkout {BRANCH}")
         raise SystemExit(1)
-    for rel in REPORTS:
+    to_add = list(REPORTS)
+    previews = HERE / "build" / "previews"
+    if previews.is_dir():
+        to_add += [f"build/previews/{p.name}" for p in sorted(previews.iterdir())
+                   if p.suffix in (".png", ".json")]
+    for rel in to_add:
         if (HERE / rel).exists():
             run(["git", "add", "-f", rel])
     diff = run(["git", "diff", "--cached", "--quiet"])
@@ -204,6 +233,8 @@ def main() -> None:
                     help="run everything but skip commit/push")
     ap.add_argument("--convert", action="store_true",
                     help="also run the Blender conversion step after classify")
+    ap.add_argument("--preview", action="store_true",
+                    help="also render assembled-mannequin preview PNGs")
     args = ap.parse_args()
 
     extracted = Path(args.extracted)
@@ -213,6 +244,8 @@ def main() -> None:
     run_pipeline()
     if args.convert:
         run_convert()
+    if args.preview:
+        run_preview()
     summarize()
     if not args.no_git:
         push_reports()

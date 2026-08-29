@@ -6,6 +6,7 @@ for a human decision.
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Optional
 
@@ -87,8 +88,40 @@ def classify_record(rec: dict, cfg: dict, png_dir: Path,
     return Classification(key, "ambiguous", f"unknown component {comp}")
 
 
+# Rockstar's freemode convention, verified 114/114 against Blender material
+# evidence from the full base-game conversion run: a garment embeds skin iff
+# its diffuse textures carry a race suffix (_whi/_bla/...); '_uni' (universal)
+# textures never contain skin — visible skin comes from the body components
+# underneath, which the mannequin body set already replaces.
+RACE_SUFFIX_RE = re.compile(
+    r"_(whi|bla|chi|lat|ara|bal|jap|kor|mid|pak|sou|vie)$")
+
+
 def _classify_by_texture(key: str, rec: dict, cfg: dict, png_dir: Path) -> Classification:
-    lo, hi = cfg.get("ambiguous_band", [0.015, 0.12])
+    texs = rec.get("texture_names", [])
+    if not texs:
+        return Classification(
+            key, "ambiguous",
+            "no textures found for garment — cannot determine skin embedding; "
+            "manual review required")
+    race = sorted({RACE_SUFFIX_RE.search(t).group(1)
+                   for t in texs if RACE_SUFFIX_RE.search(t)})
+    ratio = _worst_skin_ratio(rec, cfg, png_dir)  # informational
+    if race:
+        return Classification(
+            key, "convert",
+            f"race-suffixed diffuse textures ({', '.join(race)}) embed "
+            "per-race skin", ratio)
+    return Classification(
+        key, "skin_free",
+        "universal (_uni) textures only — freemode garments carry no embedded "
+        "skin (base-game convention, verified against conversion evidence)",
+        ratio)
+
+
+def _worst_skin_ratio(rec: dict, cfg: dict, png_dir: Path):
+    """Highest skin-pixel ratio across the garment's texture dumps, or None.
+    Recorded as evidence only — the race-suffix rule decides the category."""
     ratios = []
     missing = []
     # plain in-ytd names repeat across collections, so a per-source-folder
@@ -121,22 +154,7 @@ def _classify_by_texture(key: str, rec: dict, cfg: dict, png_dir: Path) -> Class
             missing.append(tex)
         else:
             ratios.append(r)
-
-    if not ratios:
-        why = ("Pillow not installed" if not HAVE_PIL
-               else f"no PNG dumps found for {len(missing)} texture(s)")
-        return Classification(key, "ambiguous",
-                              f"cannot analyze textures ({why}) — manual review required")
-    worst = max(ratios)
-    if worst < lo:
-        return Classification(key, "skin_free",
-                              f"max skin-pixel ratio {worst:.3f} < {lo}", worst)
-    if worst > hi:
-        return Classification(key, "convert",
-                              f"max skin-pixel ratio {worst:.3f} > {hi} — embedded skin likely", worst)
-    return Classification(
-        key, "ambiguous",
-        f"skin-pixel ratio {worst:.3f} inside ambiguity band [{lo},{hi}] — manual review", worst)
+    return max(ratios) if ratios else None
 
 
 def _key(rec: dict) -> str:

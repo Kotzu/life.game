@@ -45,9 +45,28 @@ def test_designated_bare_body_drawables_are_body_skin(tmp_path):
 
 
 def test_analyze_component_without_textures_is_ambiguous(tmp_path):
-    c = classify_record(rec(11, "jbib", texs=["mp_m_freemode_01^jbib_diff_000_a_uni"]),
-                        CFG, tmp_path)
-    assert c.category == "ambiguous"  # no PNGs / no Pillow -> never guess
+    c = classify_record(rec(11, "jbib"), CFG, tmp_path)
+    assert c.category == "ambiguous"  # no textures at all -> never guess
+
+
+def test_race_suffixed_garment_is_convert(tmp_path):
+    c = classify_record(
+        rec(4, "lowr", idx=6,
+            texs=["mp_m_freemode_01^lowr_diff_006_a_whi",
+                  "mp_m_freemode_01^lowr_diff_006_a_bla"]),
+        CFG, tmp_path)
+    assert c.category == "convert"
+    assert "whi" in c.reason and "bla" in c.reason
+
+
+def test_uni_only_garment_is_skin_free(tmp_path):
+    # freemode convention (verified 114/114 in conversion evidence): _uni-only
+    # garments carry no embedded skin — the body underneath shows it instead
+    c = classify_record(
+        rec(11, "jbib", texs=["mp_m_freemode_01^jbib_diff_000_a_uni"]),
+        CFG, tmp_path)
+    assert c.category == "skin_free"
+    assert "_uni" in c.reason
 
 
 def test_manual_resolution_wins(tmp_path):
@@ -69,8 +88,8 @@ def test_skin_pixel_ratio_detects_skin(tmp_path):
 @pytest.mark.skipif(not classify_mod.HAVE_PIL, reason="Pillow not installed")
 def test_png_lookup_accepts_plain_and_per_folder_names(tmp_path):
     """CodeWalker 'Save All' writes plain texture names; the record stores the
-    canonical '^' stem. Lookup must bridge the two, preferring the
-    per-source-folder subdir over a flat plain name."""
+    canonical '^' stem. Lookup must bridge the two (evidence ratio recorded,
+    the race-suffix rule decides the category)."""
     from PIL import Image
     blue = Image.new("RGBA", (16, 16), (20, 40, 200, 255))  # clearly not skin
     r = rec(11, "jbib", texs=["mp_m_freemode_01^jbib_diff_000_a_uni"])
@@ -78,19 +97,21 @@ def test_png_lookup_accepts_plain_and_per_folder_names(tmp_path):
     sub = tmp_path / "mp_m_freemode_01"
     sub.mkdir()
     blue.save(sub / "jbib_diff_000_a_uni.png")
-    assert classify_record(r, CFG, tmp_path).category == "skin_free"
+    c = classify_record(r, CFG, tmp_path)
+    assert c.category == "skin_free" and c.skin_pixel_ratio == 0.0
 
     flat = tmp_path / "flat"
     flat.mkdir()
     blue.save(flat / "jbib_diff_000_a_uni.png")
-    assert classify_record(r, CFG, flat).category == "skin_free"
+    c = classify_record(r, CFG, flat)
+    assert c.category == "skin_free" and c.skin_pixel_ratio == 0.0
 
 
 @pytest.mark.skipif(not classify_mod.HAVE_PIL, reason="Pillow not installed")
 def test_dds_next_to_source_replaces_png_dump(tmp_path):
     """CodeWalker Export XML drops textures as .dds beside the .ytd.xml —
-    classification must work from those alone (no _png dump), both as
-    <stem>.dds and as a <stem>/ folder of dds files."""
+    the evidence ratio must come from those alone (no _png dump), both as
+    <stem>.dds and as a <stem>/ folder of dds files (worst layer wins)."""
     from PIL import Image
     blue = Image.new("RGBA", (16, 16), (20, 40, 200, 255))
     src = tmp_path / "extracted" / "mp_m_freemode_01"
@@ -100,15 +121,17 @@ def test_dds_next_to_source_replaces_png_dump(tmp_path):
     empty_png_dir = tmp_path / "nopng"
 
     blue.save(src / "jbib_diff_000_a_uni.dds")
-    assert classify_record(r, CFG, empty_png_dir).category == "skin_free"
+    c = classify_record(r, CFG, empty_png_dir)
+    assert c.category == "skin_free" and c.skin_pixel_ratio == 0.0
 
     (src / "jbib_diff_000_a_uni.dds").unlink()
     sub = src / "jbib_diff_000_a_uni"
     sub.mkdir()
     skin = Image.new("RGBA", (16, 16), (224, 172, 138, 255))
     blue.save(sub / "layer_a.dds")
-    skin.save(sub / "layer_b.dds")  # worst layer wins -> convert
-    assert classify_record(r, CFG, empty_png_dir).category == "convert"
+    skin.save(sub / "layer_b.dds")
+    c = classify_record(r, CFG, empty_png_dir)
+    assert c.skin_pixel_ratio is not None and c.skin_pixel_ratio > 0.9
 
 
 def test_classify_end_to_end_writes_queue(tmp_path, monkeypatch):
@@ -117,8 +140,7 @@ def test_classify_end_to_end_writes_queue(tmp_path, monkeypatch):
         "schema": "kotzu_scan_catalog/1",
         "drawables": {
             "male:comp3::0": rec(3, "uppr"),
-            "male:comp11::0": rec(11, "jbib",
-                                  texs=["mp_m_freemode_01^jbib_diff_000_a_uni"]),
+            "male:comp11::0": rec(11, "jbib"),  # no textures -> ambiguous
         },
     }
     save_json(build / "scan_catalog.json", catalog)
