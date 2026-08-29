@@ -37,7 +37,7 @@ from material_mannequin import make_mannequin_material  # noqa: E402
 from convert_garment import (sollumz_import, sollumz_export,  # noqa: E402
                              target_name, write_result)
 
-SMOOTH_ITERATIONS = 25
+SMOOTH_ITERATIONS = 60
 SMOOTH_FACTOR = 0.5
 
 

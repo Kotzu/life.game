@@ -191,6 +191,20 @@ def run_preview() -> None:
         print(f"  {gender}: {res.get('status', 'no result')} "
               f"{res.get('renders', res.get('reason', ''))}")
 
+    step("rendering per-piece identification sheets (uppr/lowr/feet/jbib)")
+    for gender in ("male", "female"):
+        run([cfg["blender_exe"], "--background",
+             "--addons", SOLLUMZ_ADDONS,
+             "--python", str(HERE / "blender" / "render_mannequin.py"), "--",
+             "--stream", str(stream), "--gender", gender,
+             "--out-dir", str(out_dir),
+             "--sheet", "uppr,lowr,feet,jbib,accs",
+             "--result", str(out_dir / f"{gender}.sheets.result.json")])
+        res_path = out_dir / f"{gender}.sheets.result.json"
+        res = json.loads(res_path.read_text(encoding="utf-8")) if res_path.exists() else {}
+        print(f"  {gender} sheets: {res.get('status')} "
+              f"({len(res.get('renders', []))} renders)")
+
 
 def summarize() -> None:
     step("summary")
@@ -228,7 +242,8 @@ def push_reports() -> None:
     to_add = list(REPORTS)
     previews = HERE / "build" / "previews"
     if previews.is_dir():
-        to_add += [f"build/previews/{p.name}" for p in sorted(previews.iterdir())
+        to_add += [str(p.relative_to(HERE)).replace("\\", "/")
+                   for p in sorted(previews.rglob("*"))
                    if p.suffix in (".png", ".json")]
     for rel in to_add:
         if (HERE / rel).exists():

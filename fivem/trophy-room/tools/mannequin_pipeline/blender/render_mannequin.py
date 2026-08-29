@@ -33,6 +33,9 @@ def parse_args():
     ap.add_argument("--gender", required=True, choices=("male", "female"))
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--result", required=True)
+    ap.add_argument("--sheet", default="",
+                    help="comma-separated slugs: render EVERY index of each "
+                         "slug as its own small PNG (piece identification)")
     return ap.parse_args(argv)
 
 
@@ -202,19 +205,54 @@ def main() -> None:
         pass
 
     renders = []
-    for label, yaw in (("front", 0), ("three_quarter", 35)):
-        # remove previous camera/lights, keep meshes
-        for obj in list(bpy.data.objects):
-            if obj.type in ("CAMERA", "LIGHT"):
-                bpy.data.objects.remove(obj, do_unlink=True)
-        rig_camera(yaw)
-        png = out_dir / f"{args.gender}_{label}.png"
-        scene.render.filepath = str(png)
-        try:
-            bpy.ops.render.render(write_still=True)
-            renders.append(png.name)
-        except Exception as e:  # noqa: BLE001
-            import_errors.append(f"render {label}: {e}")
+    if args.sheet:
+        # identification mode: render EVERY index of each requested slug alone
+        model = "mp_m_freemode_01" if args.gender == "male" else "mp_f_freemode_01"
+        sheet_dir = out_dir / "sheets"
+        sheet_dir.mkdir(parents=True, exist_ok=True)
+        scene.render.resolution_x = 450
+        scene.render.resolution_y = 700
+        slugs = [s.strip() for s in args.sheet.split(",") if s.strip()]
+        assets = sorted(p for p in stream.rglob("*")
+                        if p.is_file() and ".ydd" in p.name.lower()
+                        and p.name.lower().startswith(model))
+        for slug in slugs:
+            for asset in assets:
+                low = asset.name.lower()
+                if f"^{slug}_" not in low and f"_{slug}_" not in low:
+                    continue
+                idx = low.split(f"{slug}_", 1)[1][:3]
+                # fresh meshes for each piece
+                for obj in list(bpy.data.objects):
+                    bpy.data.objects.remove(obj, do_unlink=True)
+                try:
+                    sollumz_import(str(asset))
+                except Exception as e:  # noqa: BLE001
+                    import_errors.append(f"{asset.name}: {e}")
+                    continue
+                force_visible()
+                rig_camera(20)
+                png = sheet_dir / f"{args.gender}_{slug}_{idx}.png"
+                scene.render.filepath = str(png)
+                try:
+                    bpy.ops.render.render(write_still=True)
+                    renders.append(f"sheets/{png.name}")
+                except Exception as e:  # noqa: BLE001
+                    import_errors.append(f"render {png.name}: {e}")
+    else:
+        for label, yaw in (("front", 0), ("three_quarter", 35)):
+            # remove previous camera/lights, keep meshes
+            for obj in list(bpy.data.objects):
+                if obj.type in ("CAMERA", "LIGHT"):
+                    bpy.data.objects.remove(obj, do_unlink=True)
+            rig_camera(yaw)
+            png = out_dir / f"{args.gender}_{label}.png"
+            scene.render.filepath = str(png)
+            try:
+                bpy.ops.render.render(write_still=True)
+                renders.append(png.name)
+            except Exception as e:  # noqa: BLE001
+                import_errors.append(f"render {label}: {e}")
 
     lo, hi = scene_bbox()
     write_result(args.result, {

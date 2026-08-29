@@ -24,11 +24,26 @@ SKIN_SHADER_TOKENS = ("ped.sps", "ped_default", "ped_wrinkle", "ped_hair")
 
 
 def ensure_plastic_image() -> bpy.types.Image:
+    """Woven-canvas mannequin texture (procedural, original work): a subtle
+    linen weave over the off-white base so the figure reads as a tailor's-dummy
+    fabric surface instead of flat plastic."""
     img = bpy.data.images.get(MANNEQUIN_TEXTURE_NAME)
     if img is None:
+        import math
         s = MANNEQUIN_TEXTURE_SIZE
         img = bpy.data.images.new(MANNEQUIN_TEXTURE_NAME, s, s, alpha=False)
-        px = list(MANNEQUIN_DIFFUSE) * (s * s)
+        r0, g0, b0, _ = MANNEQUIN_DIFFUSE
+        px = []
+        for y in range(s):
+            for x in range(s):
+                # two crossed sine "threads" + deterministic speckle
+                weave = (math.sin(x * math.pi / 2.0) * 0.5
+                         + math.sin(y * math.pi / 2.0) * 0.5)
+                speck = ((x * 7349 + y * 9151) % 97) / 97.0 - 0.5
+                v = 1.0 + weave * 0.035 + speck * 0.02
+                px += [min(max(r0 * v, 0.0), 1.0),
+                       min(max(g0 * v, 0.0), 1.0),
+                       min(max(b0 * v, 0.0), 1.0), 1.0]
         img.pixels[:] = px
         img.pack()
     return img

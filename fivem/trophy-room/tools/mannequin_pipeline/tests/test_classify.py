@@ -59,6 +59,22 @@ def test_race_suffixed_garment_is_convert(tmp_path):
     assert "whi" in c.reason and "bla" in c.reason
 
 
+@pytest.mark.skipif(not classify_mod.HAVE_PIL, reason="Pillow not installed")
+def test_skin_dominant_uni_texture_is_convert(tmp_path):
+    """Nude/underwear pieces (bare chest, bra...) use _uni textures that ARE
+    skin images — pixel evidence must convert them even without race suffixes."""
+    from PIL import Image
+    skin = Image.new("RGBA", (16, 16), (224, 172, 138, 255))
+    sub = tmp_path / "mp_m_freemode_01"
+    sub.mkdir()
+    skin.save(sub / "accs_diff_000_a_uni.png")
+    c = classify_record(
+        rec(8, "accs", texs=["mp_m_freemode_01^accs_diff_000_a_uni"]),
+        CFG, tmp_path)
+    assert c.category == "convert"
+    assert "nude/underwear" in c.reason
+
+
 def test_uni_only_garment_is_skin_free(tmp_path):
     # freemode convention (verified 114/114 in conversion evidence): _uni-only
     # garments carry no embedded skin — the body underneath shows it instead

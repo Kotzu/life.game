@@ -29,8 +29,14 @@ SOLLUMZ_ADDONS = ",".join((
 ))
 
 
+# bump to force a full re-conversion after logic/material changes
+# rev 2: linen mannequin texture, stronger face smoothing, pixel-evidence
+#        skin hints for garments
+CONVERT_REV = 2
+
+
 def _job_hash(rec: dict) -> str:
-    ident = f"{rec['source_path']}|{rec['texture_count']}"
+    ident = f"{rec['source_path']}|{rec['texture_count']}|r{CONVERT_REV}"
     return hashlib.sha256(ident.encode()).hexdigest()[:16]
 
 
@@ -63,6 +69,13 @@ def build_jobs(build_dir: Path, cfg: dict) -> list[dict]:
             "collection": rec["collection"],
             "local_drawable": rec["local_drawable"],
             "textures": rec["texture_names"],
+            # a garment classified 'convert' carries its own diffuse stem as a
+            # skin hint, so Blender replaces its materials even when their
+            # names carry no skin tokens (nude/underwear pieces)
+            "hints": ({"extra_skin_tokens":
+                       [f"{rec['component_slug']}_diff_"
+                        f"{rec['local_drawable']:03d}"]}
+                      if eff == "convert" else {}),
             "collection_name": cfg.get("collection_name", "mannequin"),
             "out_dir": str(Path(cfg["assets_resource_dir"]) / "stream"),
         })

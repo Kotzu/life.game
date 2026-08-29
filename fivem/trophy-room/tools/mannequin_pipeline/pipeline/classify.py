@@ -76,13 +76,19 @@ def classify_record(rec: dict, cfg: dict, png_dir: Path,
                               "base skin carrier — replaced by mannequin body set")
     if comp in SKIN_FREE_COMPONENTS:
         return Classification(key, "skin_free", "overlay/decal slot never carries skin")
-    # designated bare-body drawables for lowr/feet: converted into plastic body
-    # twins so a bare mannequin has mannequin legs/feet, never engine defaults
+    # designated base-body drawables (lowr/feet/jbib...): converted into FULL
+    # plastic pieces forming the bare mannequin figure. Freemode has no torso
+    # under clothing (the chest always comes from the worn top), so the
+    # mannequin's torso is a designated fitted top turned entirely to plastic.
+    # Values are an index, or {"male": i, "female": j} for per-gender picks.
     body_base = cfg.get("body_base", {"4": 0, "6": 0})
-    if (str(comp) in body_base and rec["collection"] == ""
-            and rec["local_drawable"] == int(body_base[str(comp)])):
+    designated = body_base.get(str(comp))
+    if isinstance(designated, dict):
+        designated = designated.get(rec["gender"])
+    if (designated is not None and rec["collection"] == ""
+            and rec["local_drawable"] == int(designated)):
         return Classification(key, "body_skin",
-                              "designated bare-body drawable — mannequin base piece")
+                              "designated base-body drawable — mannequin base piece")
     if comp in ANALYZE_COMPONENTS:
         return _classify_by_texture(key, rec, cfg, png_dir)
     return Classification(key, "ambiguous", f"unknown component {comp}")
@@ -106,17 +112,25 @@ def _classify_by_texture(key: str, rec: dict, cfg: dict, png_dir: Path) -> Class
             "manual review required")
     race = sorted({RACE_SUFFIX_RE.search(t).group(1)
                    for t in texs if RACE_SUFFIX_RE.search(t)})
-    ratio = _worst_skin_ratio(rec, cfg, png_dir)  # informational
+    ratio = _worst_skin_ratio(rec, cfg, png_dir)
     if race:
         return Classification(
             key, "convert",
             f"race-suffixed diffuse textures ({', '.join(race)}) embed "
             "per-race skin", ratio)
+    # nude/underwear pieces (bare chest, bra, boxers...) use _uni textures that
+    # are themselves skin images — the pixel evidence catches what names can't
+    thr = cfg.get("skin_ratio_convert", 0.35)
+    if ratio is not None and ratio >= thr:
+        return Classification(
+            key, "convert",
+            f"skin-dominant texture (worst ratio {ratio:.2f} >= {thr}) — "
+            "nude/underwear piece, converted fully to mannequin material",
+            ratio)
     return Classification(
         key, "skin_free",
-        "universal (_uni) textures only — freemode garments carry no embedded "
-        "skin (base-game convention, verified against conversion evidence)",
-        ratio)
+        "universal (_uni) textures with low skin-pixel evidence — garment "
+        "carries no embedded skin", ratio)
 
 
 def _worst_skin_ratio(rec: dict, cfg: dict, png_dir: Path):
