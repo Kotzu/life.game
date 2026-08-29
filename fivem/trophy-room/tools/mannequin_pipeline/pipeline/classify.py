@@ -68,6 +68,12 @@ def classify_record(rec: dict, cfg: dict, png_dir: Path,
         c.resolution = prior["resolution"]
         return c
 
+    if key in set(cfg.get("force_convert", [])):
+        return Classification(
+            key, "convert",
+            "force_convert (config) — converted for piece identification / "
+            "mannequin base candidates")
+
     if is_prop:
         return Classification(key, "skin_free",
                               "props carry no body skin (manifest exception list may override)")

@@ -25,10 +25,16 @@ from convert_garment import sollumz_import, write_result  # noqa: E402
 
 PIECE_SLUGS = ("head", "hair", "uppr", "lowr", "hand", "feet")
 
-# preferred drawable index per slug for the BARE mannequin figure:
-# uppr_015 is the bare-chest torso+arms variant (the clothed uppr variants are
-# sleeve-cropped arms only); everything else defaults to index 000 first.
-PREFERRED_IDX = {"uppr": ("015", "014", "000"), }
+# preferred drawable index per slug for the BARE mannequin figure, chosen from
+# the identification sheets: uppr_015 = bare torso+arms; male lowr_014 =
+# briefs + bare legs; female lowr_015 = briefs + bare legs; female feet_014 =
+# bare feet. Male barefoot candidates (feet 2/4/6/13) pending identification.
+PREFERRED_IDX = {
+    "male": {"uppr": ("015", "000"), "lowr": ("014", "000"),
+             "feet": ("005", "000")},
+    "female": {"uppr": ("015", "000"), "lowr": ("015", "000"),
+               "feet": ("014", "000")},
+}
 
 
 def parse_args():
@@ -54,7 +60,7 @@ def find_pieces(stream: Path, gender: str) -> list[Path]:
         # exported names may be <model>_<coll>^<slug>_NNN_u.ydd, a sanitized
         # variant without '^', or the .ydd.xml form — match loosely on slug,
         # trying the slug's preferred indices first (e.g. bare-chest uppr_015)
-        idx_prefs = PREFERRED_IDX.get(slug, ()) + ("000", "")
+        idx_prefs = PREFERRED_IDX.get(gender, {}).get(slug, ()) + ("000", "")
         markers = [m for idx in idx_prefs
                    for m in (f"^{slug}_{idx}", f"_{slug}_{idx}")]
         for marker in markers:
