@@ -33,11 +33,13 @@ function MQ.ApplyBase(ped, gender)
     ClearPedDecorations(ped)
     ClearAllPedProps(ped)
 
+    local base = C.MannequinBase[gender] or {}
     for _, compId in ipairs(C.BodyComponents) do
         if compId == C.Comp.TEEF then
             SetPedComponentVariation(ped, compId, 0, 0, 0) -- hidden by faceless head
         else
-            local idx = M.BodyDrawable(gender, compId, '', 0)
+            local srcIdx = base[compId] or 0
+            local idx = M.BodyDrawable(gender, compId, '', srcIdx)
             if idx == nil then return false, C.Err.MANIFEST_NOT_BUILT end
             applyCollectionComp(ped, compId, coll, idx, 0, 0)
         end
@@ -46,7 +48,8 @@ function MQ.ApplyBase(ped, gender)
     -- base pieces; if the manifest lacks them the whole spawn is refused —
     -- engine-default legs/feet (human skin) must never be shown
     for _, compId in ipairs({ C.Comp.LOWR, C.Comp.FEET }) do
-        local idx = M.BodyDrawable(gender, compId, '', 0)
+        local srcIdx = base[compId] or 0
+        local idx = M.BodyDrawable(gender, compId, '', srcIdx)
         if idx == nil then return false, C.Err.MANIFEST_NOT_BUILT end
         applyCollectionComp(ped, compId, coll, idx, 0, 0)
     end

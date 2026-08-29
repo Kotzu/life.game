@@ -31,7 +31,7 @@ PIECE_SLUGS = ("head", "hair", "uppr", "lowr", "hand", "feet")
 # bare feet. Male barefoot candidates (feet 2/4/6/13) pending identification.
 PREFERRED_IDX = {
     "male": {"uppr": ("015", "000"), "lowr": ("014", "000"),
-             "feet": ("005", "000")},
+             "feet": ("013", "002", "000")},
     "female": {"uppr": ("015", "000"), "lowr": ("015", "000"),
                "feet": ("014", "000")},
 }

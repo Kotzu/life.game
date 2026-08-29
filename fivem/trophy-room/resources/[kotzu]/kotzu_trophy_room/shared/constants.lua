@@ -57,6 +57,19 @@ KTR.Const = {
              FEET = 6, TEEF = 7, ACCS = 8, TASK = 9, DECL = 10, JBIB = 11 },
     -- base-skin carriers replaced by the mannequin body set
     BodyComponents = { 0, 2, 3, 5, 7 },
+    -- SOURCE drawable index per component for the bare mannequin figure,
+    -- identified visually from the converted base-game pieces:
+    -- uppr 15 = bare torso+arms; lowr 14/15 = briefs + bare legs;
+    -- feet: no barefoot male drawable exists in the base game (2 = the
+    -- lowest-profile shoe, reads as a stylized mannequin foot), female 14 =
+    -- bare feet. Components not listed fall back to source index 0.
+    MannequinBase = {
+        -- male: briefs band smoothed into the body at conversion; feet 13 is
+        -- the empty drawable (no base-game barefoot male exists — the leg
+        -- piece ends cleanly at the ankle)
+        male   = { [3] = 15, [4] = 14, [6] = 13 },
+        female = { [3] = 15, [4] = 15, [6] = 14 },
+    },
     AllComponents = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
     AllProps = { 0, 1, 2, 6, 7 },
 

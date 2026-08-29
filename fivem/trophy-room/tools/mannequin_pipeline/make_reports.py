@@ -100,7 +100,12 @@ def write_config(extracted: Path) -> None:
     cfg = json.loads((HERE / "config.example.json").read_text(encoding="utf-8"))
     existing = HERE / "config.json"
     if existing.exists():
-        cfg.update(json.loads(existing.read_text(encoding="utf-8")))
+        # the example is the source of truth (it evolves with the pipeline);
+        # only machine-specific values survive from the local config
+        prev = json.loads(existing.read_text(encoding="utf-8"))
+        for k in ("extracted_dir", "blender_exe"):
+            if k in prev:
+                cfg[k] = prev[k]
     cfg["extracted_dir"] = extracted.as_posix()
     existing.write_text(json.dumps(cfg, indent=2), encoding="utf-8")
     print("  extracted_dir =", cfg["extracted_dir"])

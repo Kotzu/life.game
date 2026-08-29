@@ -8,8 +8,14 @@
   "texture_png_dir": "extracted/_png",
   "skin_pixel_threshold": 0.04,
   "body_base": {
-    "4": 0,
-    "6": 0
+    "4": {
+      "male": 14,
+      "female": 15
+    },
+    "6": {
+      "male": 13,
+      "female": 14
+    }
   },
   "ambiguous_band": [
     0.015,

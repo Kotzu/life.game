@@ -100,6 +100,30 @@ def smooth_face_region(obj) -> int:
     return len(verts)
 
 
+def smooth_z_band(obj, lo_frac: float, hi_frac: float,
+                  iterations: int = SMOOTH_ITERATIONS) -> int:
+    """Heavily smooth vertices whose height falls inside [lo_frac, hi_frac] of
+    the mesh's z-range — used to melt clothing seams (waistband/cuffs) into
+    the mannequin body."""
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    zs = [v.co.z for v in bm.verts]
+    if not zs:
+        bm.free()
+        return 0
+    zmin, zmax = min(zs), max(zs)
+    rng = (zmax - zmin) or 1.0
+    verts = [v for v in bm.verts
+             if lo_frac <= (v.co.z - zmin) / rng <= hi_frac]
+    for _ in range(iterations):
+        bmesh.ops.smooth_vert(bm, verts=verts, factor=SMOOTH_FACTOR,
+                              use_axis_x=True, use_axis_y=True,
+                              use_axis_z=True)
+    bm.to_mesh(obj.data)
+    bm.free()
+    return len(verts)
+
+
 def build_scalp_from_head(head_obj):
     """Duplicate the cranium region of the head as the comp-2 'hair' drawable."""
     scalp = head_obj.copy()
@@ -139,6 +163,10 @@ def main() -> None:
         swap_all_materials(obj)
         if comp == 0:  # head: close facial cavities
             smoothed += smooth_face_region(obj)
+        if comp == 4 and job.get("gender") == "male":
+            # male briefs piece: melt the waistband/cuff geometry into the
+            # body so the bare mannequin reads as smooth hips, not underwear
+            smoothed += smooth_z_band(obj, 0.66, 1.0)
         if comp == 2:  # hair source: replace with scalp derived from geometry
             pass  # scalp derives from the head job below
 
