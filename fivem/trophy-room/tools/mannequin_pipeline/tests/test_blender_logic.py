@@ -212,6 +212,27 @@ def test_main_export_failure_is_failed(tmp_path):
     assert res["status"] == "failed" and res["reason"].startswith("export:")
 
 
+def test_main_export_writing_nothing_is_failed(tmp_path):
+    """The real bug found on the workstation: Sollumz export returns FINISHED
+    in --background with nothing selected, writing zero files. That must be a
+    loud failure, never a fake 'ok'."""
+    obj = mesh("g", [mk_material("head_diff_000")])
+    _, cg = load_blender(Controller(import_objects=[obj],
+                                    export_writes_nothing=True))
+    res = run_main(cg, tmp_path, write_job(tmp_path))
+    assert res["status"] == "failed"
+    assert "wrote no files" in res["reason"] or "produced files" in res["reason"]
+    # and the export path selects the scene first (Sollumz exports the selection)
+    assert obj.selected
+
+
+def test_main_ok_reports_written_files(tmp_path):
+    obj = mesh("g", [mk_material("head_diff_000")])
+    _, cg = load_blender(Controller(import_objects=[obj]))
+    res = run_main(cg, tmp_path, write_job(tmp_path))
+    assert res["status"] == "ok" and res["files"] == ["exported.ydd"]
+
+
 def test_make_material_uses_sollumz_create_shader(tmp_path):
     """Primary path: when Sollumz's create_shader is importable it must be used
     (no source_mat needed), producing the shared plastic material."""

@@ -96,6 +96,10 @@ class Object:
         self.data = types.SimpleNamespace(name=name + "_data")
         self.rotation_euler = [0.0, 0.0, 0.0]
         self.location = [0.0, 0.0, 0.0]
+        self.selected = False
+
+    def select_set(self, value):
+        self.selected = bool(value)
 
 
 # ------------------------------------------------------------------ collections
@@ -169,6 +173,7 @@ def install(controller):
     coll = types.SimpleNamespace(objects=_LinkColl(bpy.data.objects))
     bpy.context = types.SimpleNamespace(
         collection=coll,
+        view_layer=types.SimpleNamespace(objects=types.SimpleNamespace(active=None)),
         scene=types.SimpleNamespace(
             world=None,
             camera=None,
@@ -214,10 +219,14 @@ class _LinkColl:
 class Controller:
     """Test-controlled Sollumz behaviour + recorded side effects."""
 
-    def __init__(self, import_objects=None, import_fails=False, export_fails=False):
+    def __init__(self, import_objects=None, import_fails=False, export_fails=False,
+                 export_writes_nothing=False):
         self.import_objects = import_objects or []
         self.import_fails = import_fails
         self.export_fails = export_fails
+        # like real Sollumz in --background with nothing selected: the operator
+        # returns FINISHED without writing any file
+        self.export_writes_nothing = export_writes_nothing
         self.exported = []
         self.saved = []
 
@@ -234,4 +243,10 @@ class Controller:
         if self.export_fails:
             raise RuntimeError("simulated export failure")
         self.exported.append(kw)
+        if not self.export_writes_nothing:
+            d = kw.get("directory")
+            if d:
+                from pathlib import Path
+                Path(d).mkdir(parents=True, exist_ok=True)
+                (Path(d) / "exported.ydd").write_bytes(b"fake")
         return {"FINISHED"}

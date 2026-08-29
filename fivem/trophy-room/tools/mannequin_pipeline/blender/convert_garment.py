@@ -59,8 +59,29 @@ def sollumz_import(path: str) -> None:
     raise RuntimeError("no Sollumz import operator worked: " + " | ".join(errors))
 
 
-def sollumz_export(out_dir: str) -> None:
-    Path(out_dir).mkdir(parents=True, exist_ok=True)
+def _select_all_for_export() -> None:
+    """Sollumz's export operates on the selection; in --background nothing is
+    selected by default, and the operator then 'succeeds' without writing."""
+    for obj in bpy.data.objects:
+        try:
+            obj.select_set(True)
+        except Exception:  # noqa: BLE001 - object not in view layer
+            pass
+    try:
+        roots = [o for o in bpy.data.objects if o.parent is None]
+        if roots:
+            bpy.context.view_layer.objects.active = roots[0]
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def sollumz_export(out_dir: str) -> list[str]:
+    """Export the scene's assets and PROVE files were written — an operator
+    returning FINISHED with an empty directory is a failure, never success."""
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    before = {f.name for f in out.iterdir()}
+    _select_all_for_export()
     candidates = (
         # verified against Sollumz 2.9: export_assets(directory, direct_export)
         lambda: bpy.ops.sollumz.export_assets(directory=out_dir, direct_export=True),
@@ -71,10 +92,15 @@ def sollumz_export(out_dir: str) -> None:
     for fn in candidates:
         try:
             fn()
-            return
         except Exception as e:  # noqa: BLE001
             errors.append(str(e))
-    raise RuntimeError("no Sollumz export operator worked: " + " | ".join(errors))
+            continue
+        written = sorted(f.name for f in out.iterdir() if f.name not in before)
+        if written:
+            return written
+        errors.append("operator finished but wrote no files")
+    raise RuntimeError("no Sollumz export operator produced files: "
+                       + " | ".join(errors))
 
 
 def target_name(job: dict, mannequin_local: int | None = None) -> str:
@@ -132,7 +158,7 @@ def main() -> None:
             obj.name = new_name
 
     try:
-        sollumz_export(job["out_dir"])
+        written = sollumz_export(job["out_dir"])
     except Exception as e:  # noqa: BLE001
         write_result(args.out, {"status": "failed", "reason": f"export: {e}"})
         return
@@ -140,6 +166,7 @@ def main() -> None:
     write_result(args.out, {
         "status": "ok",
         "output_name": new_name,
+        "files": written,
         "replaced": replaced,
         "kept": kept,
     })

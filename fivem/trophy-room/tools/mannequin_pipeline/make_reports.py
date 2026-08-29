@@ -134,8 +134,32 @@ def find_blender() -> None:
     print("  blender_exe ->", cfg["blender_exe"])
 
 
+def _stream_dir(cfg: dict) -> Path:
+    stream = Path(cfg["assets_resource_dir"]) / "stream"
+    return stream if stream.is_absolute() else (HERE / stream).resolve()
+
+
+def reset_state_if_stream_empty() -> None:
+    """Self-heal: if conversion_state claims work is done but the stream dir
+    holds no assets (the silent-export bug), re-run everything."""
+    state_p = HERE / "build" / "conversion_state.json"
+    if not state_p.exists():
+        return
+    st = json.loads(state_p.read_text(encoding="utf-8"))
+    if not st.get("done"):
+        return
+    cfg = json.loads((HERE / "config.json").read_text(encoding="utf-8"))
+    stream = _stream_dir(cfg)
+    if stream.is_dir() and any(stream.rglob("*.ydd*")):
+        return
+    print("  ! state says converted but the stream dir is empty — "
+          "resetting conversion state to re-run all jobs")
+    state_p.unlink()
+
+
 def run_convert() -> None:
     find_blender()
+    reset_state_if_stream_empty()
     step("pipeline convert (Blender, headless — this takes a while; "
          "progress prints per item)")
     run([sys.executable, "-m", "pipeline", "convert"])
