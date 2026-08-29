@@ -1,8 +1,8 @@
 {
   "counts": {
     "body_skin": 204,
-    "convert": 114,
-    "skin_free": 134
+    "convert": 37,
+    "skin_free": 211
   },
   "items": {
     "female:comp0::0": {
@@ -370,170 +370,170 @@
       "skin_pixel_ratio": null
     },
     "female:comp11::0": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "female:comp11::1": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.994 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.993804931640625
     },
     "female:comp11::10": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.99957275390625
     },
     "female:comp11::11": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.029 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0288238525390625
     },
     "female:comp11::12": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.175 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.174591064453125
     },
     "female:comp11::13": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.773 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.7733612060546875
     },
     "female:comp11::14": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.995 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9954071044921875
     },
     "female:comp11::15": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.130 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.130279541015625
     },
     "female:comp11::2": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.998 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.997772216796875
     },
     "female:comp11::3": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.951 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9510345458984375
     },
     "female:comp11::4": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.174 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.1742095947265625
     },
     "female:comp11::5": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.091 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0911712646484375
     },
     "female:comp11::6": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp11::7": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.079 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0789794921875
     },
     "female:comp11::8": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.015 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.01495361328125
     },
     "female:comp11::9": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "female:comp1::0": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp1::1": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "female:comp1::2": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.977 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9769744873046875
     },
     "female:comp1::3": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.983 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9828948974609375
     },
     "female:comp1::4": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.582 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.58197021484375
     },
     "female:comp1::5": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.999969482421875
     },
     "female:comp1::6": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.037 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.037109375
     },
     "female:comp1::7": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.938 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9375
     },
@@ -771,105 +771,105 @@
     "female:comp4::1": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.900 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9000701904296875
     },
     "female:comp4::10": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.446 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.4459381103515625
     },
     "female:comp4::11": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.999 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9990386962890625
     },
     "female:comp4::12": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.891 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.890899658203125
     },
     "female:comp4::13": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp4::14": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.405 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.405487060546875
     },
     "female:comp4::15": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.475 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.4746246337890625
     },
     "female:comp4::2": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.185 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.1850128173828125
     },
     "female:comp4::3": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.983 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.982666015625
     },
     "female:comp4::4": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.991 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.990875244140625
     },
     "female:comp4::5": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.655 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.65533447265625
     },
     "female:comp4::6": {
-      "category": "ambiguous",
+      "category": "convert",
       "effective": "convert",
-      "reason": "skin-pixel ratio 0.116 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.116058349609375
     },
     "female:comp4::7": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.410 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.4099578857421875
     },
     "female:comp4::8": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.823 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.8232269287109375
     },
     "female:comp4::9": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.855 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.8548736572265625
     },
@@ -944,107 +944,107 @@
       "skin_pixel_ratio": null
     },
     "female:comp6::1": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.779 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.779205322265625
     },
     "female:comp6::10": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.004 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.00445556640625
     },
     "female:comp6::11": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.277 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.27667236328125
     },
     "female:comp6::12": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp6::13": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.908 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.908203125
     },
     "female:comp6::14": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.981 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9808197021484375
     },
     "female:comp6::15": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.913 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9128875732421875
     },
     "female:comp6::2": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9997814855858528
     },
     "female:comp6::3": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.681 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.680908203125
     },
     "female:comp6::4": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.119 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.1192474365234375
     },
     "female:comp6::5": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.606 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.6060638427734375
     },
     "female:comp6::6": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.999908447265625
     },
     "female:comp6::7": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.930 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.93017578125
     },
     "female:comp6::8": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.996 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.996124267578125
     },
     "female:comp6::9": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.981 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.981475830078125
     },
@@ -1119,114 +1119,114 @@
       "skin_pixel_ratio": null
     },
     "female:comp8::0": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "female:comp8::1": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "female:comp8::10": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp8::11": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.029 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0288238525390625
     },
     "female:comp8::12": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.175 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.174591064453125
     },
     "female:comp8::13": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.773 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.7733612060546875
     },
     "female:comp8::14": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp8::15": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.130 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.130279541015625
     },
     "female:comp8::2": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp8::3": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp8::4": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.174 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.1742095947265625
     },
     "female:comp8::5": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.092 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.091522216796875
     },
     "female:comp8::6": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp8::7": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp8::8": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "female:comp8::9": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
@@ -1924,170 +1924,170 @@
       "skin_pixel_ratio": null
     },
     "male:comp11::0": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp11::1": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp11::10": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp11::11": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.274 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.2739715576171875
     },
     "male:comp11::12": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9998321533203125
     },
     "male:comp11::13": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.999664306640625
     },
     "male:comp11::14": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.680 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.6804962158203125
     },
     "male:comp11::15": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp11::2": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp11::3": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp11::4": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp11::5": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.006 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.005523681640625
     },
     "male:comp11::6": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.925 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.92498779296875
     },
     "male:comp11::7": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.996 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.996429443359375
     },
     "male:comp11::8": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.061 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0612945556640625
     },
     "male:comp11::9": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.927 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9267120361328125
     },
     "male:comp1::0": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp1::1": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp1::2": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.977 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9769744873046875
     },
     "male:comp1::3": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.983 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9828948974609375
     },
     "male:comp1::4": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.582 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.58197021484375
     },
     "male:comp1::5": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.999969482421875
     },
     "male:comp1::6": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.037 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.037109375
     },
     "male:comp1::7": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.938 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9375
     },
@@ -2325,105 +2325,105 @@
     "male:comp4::1": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.972 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9718475341796875
     },
     "male:comp4::10": {
-      "category": "ambiguous",
+      "category": "convert",
       "effective": "convert",
-      "reason": "skin-pixel ratio 0.105 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.105255126953125
     },
     "male:comp4::11": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp4::12": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp4::13": {
-      "category": "ambiguous",
+      "category": "convert",
       "effective": "convert",
-      "reason": "skin-pixel ratio 0.099 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.098907470703125
     },
     "male:comp4::14": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.911 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9109344482421875
     },
     "male:comp4::15": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.998 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9978179931640625
     },
     "male:comp4::2": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.363 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.3629913330078125
     },
     "male:comp4::3": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp4::4": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.131 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.1308135986328125
     },
     "male:comp4::5": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.999 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9986114501953125
     },
     "male:comp4::6": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.384 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.383880615234375
     },
     "male:comp4::7": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.934 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.9344635009765625
     },
     "male:comp4::8": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp4::9": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.963 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.963043212890625
     },
@@ -2498,107 +2498,107 @@
       "skin_pixel_ratio": null
     },
     "male:comp6::1": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.721 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.7205352783203125
     },
     "male:comp6::10": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.682 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.681793212890625
     },
     "male:comp6::11": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.967 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9667510986328125
     },
     "male:comp6::12": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.973 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.97265625
     },
     "male:comp6::13": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp6::14": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.980 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9802703857421875
     },
     "male:comp6::15": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.857 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.85650634765625
     },
     "male:comp6::2": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.054 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.054473876953125
     },
     "male:comp6::3": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.984 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9844818115234375
     },
     "male:comp6::4": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.179 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.179107666015625
     },
     "male:comp6::5": {
       "category": "convert",
       "effective": "convert",
-      "reason": "max skin-pixel ratio 0.299 > 0.12 \u2014 embedded skin likely",
+      "reason": "race-suffixed diffuse textures (whi) embed per-race skin",
       "resolution": null,
       "skin_pixel_ratio": 0.298828125
     },
     "male:comp6::6": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.52587890625e-05
     },
     "male:comp6::7": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.518 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.5180816650390625
     },
     "male:comp6::8": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.737 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.73681640625
     },
     "male:comp6::9": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.638 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.63775634765625
     },
@@ -2715,114 +2715,114 @@
       "skin_pixel_ratio": null
     },
     "male:comp8::0": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::1": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::10": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.991 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9909210205078125
     },
     "male:comp8::11": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.991 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9909210205078125
     },
     "male:comp8::12": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9998626708984375
     },
     "male:comp8::13": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.999664306640625
     },
     "male:comp8::14": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::15": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp8::2": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::3": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp8::4": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.000 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0
     },
     "male:comp8::5": {
       "category": "skin_free",
       "effective": "skin_free",
-      "reason": "max skin-pixel ratio 0.006 < 0.015",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.005523681640625
     },
     "male:comp8::6": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::7": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 1.000 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::8": {
-      "category": "ambiguous",
-      "effective": "convert",
-      "reason": "skin-pixel ratio 0.061 inside ambiguity band [0.015,0.12] \u2014 manual review",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.0612945556640625
     },
     "male:comp8::9": {
-      "category": "convert",
-      "effective": "convert",
-      "reason": "max skin-pixel ratio 0.927 > 0.12 \u2014 embedded skin likely",
+      "category": "skin_free",
+      "effective": "skin_free",
+      "reason": "universal (_uni) textures only \u2014 freemode garments carry no embedded skin (base-game convention, verified against conversion evidence)",
       "resolution": null,
       "skin_pixel_ratio": 0.9267120361328125
     },
