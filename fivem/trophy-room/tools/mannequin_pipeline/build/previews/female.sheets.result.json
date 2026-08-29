@@ -356,7 +356,7 @@
     "mp_f_freemode_01_mannequin^uppr_015_u.ydd",
     "mp_f_freemode_01_mannequin^lowr_015_u.ydd",
     "mp_f_freemode_01_mannequin^hand_000_u.ydd",
-    "mp_f_freemode_01_mannequin^feet_014_u.ydd"
+    "mp_f_freemode_01_mannequin^feet_016_u.ydd"
   ],
   "errors": [],
   "diagnostics": {
@@ -364,6 +364,7 @@
       "hash_976FBF04:SKEL_L_UpperArm",
       "hash_976FBF04:SKEL_R_UpperArm"
     ],
+    "armature_modifiers_added": 0,
     "bbox_lo": [
       -0.07,
       -0.166,

@@ -360,6 +360,7 @@
       "hash_976FBF04:SKEL_L_UpperArm",
       "hash_976FBF04:SKEL_R_UpperArm"
     ],
+    "armature_modifiers_added": 0,
     "bbox_lo": [
       -0.161,
       -0.144,

@@ -18,6 +18,7 @@
       "hash_976FBF04:SKEL_L_UpperArm",
       "hash_976FBF04:SKEL_R_UpperArm"
     ],
+    "armature_modifiers_added": 0,
     "bbox_lo": [
       -0.593,
       -0.201,
@@ -25,16 +26,16 @@
     ],
     "bbox_hi": [
       0.593,
-      0.154,
-      0.809
+      0.16,
+      0.816
     ],
     "objects": [
       {
         "name": "cam",
         "type": "CAMERA",
         "loc": [
-          2.7,
-          -3.88,
+          2.71,
+          -3.89,
           0.05
         ],
         "hide_render": false,
@@ -156,7 +157,7 @@
         "loc": [
           1.6,
           -1.82,
-          1.1
+          1.11
         ],
         "hide_render": false,
         "verts": null
