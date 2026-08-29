@@ -38,17 +38,27 @@ def parse_args():
 
 def find_pieces(stream: Path, gender: str) -> list[Path]:
     model = "mp_m_freemode_01" if gender == "male" else "mp_f_freemode_01"
+    all_assets = sorted(p for p in stream.rglob("*")
+                        if p.is_file() and ".ydd" in p.name.lower()
+                        and p.name.lower().startswith(model))
     picks = []
     for slug in PIECE_SLUGS:
-        # converted names look like <model>_<collection>^<slug>_000_u.ydd
-        cands = sorted(p for p in stream.glob(f"{model}*.ydd*")
-                       if f"^{slug}_000" in p.name and not p.name.endswith(".xml"))
-        if not cands:  # fall back to any index of that slug
-            cands = sorted(p for p in stream.glob(f"{model}*.ydd*")
-                           if f"^{slug}_" in p.name and not p.name.endswith(".xml"))
-        if cands:
-            picks.append(cands[0])
+        # exported names may be <model>_<coll>^<slug>_000_u.ydd, a sanitized
+        # variant without '^', or the .ydd.xml form — match loosely on slug
+        for marker in (f"^{slug}_000", f"_{slug}_000", f"^{slug}_", f"_{slug}_"):
+            cands = [p for p in all_assets if marker in p.name.lower()]
+            if cands:
+                # prefer binary .ydd over .ydd.xml when both exist
+                cands.sort(key=lambda p: (p.name.lower().endswith(".xml"), p.name))
+                picks.append(cands[0])
+                break
     return picks
+
+
+def stream_listing(stream: Path, limit: int = 60) -> list[str]:
+    if not stream.is_dir():
+        return [f"<missing dir: {stream}>"]
+    return sorted(p.name for p in stream.rglob("*") if p.is_file())[:limit]
 
 
 def scene_bbox():
@@ -111,7 +121,8 @@ def main() -> None:
     if not pieces:
         write_result(args.result, {
             "status": "failed",
-            "reason": f"no converted body pieces found in {stream}"})
+            "reason": f"no converted body pieces found in {stream}",
+            "evidence": {"stream_files": stream_listing(stream)}})
         return
 
     imported, import_errors = [], []
