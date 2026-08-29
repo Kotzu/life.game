@@ -1,8 +1,8 @@
 {
   "counts": {
     "body_skin": 204,
-    "convert": 96,
-    "skin_free": 152
+    "convert": 136,
+    "skin_free": 112
   },
   "items": {
     "female:comp0::0": {
@@ -391,18 +391,18 @@
       "skin_pixel_ratio": 0.99957275390625
     },
     "female:comp11::11": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0288238525390625
+      "skin_pixel_ratio": null
     },
     "female:comp11::12": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.174591064453125
+      "skin_pixel_ratio": null
     },
     "female:comp11::13": {
       "category": "convert",
@@ -419,11 +419,11 @@
       "skin_pixel_ratio": 0.9954071044921875
     },
     "female:comp11::15": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.130279541015625
+      "skin_pixel_ratio": null
     },
     "female:comp11::2": {
       "category": "convert",
@@ -440,39 +440,39 @@
       "skin_pixel_ratio": 0.9510345458984375
     },
     "female:comp11::4": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.1742095947265625
+      "skin_pixel_ratio": null
     },
     "female:comp11::5": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0911712646484375
+      "skin_pixel_ratio": null
     },
     "female:comp11::6": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp11::7": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0789794921875
+      "skin_pixel_ratio": null
     },
     "female:comp11::8": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.01495361328125
+      "skin_pixel_ratio": null
     },
     "female:comp11::9": {
       "category": "convert",
@@ -951,25 +951,25 @@
       "skin_pixel_ratio": 0.779205322265625
     },
     "female:comp6::10": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.00445556640625
+      "skin_pixel_ratio": null
     },
     "female:comp6::11": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.27667236328125
+      "skin_pixel_ratio": null
     },
     "female:comp6::12": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp6::13": {
       "category": "convert",
@@ -1007,11 +1007,11 @@
       "skin_pixel_ratio": 0.680908203125
     },
     "female:comp6::4": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.1192474365234375
+      "skin_pixel_ratio": null
     },
     "female:comp6::5": {
       "category": "convert",
@@ -1133,25 +1133,25 @@
       "skin_pixel_ratio": 1.0
     },
     "female:comp8::10": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp8::11": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0288238525390625
+      "skin_pixel_ratio": null
     },
     "female:comp8::12": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.174591064453125
+      "skin_pixel_ratio": null
     },
     "female:comp8::13": {
       "category": "convert",
@@ -1161,74 +1161,74 @@
       "skin_pixel_ratio": 0.7733612060546875
     },
     "female:comp8::14": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp8::15": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.130279541015625
+      "skin_pixel_ratio": null
     },
     "female:comp8::2": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp8::3": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp8::4": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.1742095947265625
+      "skin_pixel_ratio": null
     },
     "female:comp8::5": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.091522216796875
+      "skin_pixel_ratio": null
     },
     "female:comp8::6": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp8::7": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp8::8": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp8::9": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "female:comp9::0": {
       "category": "skin_free",
@@ -1938,18 +1938,18 @@
       "skin_pixel_ratio": 1.0
     },
     "male:comp11::10": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "male:comp11::11": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.2739715576171875
+      "skin_pixel_ratio": null
     },
     "male:comp11::12": {
       "category": "convert",
@@ -1973,18 +1973,18 @@
       "skin_pixel_ratio": 0.6804962158203125
     },
     "male:comp11::15": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "male:comp11::2": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "male:comp11::3": {
       "category": "convert",
@@ -2001,11 +2001,11 @@
       "skin_pixel_ratio": 1.0
     },
     "male:comp11::5": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.005523681640625
+      "skin_pixel_ratio": null
     },
     "male:comp11::6": {
       "category": "convert",
@@ -2022,11 +2022,11 @@
       "skin_pixel_ratio": 0.996429443359375
     },
     "male:comp11::8": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0612945556640625
+      "skin_pixel_ratio": null
     },
     "male:comp11::9": {
       "category": "convert",
@@ -2526,11 +2526,11 @@
       "skin_pixel_ratio": 0.97265625
     },
     "male:comp6::13": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "male:comp6::14": {
       "category": "convert",
@@ -2547,11 +2547,11 @@
       "skin_pixel_ratio": 0.85650634765625
     },
     "male:comp6::2": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.054473876953125
+      "skin_pixel_ratio": null
     },
     "male:comp6::3": {
       "category": "convert",
@@ -2561,11 +2561,11 @@
       "skin_pixel_ratio": 0.9844818115234375
     },
     "male:comp6::4": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.179107666015625
+      "skin_pixel_ratio": null
     },
     "male:comp6::5": {
       "category": "convert",
@@ -2575,11 +2575,11 @@
       "skin_pixel_ratio": 0.298828125
     },
     "male:comp6::6": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 1.52587890625e-05
+      "skin_pixel_ratio": null
     },
     "male:comp6::7": {
       "category": "convert",
@@ -2764,11 +2764,11 @@
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::15": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "male:comp8::2": {
       "category": "convert",
@@ -2778,25 +2778,25 @@
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::3": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "male:comp8::4": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0
+      "skin_pixel_ratio": null
     },
     "male:comp8::5": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.005523681640625
+      "skin_pixel_ratio": null
     },
     "male:comp8::6": {
       "category": "convert",
@@ -2813,11 +2813,11 @@
       "skin_pixel_ratio": 1.0
     },
     "male:comp8::8": {
-      "category": "skin_free",
-      "effective": "skin_free",
-      "reason": "universal (_uni) textures with low skin-pixel evidence \u2014 garment carries no embedded skin",
+      "category": "convert",
+      "effective": "convert",
+      "reason": "force_convert (config) \u2014 converted for piece identification / mannequin base candidates",
       "resolution": null,
-      "skin_pixel_ratio": 0.0612945556640625
+      "skin_pixel_ratio": null
     },
     "male:comp8::9": {
       "category": "convert",

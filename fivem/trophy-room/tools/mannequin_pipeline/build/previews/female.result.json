@@ -8,20 +8,20 @@
     "mp_f_freemode_01_mannequin^head_000_u.ydd",
     "mp_f_freemode_01_mannequin^hair_000_u.ydd",
     "mp_f_freemode_01_mannequin^uppr_015_u.ydd",
-    "mp_f_freemode_01_mannequin^lowr_000_u.ydd",
+    "mp_f_freemode_01_mannequin^lowr_015_u.ydd",
     "mp_f_freemode_01_mannequin^hand_000_u.ydd",
-    "mp_f_freemode_01_mannequin^feet_000_u.ydd"
+    "mp_f_freemode_01_mannequin^feet_014_u.ydd"
   ],
   "errors": [],
   "diagnostics": {
     "bbox_lo": [
       -0.588,
       -0.168,
-      -1.088
+      -1.093
     ],
     "bbox_hi": [
       0.588,
-      0.136,
+      0.13,
       0.816
     ],
     "objects": [
@@ -29,9 +29,9 @@
         "name": "cam",
         "type": "CAMERA",
         "loc": [
-          2.84,
-          -4.07,
-          0.02
+          2.85,
+          -4.08,
+          0.01
         ],
         "hide_render": false,
         "verts": null
@@ -48,7 +48,7 @@
         "verts": null
       },
       {
-        "name": "hash_3FBBEF0A",
+        "name": "hash_0F485825",
         "type": "EMPTY",
         "loc": [
           0.0,
@@ -59,7 +59,7 @@
         "verts": null
       },
       {
-        "name": "hash_3FBBEF0A.model",
+        "name": "hash_0F485825.model",
         "type": "MESH",
         "loc": [
           0.0,
@@ -67,10 +67,10 @@
           0.0
         ],
         "hide_render": false,
-        "verts": 906
+        "verts": 649
       },
       {
-        "name": "hash_94038DC8",
+        "name": "hash_23E17E3C",
         "type": "EMPTY",
         "loc": [
           0.0,
@@ -81,7 +81,7 @@
         "verts": null
       },
       {
-        "name": "hash_94038DC8.model",
+        "name": "hash_23E17E3C.model",
         "type": "MESH",
         "loc": [
           0.0,
@@ -89,7 +89,7 @@
           0.0
         ],
         "hide_render": false,
-        "verts": 702
+        "verts": 2505
       },
       {
         "name": "hash_976FBF04",
@@ -158,7 +158,7 @@
         "verts": null
       },
       {
-        "name": "mp_f_freemode_01_mannequin^feet_000_u",
+        "name": "mp_f_freemode_01_mannequin^feet_014_u",
         "type": "EMPTY",
         "loc": [
           0.0,
@@ -202,7 +202,7 @@
         "verts": null
       },
       {
-        "name": "mp_f_freemode_01_mannequin^lowr_000_u",
+        "name": "mp_f_freemode_01_mannequin^lowr_015_u",
         "type": "EMPTY",
         "loc": [
           0.0,
