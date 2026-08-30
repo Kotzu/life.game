@@ -304,8 +304,13 @@ def main() -> None:
     run_pipeline()
     if args.convert:
         run_convert()
-    if args.manifest:
-        run_manifest()
+    # the manifest step is pure Python (no Blender) — ALWAYS run it once
+    # conversions exist, so every workstation run ships a current manifest
+    if args.manifest or (HERE / "build" / "conversion_state.json").exists():
+        try:
+            run_manifest()
+        except SystemExit as e:
+            print(f"  ! manifest step skipped: {e}")
     if args.preview:
         run_preview()
     summarize()
