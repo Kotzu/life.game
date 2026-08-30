@@ -181,18 +181,10 @@ def main() -> None:
     comp = job["component_id"]
     for obj in mesh_objs:
         swap_all_materials(obj)
-        if comp == 0:  # head: close facial cavities
-            smoothed += smooth_face_region(obj)
-        if comp == 4 and job.get("gender") == "male":
-            # male briefs piece: GENTLY soften the waistband/cuff geometry —
-            # heavy smoothing collapses the briefs shell and tears the hip
-            # (seen in preview evidence); keep the top seam (>=0.94) intact
-            # where the piece meets the torso
-            smoothed += smooth_z_band(obj, 0.55, 0.94, iterations=12)
-        if comp == 6 and job.get("gender") == "male":
-            # no barefoot male drawable exists — soften the low-profile shoe
-            # into an abstract mannequin foot (details melt, sole stays)
-            smoothed += smooth_z_band(obj, 0.0, 1.0, iterations=20)
+        # USER DECISION (final look): keep the ORIGINAL geometry everywhere —
+        # normal face, boxers as-is, feet as-is. Only materials become
+        # mannequin canvas. smooth_face_region/smooth_z_band remain available
+        # for optional art passes but are not applied.
         if comp == 2:  # hair source: replace with scalp derived from geometry
             pass  # scalp derives from the head job below
 

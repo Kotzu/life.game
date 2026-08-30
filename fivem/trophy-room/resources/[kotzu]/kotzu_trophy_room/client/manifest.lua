@@ -54,7 +54,30 @@ function M.BodyDrawable(gender, compId, sourceCollection, sourceDrawable)
     local body = g and g.body[tostring(compId)]
     if not body or not body.variants then return nil end
     local src = ('%s:%d'):format(sourceCollection or '', sourceDrawable or 0)
-    return body.variants[src] or body.variants[':0'] or next(body.variants) and body.variants[next(body.variants)]
+    -- exact match only: a missing designated piece must surface as nil so the
+    -- caller can refuse the spawn (never silently show a different drawable)
+    return body.variants[src]
+end
+
+---Converted-garment mapping: mannequin-collection drawable for a source piece.
+function M.GarmentConverted(gender, compId, collection, drawable)
+    local m = M.Load()
+    if not m then return nil end
+    local g = m.genders[gender]
+    if not g or not g.garments then return nil end
+    local key = ('%s:comp%d:%s:%d'):format(gender, compId, collection or '',
+                                           drawable or 0)
+    local e = g.garments[key]
+    if e and e.status == 'converted' and e.converted then
+        return e.converted.drawable
+    end
+    return nil
+end
+
+---Resolve a mannequin-base piece (body twin OR converted garment).
+function M.BasePiece(gender, compId, collection, drawable)
+    return M.BodyDrawable(gender, compId, collection, drawable)
+        or M.GarmentConverted(gender, compId, collection, drawable)
 end
 
 RegisterNetEvent('kotzu_trophy:client:reloadManifest', function()

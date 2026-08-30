@@ -38,7 +38,9 @@ RENAMES = {
 
 REPORTS = ["build/scan_catalog.json", "build/crosscheck_report.json",
            "build/classification.json", "manual_review_queue.json",
-           "build/conversion_state.json", "build/manifest_alloc.json"]
+           "build/conversion_state.json", "build/manifest_alloc.json",
+           "conversion_report.json", "coverage_report.md",
+           "../../resources/[kotzu]/kotzu_mannequin_assets/mannequin_manifest.json"]
 
 
 def step(msg: str) -> None:
@@ -173,6 +175,18 @@ def run_convert() -> None:
           f"failed: {len(st.get('failed', {}))}")
 
 
+def run_manifest() -> None:
+    """Build the shipping manifest + validate the assets against it."""
+    step("pipeline build-manifest")
+    r = run([sys.executable, "-m", "pipeline", "build-manifest"])
+    if r.returncode != 0:
+        raise SystemExit("build-manifest failed")
+    step("pipeline validate")
+    run([sys.executable, "-m", "pipeline", "validate"])
+    step("pipeline report-coverage")
+    run([sys.executable, "-m", "pipeline", "report-coverage"])
+
+
 def run_preview() -> None:
     """Render the assembled mannequin (front + 3/4, both genders) to PNGs."""
     find_blender()
@@ -279,6 +293,8 @@ def main() -> None:
                     help="also run the Blender conversion step after classify")
     ap.add_argument("--preview", action="store_true",
                     help="also render assembled-mannequin preview PNGs")
+    ap.add_argument("--manifest", action="store_true",
+                    help="also build the shipping manifest + validate")
     args = ap.parse_args()
 
     extracted = Path(args.extracted)
@@ -288,6 +304,8 @@ def main() -> None:
     run_pipeline()
     if args.convert:
         run_convert()
+    if args.manifest:
+        run_manifest()
     if args.preview:
         run_preview()
     summarize()

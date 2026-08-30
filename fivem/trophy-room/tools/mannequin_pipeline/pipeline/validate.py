@@ -28,7 +28,7 @@ def validate(build_dir: Path, cfg: dict, manifest_path: Path) -> dict:
                         f"{gender}: mannequin body missing component {comp} — "
                         "run convert/export for the body set")
             # allocation uniqueness per component
-            for comp, allocs in manifest["allocations"][gender].items():
+            for comp, allocs in (manifest.get("allocations", {}).get(gender) or {}).items():
                 vals = list(allocs.values())
                 if len(vals) != len(set(vals)):
                     problems.append(f"{gender} comp {comp}: duplicate local indexes in allocation")

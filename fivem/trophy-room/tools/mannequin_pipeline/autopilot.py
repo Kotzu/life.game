@@ -51,7 +51,7 @@ def push_error_report() -> None:
 
 def run_once() -> None:
     try:
-        r = sh(sys.executable, "make_reports.py", "--convert", "--preview")
+        r = sh(sys.executable, "make_reports.py", "--convert", "--manifest", "--preview")
         if r.returncode != 0:
             raise RuntimeError(f"make_reports exited with {r.returncode}")
     except Exception:  # noqa: BLE001 — ship the error to Claude, keep looping

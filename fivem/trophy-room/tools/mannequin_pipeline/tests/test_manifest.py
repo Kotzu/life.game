@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from pipeline.manifest import build_manifest, BODY_RESERVED
+from pipeline.manifest import build_manifest
 from pipeline.model import save_json
 from pipeline.reports import report
 
@@ -52,8 +52,9 @@ def test_manifest_statuses(build, tmp_path):
     conv = g["garments"]["male:comp11::4"]
     assert conv["status"] == "converted"
     assert conv["converted"]["collection"] == "mannequin"
-    assert conv["converted"]["drawable"] >= BODY_RESERVED
-    assert "0" in m["allocations"]["male"]["3"] or m["allocations"]["male"]["3"]
+    # base pieces keep their SOURCE index — that is how the files are named
+    assert conv["converted"]["drawable"] == 4
+    assert g["body"]["3"]["variants"][":0"] == 0
 
 
 def test_allocation_is_stable_across_rebuilds(build, tmp_path):
@@ -76,8 +77,30 @@ def test_allocation_is_stable_across_rebuilds(build, tmp_path):
     idx2_old = m2["genders"]["male"]["garments"]["male:comp11::4"]["converted"]["drawable"]
     idx2_new = m2["genders"]["male"]["garments"]["male:comp11::9"]["converted"]["drawable"]
     assert idx2_old == idx1
-    assert idx2_new != idx1
+    assert idx2_new == 9  # base piece: file named by its source index
     assert m2["version"] == m1["version"] + 1
+
+
+def test_dlc_pieces_get_allocated_indexes(build, tmp_path):
+    # a DLC-collection garment must get a stable index >= 16, matching the
+    # file-name allocator convert uses
+    catalog = json.loads((build / "scan_catalog.json").read_text())
+    catalog["drawables"]["male:comp6:beach:0"] = rec(6, "feet", coll="beach", idx=0)
+    save_json(build / "scan_catalog.json", catalog)
+    cls = json.loads((build / "classification.json").read_text())
+    cls["items"]["male:comp6:beach:0"] = {"effective": "convert"}
+    save_json(build / "classification.json", cls)
+    state = json.loads((build / "conversion_state.json").read_text())
+    state["done"]["male:comp6:beach:0"] = "beef"
+    save_json(build / "conversion_state.json", state)
+
+    mpath = tmp_path / "assets" / "mannequin_manifest.json"
+    m = build_manifest(build, CFG, mpath)
+    got = m["genders"]["male"]["garments"]["male:comp6:beach:0"]["converted"]["drawable"]
+    assert got == 16
+    # and it is persisted in the shared alloc file convert reads
+    alloc = json.loads((build / "manifest_alloc.json").read_text())
+    assert alloc["male"]["comp6"]["beach:0"] == 16
 
 
 def test_coverage_report(build, tmp_path):

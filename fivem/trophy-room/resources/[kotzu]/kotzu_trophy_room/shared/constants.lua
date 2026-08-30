@@ -63,12 +63,13 @@ KTR.Const = {
     -- feet: no barefoot male drawable exists in the base game (2 = the
     -- lowest-profile shoe, reads as a stylized mannequin foot), female 14 =
     -- bare feet. Components not listed fall back to source index 0.
+    -- values: source drawable index, or { coll = '<source collection>',
+    -- idx = n } for DLC pieces (resolved through the manifest)
     MannequinBase = {
-        -- male: briefs band smoothed into the body at conversion; feet 2 is
-        -- the low-profile shoe smoothed into an abstract mannequin foot (no
-        -- base-game barefoot male drawable exists) so the figure has a sole
-        -- to stand on
-        male   = { [3] = 15, [4] = 14, [6] = 2 },
+        -- final look per user decision: ORIGINAL geometry (normal face,
+        -- boxers kept); male feet = beach DLC bare feet, female = base bare
+        male   = { [3] = 15, [4] = 14,
+                   [6] = { coll = 'male_freemode_beach', idx = 0 } },
         female = { [3] = 15, [4] = 15, [6] = 14 },
     },
     AllComponents = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 },
