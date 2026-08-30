@@ -1,12 +1,2478 @@
 {
-  "schema": "kotzu_mannequin_manifest/1",
-  "version": 0,
-  "collection": "mannequin",
-  "game_build": null,
-  "allocations": { "male": {}, "female": {} },
-  "genders": {
-    "male": { "body": {}, "garments": {}, "props": {} },
-    "female": { "body": {}, "garments": {}, "props": {} }
+  "_note": "Seed manifest. Version 0 = no mannequin assets built yet; kotzu_trophy_room refuses to spawn mannequins on v0 and reports MANIFEST_NOT_BUILT. Replace by running the pipeline: scan -> classify -> convert -> export -> build-manifest.",
+  "allocations": {
+    "female": {
+      "comp11": {
+        "female_freemode_beach:0": 16,
+        "female_freemode_beach:2": 17
+      },
+      "comp2": {
+        "female_freemode_beach:0": 16,
+        "female_freemode_beach:1": 17
+      },
+      "comp4": {
+        "female_freemode_beach:0": 16,
+        "female_freemode_beach:1": 17
+      },
+      "comp6": {
+        "female_freemode_beach:0": 16
+      },
+      "comp7": {
+        "female_freemode_beach:0": 16,
+        "female_freemode_beach:1": 17
+      },
+      "comp8": {
+        "female_freemode_beach:0": 16,
+        "female_freemode_beach:1": 17
+      }
+    },
+    "male": {
+      "comp11": {
+        "male_freemode_beach:1": 16
+      },
+      "comp2": {
+        "male_freemode_beach:0": 16,
+        "male_freemode_beach:1": 17
+      },
+      "comp4": {
+        "male_freemode_beach:0": 16,
+        "male_freemode_beach:1": 17,
+        "male_freemode_beach:2": 18
+      },
+      "comp6": {
+        "male_freemode_beach:0": 16
+      },
+      "comp7": {
+        "male_freemode_beach:0": 16,
+        "male_freemode_beach:1": 17
+      },
+      "comp8": {
+        "male_freemode_beach:1": 16
+      }
+    }
   },
-  "_note": "Seed manifest. Version 0 = no mannequin assets built yet; kotzu_trophy_room refuses to spawn mannequins on v0 and reports MANIFEST_NOT_BUILT. Replace by running the pipeline: scan -> classify -> convert -> export -> build-manifest."
+  "collection": "mannequin",
+  "game_build": 3258,
+  "genders": {
+    "female": {
+      "body": {
+        "0": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":10": 10,
+            ":11": 11,
+            ":12": 12,
+            ":13": 13,
+            ":14": 14,
+            ":15": 15,
+            ":16": 16,
+            ":17": 17,
+            ":18": 18,
+            ":19": 19,
+            ":2": 2,
+            ":20": 20,
+            ":21": 21,
+            ":22": 22,
+            ":23": 23,
+            ":24": 24,
+            ":25": 25,
+            ":26": 26,
+            ":27": 27,
+            ":28": 28,
+            ":29": 29,
+            ":3": 3,
+            ":30": 30,
+            ":31": 31,
+            ":32": 32,
+            ":33": 33,
+            ":34": 34,
+            ":35": 35,
+            ":36": 36,
+            ":37": 37,
+            ":38": 38,
+            ":39": 39,
+            ":4": 4,
+            ":40": 40,
+            ":41": 41,
+            ":42": 42,
+            ":43": 43,
+            ":44": 44,
+            ":45": 45,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8,
+            ":9": 9
+          }
+        },
+        "2": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":10": 10,
+            ":11": 11,
+            ":12": 12,
+            ":13": 13,
+            ":14": 14,
+            ":15": 15,
+            ":2": 2,
+            ":3": 3,
+            ":4": 4,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8,
+            ":9": 9,
+            "female_freemode_beach:0": 16,
+            "female_freemode_beach:1": 17
+          }
+        },
+        "3": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":10": 10,
+            ":11": 11,
+            ":12": 12,
+            ":13": 13,
+            ":14": 14,
+            ":15": 15,
+            ":2": 2,
+            ":3": 3,
+            ":4": 4,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8,
+            ":9": 9
+          }
+        },
+        "4": {
+          "variants": {
+            ":15": 15
+          }
+        },
+        "5": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":2": 2,
+            ":3": 3,
+            ":4": 4,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8
+          }
+        },
+        "6": {
+          "variants": {
+            ":14": 14
+          }
+        },
+        "7": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":2": 2,
+            ":3": 3,
+            ":4": 4,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8,
+            ":9": 9,
+            "female_freemode_beach:0": 16,
+            "female_freemode_beach:1": 17
+          }
+        }
+      },
+      "garments": {
+        "female:comp10::0": {
+          "status": "skin_free"
+        },
+        "female:comp10::1": {
+          "status": "skin_free"
+        },
+        "female:comp10::2": {
+          "status": "skin_free"
+        },
+        "female:comp10::3": {
+          "status": "skin_free"
+        },
+        "female:comp10::4": {
+          "status": "skin_free"
+        },
+        "female:comp10::5": {
+          "status": "skin_free"
+        },
+        "female:comp11::0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 0
+          },
+          "source": {
+            "collection": "",
+            "drawable": 0,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::10": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 10
+          },
+          "source": {
+            "collection": "",
+            "drawable": 10,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::11": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 11
+          },
+          "source": {
+            "collection": "",
+            "drawable": 11,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::12": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 12
+          },
+          "source": {
+            "collection": "",
+            "drawable": 12,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::13": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 13
+          },
+          "source": {
+            "collection": "",
+            "drawable": 13,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::14": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 14
+          },
+          "source": {
+            "collection": "",
+            "drawable": 14,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::15": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 15
+          },
+          "source": {
+            "collection": "",
+            "drawable": 15,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::6": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 6
+          },
+          "source": {
+            "collection": "",
+            "drawable": 6,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::8": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 8
+          },
+          "source": {
+            "collection": "",
+            "drawable": 8,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11::9": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 9
+          },
+          "source": {
+            "collection": "",
+            "drawable": 9,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp11:female_freemode_beach:0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 16
+          },
+          "source": {
+            "collection": "female_freemode_beach",
+            "drawable": 0,
+            "textures": 7
+          },
+          "status": "converted"
+        },
+        "female:comp11:female_freemode_beach:1": {
+          "status": "skin_free"
+        },
+        "female:comp11:female_freemode_beach:2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 17
+          },
+          "source": {
+            "collection": "female_freemode_beach",
+            "drawable": 2,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "female:comp1::0": {
+          "status": "skin_free"
+        },
+        "female:comp1::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "female:comp1::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "female:comp1::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp1::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "female:comp1::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "female:comp1::6": {
+          "status": "skin_free"
+        },
+        "female:comp1::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "female:comp4::0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 0
+          },
+          "source": {
+            "collection": "",
+            "drawable": 0,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::10": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 10
+          },
+          "source": {
+            "collection": "",
+            "drawable": 10,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::11": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 11
+          },
+          "source": {
+            "collection": "",
+            "drawable": 11,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::12": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 12
+          },
+          "source": {
+            "collection": "",
+            "drawable": 12,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::13": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 13
+          },
+          "source": {
+            "collection": "",
+            "drawable": 13,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::14": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 14
+          },
+          "source": {
+            "collection": "",
+            "drawable": 14,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::6": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 6
+          },
+          "source": {
+            "collection": "",
+            "drawable": 6,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::8": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 8
+          },
+          "source": {
+            "collection": "",
+            "drawable": 8,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4::9": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 9
+          },
+          "source": {
+            "collection": "",
+            "drawable": 9,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp4:female_freemode_beach:0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 16
+          },
+          "source": {
+            "collection": "female_freemode_beach",
+            "drawable": 0,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "female:comp4:female_freemode_beach:1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 17
+          },
+          "source": {
+            "collection": "female_freemode_beach",
+            "drawable": 1,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "female:comp6::0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 0
+          },
+          "source": {
+            "collection": "",
+            "drawable": 0,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::10": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 10
+          },
+          "source": {
+            "collection": "",
+            "drawable": 10,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::11": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 11
+          },
+          "source": {
+            "collection": "",
+            "drawable": 11,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::12": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 12
+          },
+          "source": {
+            "collection": "",
+            "drawable": 12,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::13": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 13
+          },
+          "source": {
+            "collection": "",
+            "drawable": 13,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::15": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 15
+          },
+          "source": {
+            "collection": "",
+            "drawable": 15,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::6": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 6
+          },
+          "source": {
+            "collection": "",
+            "drawable": 6,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::8": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 8
+          },
+          "source": {
+            "collection": "",
+            "drawable": 8,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6::9": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 9
+          },
+          "source": {
+            "collection": "",
+            "drawable": 9,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp6:female_freemode_beach:0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 16
+          },
+          "source": {
+            "collection": "female_freemode_beach",
+            "drawable": 0,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "female:comp8::0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 0
+          },
+          "source": {
+            "collection": "",
+            "drawable": 0,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp8::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp8::10": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 10
+          },
+          "source": {
+            "collection": "",
+            "drawable": 10,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp8::11": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 11
+          },
+          "source": {
+            "collection": "",
+            "drawable": 11,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp8::12": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 12
+          },
+          "source": {
+            "collection": "",
+            "drawable": 12,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp8::13": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 13
+          },
+          "source": {
+            "collection": "",
+            "drawable": 13,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp8::14": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 14
+          },
+          "source": {
+            "collection": "",
+            "drawable": 14,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp8::15": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 15
+          },
+          "source": {
+            "collection": "",
+            "drawable": 15,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp8::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp8::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp8::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp8::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "female:comp8::6": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 6
+          },
+          "source": {
+            "collection": "",
+            "drawable": 6,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp8::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp8::8": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 8
+          },
+          "source": {
+            "collection": "",
+            "drawable": 8,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp8::9": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 9
+          },
+          "source": {
+            "collection": "",
+            "drawable": 9,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "female:comp8:female_freemode_beach:0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 16
+          },
+          "source": {
+            "collection": "female_freemode_beach",
+            "drawable": 0,
+            "textures": 7
+          },
+          "status": "converted"
+        },
+        "female:comp8:female_freemode_beach:1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 17
+          },
+          "source": {
+            "collection": "female_freemode_beach",
+            "drawable": 1,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "female:comp9::0": {
+          "status": "skin_free"
+        },
+        "female:comp9::1": {
+          "status": "skin_free"
+        },
+        "female:comp9::2": {
+          "status": "skin_free"
+        },
+        "female:comp9::3": {
+          "status": "skin_free"
+        },
+        "female:comp9::4": {
+          "status": "skin_free"
+        },
+        "female:comp9::5": {
+          "status": "skin_free"
+        },
+        "female:comp9::6": {
+          "status": "skin_free"
+        },
+        "female:comp9::7": {
+          "status": "skin_free"
+        }
+      },
+      "props": {
+        "female:prop0::0": {
+          "status": "pass_through"
+        },
+        "female:prop0::1": {
+          "status": "pass_through"
+        },
+        "female:prop0::10": {
+          "status": "pass_through"
+        },
+        "female:prop0::11": {
+          "status": "pass_through"
+        },
+        "female:prop0::12": {
+          "status": "pass_through"
+        },
+        "female:prop0::13": {
+          "status": "pass_through"
+        },
+        "female:prop0::14": {
+          "status": "pass_through"
+        },
+        "female:prop0::15": {
+          "status": "pass_through"
+        },
+        "female:prop0::16": {
+          "status": "pass_through"
+        },
+        "female:prop0::17": {
+          "status": "pass_through"
+        },
+        "female:prop0::18": {
+          "status": "pass_through"
+        },
+        "female:prop0::19": {
+          "status": "pass_through"
+        },
+        "female:prop0::2": {
+          "status": "pass_through"
+        },
+        "female:prop0::3": {
+          "status": "pass_through"
+        },
+        "female:prop0::4": {
+          "status": "pass_through"
+        },
+        "female:prop0::5": {
+          "status": "pass_through"
+        },
+        "female:prop0::6": {
+          "status": "pass_through"
+        },
+        "female:prop0::7": {
+          "status": "pass_through"
+        },
+        "female:prop0::8": {
+          "status": "pass_through"
+        },
+        "female:prop0::9": {
+          "status": "pass_through"
+        },
+        "female:prop1::0": {
+          "status": "pass_through"
+        },
+        "female:prop1::1": {
+          "status": "pass_through"
+        },
+        "female:prop1::10": {
+          "status": "pass_through"
+        },
+        "female:prop1::11": {
+          "status": "pass_through"
+        },
+        "female:prop1::12": {
+          "status": "pass_through"
+        },
+        "female:prop1::13": {
+          "status": "pass_through"
+        },
+        "female:prop1::14": {
+          "status": "pass_through"
+        },
+        "female:prop1::15": {
+          "status": "pass_through"
+        },
+        "female:prop1::2": {
+          "status": "pass_through"
+        },
+        "female:prop1::3": {
+          "status": "pass_through"
+        },
+        "female:prop1::4": {
+          "status": "pass_through"
+        },
+        "female:prop1::5": {
+          "status": "pass_through"
+        },
+        "female:prop1::6": {
+          "status": "pass_through"
+        },
+        "female:prop1::7": {
+          "status": "pass_through"
+        },
+        "female:prop1::8": {
+          "status": "pass_through"
+        },
+        "female:prop1::9": {
+          "status": "pass_through"
+        },
+        "female:prop6::0": {
+          "status": "pass_through"
+        },
+        "female:prop6::1": {
+          "status": "pass_through"
+        }
+      }
+    },
+    "male": {
+      "body": {
+        "0": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":10": 10,
+            ":11": 11,
+            ":12": 12,
+            ":13": 13,
+            ":14": 14,
+            ":15": 15,
+            ":16": 16,
+            ":17": 17,
+            ":18": 18,
+            ":19": 19,
+            ":2": 2,
+            ":20": 20,
+            ":21": 21,
+            ":22": 22,
+            ":23": 23,
+            ":24": 24,
+            ":25": 25,
+            ":26": 26,
+            ":27": 27,
+            ":28": 28,
+            ":29": 29,
+            ":3": 3,
+            ":30": 30,
+            ":31": 31,
+            ":32": 32,
+            ":33": 33,
+            ":34": 34,
+            ":35": 35,
+            ":36": 36,
+            ":37": 37,
+            ":38": 38,
+            ":39": 39,
+            ":4": 4,
+            ":40": 40,
+            ":41": 41,
+            ":42": 42,
+            ":43": 43,
+            ":44": 44,
+            ":45": 45,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8,
+            ":9": 9
+          }
+        },
+        "2": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":10": 10,
+            ":11": 11,
+            ":12": 12,
+            ":13": 13,
+            ":14": 14,
+            ":15": 15,
+            ":2": 2,
+            ":3": 3,
+            ":4": 4,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8,
+            ":9": 9,
+            "male_freemode_beach:0": 16,
+            "male_freemode_beach:1": 17
+          }
+        },
+        "3": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":10": 10,
+            ":11": 11,
+            ":12": 12,
+            ":13": 13,
+            ":14": 14,
+            ":15": 15,
+            ":2": 2,
+            ":3": 3,
+            ":4": 4,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8,
+            ":9": 9
+          }
+        },
+        "4": {
+          "variants": {
+            ":14": 14
+          }
+        },
+        "5": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":2": 2,
+            ":3": 3,
+            ":4": 4,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8
+          }
+        },
+        "7": {
+          "variants": {
+            ":0": 0,
+            ":1": 1,
+            ":10": 10,
+            ":11": 11,
+            ":12": 12,
+            ":13": 13,
+            ":14": 14,
+            ":15": 15,
+            ":2": 2,
+            ":3": 3,
+            ":4": 4,
+            ":5": 5,
+            ":6": 6,
+            ":7": 7,
+            ":8": 8,
+            ":9": 9,
+            "male_freemode_beach:0": 16,
+            "male_freemode_beach:1": 17
+          }
+        }
+      },
+      "garments": {
+        "male:comp10::0": {
+          "status": "skin_free"
+        },
+        "male:comp10::1": {
+          "status": "skin_free"
+        },
+        "male:comp10::2": {
+          "status": "skin_free"
+        },
+        "male:comp10::3": {
+          "status": "skin_free"
+        },
+        "male:comp10::4": {
+          "status": "skin_free"
+        },
+        "male:comp10::5": {
+          "status": "skin_free"
+        },
+        "male:comp10::6": {
+          "status": "skin_free"
+        },
+        "male:comp11::0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 0
+          },
+          "source": {
+            "collection": "",
+            "drawable": 0,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::10": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 10
+          },
+          "source": {
+            "collection": "",
+            "drawable": 10,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::11": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 11
+          },
+          "source": {
+            "collection": "",
+            "drawable": 11,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::12": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 12
+          },
+          "source": {
+            "collection": "",
+            "drawable": 12,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::13": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 13
+          },
+          "source": {
+            "collection": "",
+            "drawable": 13,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::14": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 14
+          },
+          "source": {
+            "collection": "",
+            "drawable": 14,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::15": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 15
+          },
+          "source": {
+            "collection": "",
+            "drawable": 15,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "male:comp11::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::6": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 6
+          },
+          "source": {
+            "collection": "",
+            "drawable": 6,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "male:comp11::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::8": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 8
+          },
+          "source": {
+            "collection": "",
+            "drawable": 8,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11::9": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 9
+          },
+          "source": {
+            "collection": "",
+            "drawable": 9,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp11:male_freemode_beach:0": {
+          "status": "skin_free"
+        },
+        "male:comp11:male_freemode_beach:1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 16
+          },
+          "source": {
+            "collection": "male_freemode_beach",
+            "drawable": 1,
+            "textures": 6
+          },
+          "status": "converted"
+        },
+        "male:comp1::0": {
+          "status": "skin_free"
+        },
+        "male:comp1::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "male:comp1::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "male:comp1::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "male:comp1::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "male:comp1::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "male:comp1::6": {
+          "status": "skin_free"
+        },
+        "male:comp1::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 4
+          },
+          "status": "converted"
+        },
+        "male:comp4::0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 0
+          },
+          "source": {
+            "collection": "",
+            "drawable": 0,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::10": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 10
+          },
+          "source": {
+            "collection": "",
+            "drawable": 10,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::11": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 11
+          },
+          "source": {
+            "collection": "",
+            "drawable": 11,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::12": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 12
+          },
+          "source": {
+            "collection": "",
+            "drawable": 12,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::13": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 13
+          },
+          "source": {
+            "collection": "",
+            "drawable": 13,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::15": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 15
+          },
+          "source": {
+            "collection": "",
+            "drawable": 15,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::6": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 6
+          },
+          "source": {
+            "collection": "",
+            "drawable": 6,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::8": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 8
+          },
+          "source": {
+            "collection": "",
+            "drawable": 8,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4::9": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 9
+          },
+          "source": {
+            "collection": "",
+            "drawable": 9,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp4:male_freemode_beach:0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 16
+          },
+          "source": {
+            "collection": "male_freemode_beach",
+            "drawable": 0,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "male:comp4:male_freemode_beach:1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 17
+          },
+          "source": {
+            "collection": "male_freemode_beach",
+            "drawable": 1,
+            "textures": 11
+          },
+          "status": "converted"
+        },
+        "male:comp4:male_freemode_beach:2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 18
+          },
+          "source": {
+            "collection": "male_freemode_beach",
+            "drawable": 2,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "male:comp6::0": {
+          "status": "skin_free"
+        },
+        "male:comp6::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::10": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 10
+          },
+          "source": {
+            "collection": "",
+            "drawable": 10,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::11": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 11
+          },
+          "source": {
+            "collection": "",
+            "drawable": 11,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::12": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 12
+          },
+          "source": {
+            "collection": "",
+            "drawable": 12,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::13": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 13
+          },
+          "source": {
+            "collection": "",
+            "drawable": 13,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::14": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 14
+          },
+          "source": {
+            "collection": "",
+            "drawable": 14,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::15": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 15
+          },
+          "source": {
+            "collection": "",
+            "drawable": 15,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::6": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 6
+          },
+          "source": {
+            "collection": "",
+            "drawable": 6,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::8": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 8
+          },
+          "source": {
+            "collection": "",
+            "drawable": 8,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6::9": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 9
+          },
+          "source": {
+            "collection": "",
+            "drawable": 9,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp6:male_freemode_beach:0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 16
+          },
+          "source": {
+            "collection": "male_freemode_beach",
+            "drawable": 0,
+            "textures": 12
+          },
+          "status": "converted"
+        },
+        "male:comp8::0": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 0
+          },
+          "source": {
+            "collection": "",
+            "drawable": 0,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 1
+          },
+          "source": {
+            "collection": "",
+            "drawable": 1,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::10": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 10
+          },
+          "source": {
+            "collection": "",
+            "drawable": 10,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::11": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 11
+          },
+          "source": {
+            "collection": "",
+            "drawable": 11,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::12": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 12
+          },
+          "source": {
+            "collection": "",
+            "drawable": 12,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::13": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 13
+          },
+          "source": {
+            "collection": "",
+            "drawable": 13,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::14": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 14
+          },
+          "source": {
+            "collection": "",
+            "drawable": 14,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::15": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 15
+          },
+          "source": {
+            "collection": "",
+            "drawable": 15,
+            "textures": 1
+          },
+          "status": "converted"
+        },
+        "male:comp8::2": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 2
+          },
+          "source": {
+            "collection": "",
+            "drawable": 2,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::3": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 3
+          },
+          "source": {
+            "collection": "",
+            "drawable": 3,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::4": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 4
+          },
+          "source": {
+            "collection": "",
+            "drawable": 4,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::5": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 5
+          },
+          "source": {
+            "collection": "",
+            "drawable": 5,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::6": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 6
+          },
+          "source": {
+            "collection": "",
+            "drawable": 6,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::7": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 7
+          },
+          "source": {
+            "collection": "",
+            "drawable": 7,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::8": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 8
+          },
+          "source": {
+            "collection": "",
+            "drawable": 8,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8::9": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 9
+          },
+          "source": {
+            "collection": "",
+            "drawable": 9,
+            "textures": 16
+          },
+          "status": "converted"
+        },
+        "male:comp8:male_freemode_beach:0": {
+          "status": "skin_free"
+        },
+        "male:comp8:male_freemode_beach:1": {
+          "converted": {
+            "collection": "mannequin",
+            "drawable": 16
+          },
+          "source": {
+            "collection": "male_freemode_beach",
+            "drawable": 1,
+            "textures": 6
+          },
+          "status": "converted"
+        },
+        "male:comp8:male_freemode_beach:2": {
+          "status": "skin_free"
+        },
+        "male:comp9::0": {
+          "status": "skin_free"
+        },
+        "male:comp9::1": {
+          "status": "skin_free"
+        },
+        "male:comp9::2": {
+          "status": "skin_free"
+        },
+        "male:comp9::3": {
+          "status": "skin_free"
+        },
+        "male:comp9::4": {
+          "status": "skin_free"
+        },
+        "male:comp9::5": {
+          "status": "skin_free"
+        },
+        "male:comp9::6": {
+          "status": "skin_free"
+        },
+        "male:comp9::7": {
+          "status": "skin_free"
+        },
+        "male:comp9::8": {
+          "status": "skin_free"
+        },
+        "male:comp9::9": {
+          "status": "skin_free"
+        }
+      },
+      "props": {
+        "male:prop0::0": {
+          "status": "pass_through"
+        },
+        "male:prop0::1": {
+          "status": "pass_through"
+        },
+        "male:prop0::10": {
+          "status": "pass_through"
+        },
+        "male:prop0::11": {
+          "status": "pass_through"
+        },
+        "male:prop0::12": {
+          "status": "pass_through"
+        },
+        "male:prop0::13": {
+          "status": "pass_through"
+        },
+        "male:prop0::14": {
+          "status": "pass_through"
+        },
+        "male:prop0::15": {
+          "status": "pass_through"
+        },
+        "male:prop0::16": {
+          "status": "pass_through"
+        },
+        "male:prop0::17": {
+          "status": "pass_through"
+        },
+        "male:prop0::18": {
+          "status": "pass_through"
+        },
+        "male:prop0::19": {
+          "status": "pass_through"
+        },
+        "male:prop0::2": {
+          "status": "pass_through"
+        },
+        "male:prop0::3": {
+          "status": "pass_through"
+        },
+        "male:prop0::4": {
+          "status": "pass_through"
+        },
+        "male:prop0::5": {
+          "status": "pass_through"
+        },
+        "male:prop0::6": {
+          "status": "pass_through"
+        },
+        "male:prop0::7": {
+          "status": "pass_through"
+        },
+        "male:prop0::8": {
+          "status": "pass_through"
+        },
+        "male:prop0::9": {
+          "status": "pass_through"
+        },
+        "male:prop1::0": {
+          "status": "pass_through"
+        },
+        "male:prop1::1": {
+          "status": "pass_through"
+        },
+        "male:prop1::10": {
+          "status": "pass_through"
+        },
+        "male:prop1::11": {
+          "status": "pass_through"
+        },
+        "male:prop1::12": {
+          "status": "pass_through"
+        },
+        "male:prop1::13": {
+          "status": "pass_through"
+        },
+        "male:prop1::14": {
+          "status": "pass_through"
+        },
+        "male:prop1::15": {
+          "status": "pass_through"
+        },
+        "male:prop1::2": {
+          "status": "pass_through"
+        },
+        "male:prop1::3": {
+          "status": "pass_through"
+        },
+        "male:prop1::4": {
+          "status": "pass_through"
+        },
+        "male:prop1::5": {
+          "status": "pass_through"
+        },
+        "male:prop1::6": {
+          "status": "pass_through"
+        },
+        "male:prop1::7": {
+          "status": "pass_through"
+        },
+        "male:prop1::8": {
+          "status": "pass_through"
+        },
+        "male:prop1::9": {
+          "status": "pass_through"
+        },
+        "male:prop6::0": {
+          "status": "pass_through"
+        },
+        "male:prop6::1": {
+          "status": "pass_through"
+        },
+        "male:prop6::2": {
+          "status": "pass_through"
+        }
+      }
+    }
+  },
+  "schema": "kotzu_mannequin_manifest/1",
+  "version": 1
 }
