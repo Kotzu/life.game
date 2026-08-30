@@ -15,6 +15,8 @@ Stop it with Ctrl+C, or by creating a file named STOP_AUTOPILOT next to it.
 
 from __future__ import annotations
 
+import hashlib
+import os
 import subprocess
 import sys
 import time
@@ -59,9 +61,14 @@ def run_once() -> None:
         push_error_report()
 
 
+def _self_hash() -> str:
+    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
+
 def main() -> None:
     print("AUTOPILOT pornit. Lasa fereastra deschisa; totul merge singur.")
     print("Oprire: Ctrl+C sau creeaza fisierul STOP_AUTOPILOT.\n", flush=True)
+    my_hash = _self_hash()
     processed = ""
     first = True
     while not STOP.exists():
@@ -69,6 +76,9 @@ def main() -> None:
         if first or (head and head != processed):
             print(f"\nAUTOPILOT: modificari noi ({head[:9]}) — rulez.", flush=True)
             sh("git", "pull", "--no-rebase", "--no-edit")
+            if _self_hash() != my_hash:
+                print("AUTOPILOT: m-am actualizat — repornesc.", flush=True)
+                os.execv(sys.executable, [sys.executable, str(Path(__file__))])
             run_once()
             processed = remote_head()
             first = False
