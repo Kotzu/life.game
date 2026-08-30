@@ -39,7 +39,7 @@ RENAMES = {
 REPORTS = ["build/scan_catalog.json", "build/crosscheck_report.json",
            "build/classification.json", "manual_review_queue.json",
            "build/conversion_state.json", "build/manifest_alloc.json",
-           "conversion_report.json", "coverage_report.md",
+           "build/validate_report.json", "conversion_report.json", "coverage_report.md",
            "../../resources/[kotzu]/kotzu_mannequin_assets/mannequin_manifest.json"]
 
 

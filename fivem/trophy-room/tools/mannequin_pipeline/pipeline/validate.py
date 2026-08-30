@@ -22,8 +22,16 @@ def validate(build_dir: Path, cfg: dict, manifest_path: Path) -> dict:
             body = manifest["genders"][gender]["body"]
             # must match the runtime contract: client ApplyBase hard-requires
             # 0/2/3/5 (head/hair/uppr/hand) and uses 4/6 for the bare base
+            garments = manifest["genders"][gender].get("garments", {})
             for comp in ("0", "2", "3", "4", "5", "6"):
-                if comp not in body:
+                in_body = comp in body
+                # a base piece may also be a converted garment (e.g. the male
+                # beach bare feet) — that satisfies the naked-safe contract too
+                in_garments = any(
+                    k.split(":")[1] == f"comp{comp}"
+                    and e.get("status") == "converted"
+                    for k, e in garments.items())
+                if not in_body and not in_garments:
                     problems.append(
                         f"{gender}: mannequin body missing component {comp} — "
                         "run convert/export for the body set")
